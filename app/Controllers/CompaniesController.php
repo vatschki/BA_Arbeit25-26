@@ -6,9 +6,9 @@ class CompaniesController extends BaseController
 {
     public function index()
     {
-        echo view('templates/header_Test');
+        echo view('templates/header_home');
         echo view('templates/menu_home');
-        echo view('pages/page_Companies_Test');
+        echo view('pages/page_Companies');
         echo view('templates/footer');
     }
 }
