@@ -1,914 +1,358 @@
-/* --- Theme tokens --- */
+/* ===========================
+   THEME TOKENS (aus CSS 2)
+   =========================== */
 :root{
-  --esr-blue-700:#0d47a1;   /* primary text (deep blue) */
-  --esr-black-205:#000205;   /* headings / stronger accents */
-  --esr-blue-500:#1e88e5;   /* links, buttons */
-  --esr-accent:#1e88e5;     /* hover bg + footer bg (request) */
-  --esr-bg:#f3f4f6;         /* slightly darker grey around text */
-  --esr-card:#ffffff;
-  --esr-border:#e5e7eb;
+    --esr-blue-700:#0d47a1;   /* primärer Text / Links */
+    --esr-black-205:#000205;  /* Überschriften / starke Akzente */
+    --esr-blue-500:#1e88e5;   /* Links/Buttons – optional */
+    --esr-accent:#1e88e5;     /* Hauptakzent (Buttons, Header, Hover) */
+    --esr-bg:#f3f4f6;         /* Seitenhintergrund */
+    --esr-card:#ffffff;       /* Karten/Flächen */
+    --esr-border:#e5e7eb;     /* Rahmen/Trennlinien */
 }
 
-.navbar .container-fluid{
-  max-width: 1200px; 
-  margin-inline: auto;
-}
-
+/* ===========================
+   BASIS (aus CSS 2)
+   =========================== */
 html, body{
-  height: 100%;
+    height: 100%;
 }
 body{
-  background: var(--esr-bg);
-  color: var(--esr-black-205);
-  font-smooth: antialiased;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+    background: var(--esr-bg);
+    color: var(--esr-black-205);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
+/* Card-Wrapper für Hauptinhalt (schönes „Panel“ um den Content) */
 body > div:first-of-type{
-  background: var(--esr-card);
-  border: 1px solid var(--esr-border);
-  border-radius: .5rem;
-  padding: 1.25rem 1.5rem;
-  margin: 1.25rem auto;
-  width: min(100% - 2rem, 1200px);
-  box-shadow: 0 8px 24px rgba(0,0,0,.04);
+    background: var(--esr-card);
+    border: 1px solid var(--esr-border);
+    border-radius: .5rem;
+    padding: 1.25rem 1.5rem;
+    margin: 1.25rem auto;
+    width: min(100% - 2rem, 1200px);
+    box-shadow: 0 8px 24px rgba(0,0,0,.04);
 }
 
+/* Navbar in den neuen Farben */
 .navbar {
-  background: var(--esr-card) !important;
-  border-bottom: 1px solid var(--esr-border);
-
-  --bs-navbar-color: var(--esr-blue-700);         /* normal text/link color */
-  --bs-navbar-hover-color: var(--esr-blue-700);   /* hover color before custom rules */
-  --bs-navbar-active-color: var(--esr-blue-700);  /* active state color */
+    background: var(--esr-card) !important;
+    border-bottom: 1px solid var(--esr-border);
+    --bs-navbar-color: var(--esr-blue-700);
+    --bs-navbar-hover-color: var(--esr-blue-700);
+    --bs-navbar-active-color: var(--esr-blue-700);
 }
-
-.navbar-brand img {
-  transform: translateX(4px); 
-}
-
 .navbar .nav-link {
-  position: relative;
-  padding: .5rem .85rem;
-  margin: .25rem .25rem;
-  border-radius: .5rem;
-  color: var(--esr-blue-700); 
-  transition: background-color .18s ease, color .18s ease, box-shadow .18s ease;
-  line-height: 1.2;
-  font-weight: 500;
-
+    position: relative;
+    padding: .5rem .85rem;
+    margin: .25rem .25rem;
+    border-radius: .5rem;
+    color: var(--esr-blue-700);
+    transition: background-color .18s ease, color .18s ease, box-shadow .18s ease;
+    line-height: 1.2;
+    font-weight: 500;
 }
-
 .navbar .nav-link:hover,
-.navbar .nav-link:focus {
-  background: var(--esr-accent);
-  color: #fff !important;
-  box-shadow: 0 2px 10px rgba(30,136,229,.25);
-  text-decoration: none;
-}
-
+.navbar .nav-link:focus,
 .navbar .nav-link.active {
-  background: var(--esr-accent);
-  color: #fff !important;
+    background: var(--esr-accent);
+    color: #fff !important;
+    box-shadow: 0 2px 10px rgba(30,136,229,.25);
+    text-decoration: none;
 }
 
-.navbar .navbar-text {
-  color: var(--esr-blue-700);  
-}
-
-.navbar-toggler {
-  border: none;
-}
-.navbar-toggler:focus {
-  box-shadow: 0 0 0 .15rem rgba(30,136,229,.3);
-}
-
-.navbar_home { 
-  background: var(--esr-card) !important; 
-  border-bottom: 0 !important;          
-  box-shadow: none !important;            
-}
-/* ende test*/
-
+/*subnav*/
 .subnav {
-  position: sticky;
-  top: 0;
-  width: 100%;
-  z-index: 100;
-  background: var(--esr-card);
-  border-top: 0 !important;
-  border-bottom: 1px solid var(--esr-border); 
-  box-shadow: none; 
+    position: sticky;
+    top: 0;
+    width: 100%;
+    z-index: 100;
+    background: var(--esr-card);
+    border-top: 0 !important;
+    border-bottom: 1px solid var(--esr-border);
+    box-shadow: none;
 }
 
 .subnav-inner {
-  max-width: 1200px;
-  margin-inline: auto;
-  padding: .55rem 1rem;
+    max-width: 1200px;
+    margin-inline: auto;
+    padding: .55rem 1rem;
 }
 
 .subnav-menu {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;              
-  list-style: none;
-  margin: 0;
-  padding: 0;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
 .subnav .nav-link:hover,
 .subnav .nav-link:focus {
-  background: var(--esr-accent);
-  color: #fff !important;
-  box-shadow: 0 2px 10px rgba(30,136,229,.25);
-  text-decoration: none;
+    background: var(--esr-accent);
+    color: #fff !important;
+    box-shadow: 0 2px 10px rgba(30,136,229,.25);
+    text-decoration: none;
 }
 
 .subnav .nav-link.active {
-  background: var(--esr-accent);
-  color: #ffffff !important;
+    background: var(--esr-accent);
+    color: #ffffff !important;
 }
 
 .subnav .nav-link::after {
-  content: "";
-  position: absolute;
-  left: .6rem;
-  right: .6rem;
-  bottom: .25rem;
-  height: 2px;
-  background: transparent;
-  border-radius: 2px;
-  transform: scaleX(0);
-  transition: transform .18s ease, background-color .18s ease;
+    content: "";
+    position: absolute;
+    left: .6rem;
+    right: .6rem;
+    bottom: .25rem;
+    height: 2px;
+    background: transparent;
+    border-radius: 2px;
+    transform: scaleX(0);
+    transition: transform .18s ease, background-color .18s ease;
 }
 
 .subnav .nav-link {
-  display: inline-block;
-  padding: .45rem .9rem;
-  border-radius: .55rem;
-  color: var(--esr-blue-700);
-  text-decoration: none;
-  transition: 
-      background-color .18s ease,
-      color .18s ease,
-      box-shadow .18s ease;
-}
-
-
-@media (max-width: 576px) {
-
-  .navbar-nav .nav-link {
-    position: relative;
+    display: inline-block;
+    padding: .45rem .9rem;
+    border-radius: .55rem;
     color: var(--esr-blue-700);
-    width: auto;
-    height: auto;
-    padding: 0.5rem 1rem;
-    border-radius: .5rem;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    text-indent: 0;
-    overflow: visible;
-    white-space: normal;
-  }
-
-  .navbar-nav .nav-link:hover,
-  .navbar-nav .nav-link:focus {
-    background: var(--esr-accent);
-    color: #fff !important;
-  }
-
-  .navbar-nav .nav-item .nav-link::before {
-    content: none !important;
-  }
-
-  .subnav-inner { padding: .45rem 1rem; }
-  .subnav-menu { gap: .5rem; }
-  .subnav .nav-link { padding: .4rem .7rem; }
+    text-decoration: none;
+    transition:
+            background-color .18s ease,
+            color .18s ease,
+            box-shadow .18s ease;
 }
 
-/*Container für Tabelle*/
-#main-content .card-body > .d-flex.justify-content-between {
-  align-items: center;
-  gap: 1rem;
-}
 
-#main-content .card-body .d-flex.align-items-center {
-  gap: .75rem;
-}
+/* Suchfeld + Button-Gruppe in neuem Look */
+#main-content .card-body > .d-flex.justify-content-between { align-items: center; gap: 1rem; }
+#main-content .card-body .d-flex.align-items-center { gap: .75rem; }
 
-/* Suchfeld */
 #table-search.form-control {
-  max-width: 360px;
-  background: #fff;
-  border: 1px solid var(--esr-border);
-  color: var(--esr-blue-700);
-  border-radius: .55rem;
-  transition: box-shadow .18s ease, border-color .18s ease;
+    max-width: 360px;
+    background: #fff;
+    border: 1px solid var(--esr-border);
+    color: var(--esr-blue-700);
+    border-radius: .55rem;
+    transition: box-shadow .18s ease, border-color .18s ease;
 }
-
-#table-search::placeholder {
-  color: color-mix(in oklab, var(--esr-blue-700) 45%, #fff);
-  opacity: .8;
-}
-
+#table-search::placeholder { opacity: .8; }
 #table-search:focus {
-  border-color: color-mix(in oklab, var(--esr-accent) 60%, black);
-  box-shadow: 0 0 0 .16rem rgba(30,136,229,.25);
+    border-color: color-mix(in oklab, var(--esr-accent) 60%, black);
+    box-shadow: 0 0 0 .16rem rgba(30,136,229,.25);
 }
 
-/* Dropdown-Button */
+/* Dropdowns im neuen Look */
 .btn-secondary {
-  background: #fff;
-  color: var(--esr-blue-700);
-  border: 1px solid var(--esr-border);
-  border-radius: .55rem;
+    background: #fff;
+    color: var(--esr-blue-700);
+    border: 1px solid var(--esr-border);
+    border-radius: .55rem;
 }
 .btn-secondary:hover,
 .btn-secondary:focus {
-  background: color-mix(in oklab, var(--esr-accent) 8%, white);
-  box-shadow: 0 2px 10px rgba(30,136,229,.15);
+    background: color-mix(in oklab, var(--esr-accent) 8%, white);
+    box-shadow: 0 2px 10px rgba(30,136,229,.15);
 }
-
-/* Dropdown-Styling */
 .dropdown-menu {
-  border: 1px solid var(--esr-border);
-  box-shadow: 0 16px 32px rgba(0,0,0,.08);
-  border-radius: .5rem;
+    border: 1px solid var(--esr-border);
+    box-shadow: 0 16px 32px rgba(0,0,0,.08);
+    border-radius: .5rem;
 }
-.dropdown-item {
-  display: flex;
-  align-items: center;
-  gap: .5rem;
-  color: var(--esr-blue-700);
+.dropdown-item { display: flex; align-items: center; gap: .5rem; color: var(--esr-blue-700); }
+.dropdown-item:hover { background: color-mix(in oklab, var(--esr-accent) 12%, white); }
+.dropdown-item input[type="checkbox"] { accent-color: var(--esr-accent); }
+
+/* Tabelle im neuen Farbsystem */
+.table{
+    width: 100%;
+    background: var(--esr-card);
+    border: 1px solid var(--esr-border);
+    border-radius: .5rem;
+    border-collapse: collapse;
+    overflow: hidden;
 }
-.dropdown-item:hover {
-  background: color-mix(in oklab, var(--esr-accent) 12%, white);
+.table thead th{
+    background: var(--esr-accent) !important;
+    color: #fff !important;
+    font-weight: 600;
+    border: 1px solid var(--esr-border);
+    padding: .75rem;
 }
-.dropdown-item input[type="checkbox"] {
-  accent-color: var(--esr-accent);
+.table td, .table th{
+    border: 1px solid var(--esr-border);
+    padding: .65rem .75rem;
+}
+.table tbody tr:nth-child(odd){ background: #ffffff; }
+.table tbody tr:nth-child(even){ background: color-mix(in oklab, var(--esr-bg) 75%, #ffffff); }
+.table tbody tr:hover:not(.no-data-row){
+    background: color-mix(in oklab, var(--esr-accent) 14%, white);
+    transition: background-color .16s ease;
+}
+.no-data-row td{
+    background: color-mix(in oklab, var(--esr-accent) 6%, white);
+    color: color-mix(in oklab, var(--esr-blue-700) 60%, #666);
+    text-align: center;
+    font-weight: 500;
 }
 
-/* --- TABELLE --- */
-.table {
-  width: 100%;
-  background: var(--esr-card);
-  border: 1px solid var(--esr-border);
-  border-radius: .5rem;
-  border-collapse: collapse;
-  overflow: hidden;
-}
-
-.table thead th {
-  background: var(--esr-accent) !important;
-  color: #fff !important;
-  font-weight: 600;
-  border: 1px solid var(--esr-border);
-  padding: .75rem;
-}
-
-.table td, 
-.table th {
-  border: 1px solid var(--esr-border);
-  padding: .65rem .75rem;
-}
-
-.table tbody tr:nth-child(odd) {
-  background: #ffffff;
-}
-
-.table tbody tr:nth-child(even) {
-  background: color-mix(in oklab, var(--esr-bg) 75%, #ffffff);
-}
-
-.table tbody tr:hover:not(.no-data-row) {
-  background: color-mix(in oklab, var(--esr-accent) 14%, white);
-  transition: background-color .16s ease;
-}
-
-.no-data-row td {
-  background: color-mix(in oklab, var(--esr-accent) 6%, white);
-  color: color-mix(in oklab, var(--esr-blue-700) 60%, #666);
-  text-align: center;
-  font-weight: 500;
-}
-
-
-
-/* Buttons */
-.btn-primary {
-  background: var(--esr-accent);
-  border-color: var(--esr-accent);
-  color: #fff;
-  border-radius: .55rem;
-  font-weight: 600;
-}
-.btn-primary:hover {
-  background: color-mix(in oklab, var(--esr-accent) 85%, black);
-  border-color: color-mix(in oklab, var(--esr-accent) 85%, black);
-}
-
-
-/* Footer */
-.footer{
-  background: var(--esr-accent) !important;  
-  border-top: 1px solid color-mix(in oklab, var(--esr-accent) 70%, black);
-}
-.footer p,
-.footer a,
-.footer span{
-  color: #111 !important;
-  transition: color .18s ease, opacity .18s ease, text-decoration-color .18s ease;
-}
-
-.footer a:hover,
-.footer a:focus{
-  color: #fff !important;
-  text-decoration: underline;
-  text-decoration-color: rgba(255,255,255,.8);
-}
-
-.footer .container{
-  max-width: 1200px;
-}
-
-.table,
-.bootstrap-table .fixed-table-container{
-  border-color: var(--esr-border);
-}
+/* Buttons in neuem Farbsystem */
 .btn-primary{
-  background-color: var(--esr-accent);
-  border-color: var(--esr-accent);
+    background: var(--esr-accent);
+    border-color: var(--esr-accent);
+    color: #fff;
+    border-radius: .55rem;
+    font-weight: 600;
 }
 .btn-primary:hover,
 .btn-primary:focus{
-  background-color: color-mix(in oklab, var(--esr-accent) 85%, black);
-  border-color: color-mix(in oklab, var(--esr-accent) 85%, black);
-}
-
-a:focus-visible,
-button:focus-visible,
-.navbar .nav-link:focus-visible{
-  outline: 2px solid color-mix(in oklab, var(--esr-accent) 70%, white);
-  outline-offset: 2px;
-  border-radius: .5rem;
-}
-
-
-
-
-/* Test */
-
-.abbrechen_spalte {
-    background-color: #777777;
-    font-weight: bold;
-    color: black;
-    width: 7em;
-    height: 2.5em;
-    margin-left: 0.5em;
-    border-radius: 8px;
-}
-
-.abbrechen_spalte:hover {
-    background-color: lightgray;
-}
-
-.active-text {
-    color: white;
-    font-weight: bold;
-    background-color: transparent;
-}
-
-.check_dropdown_board {
-    padding-left: 0;
-    margin-right: 0.5em;
-    width: 100%;
-}
-
-.col-sm {
-    align-content: center;
-}
-
-.container-card {
-    margin: 20px;
-}
-
-.erstellen_spalte {
-    margin-left: 0.5em;
-    height: 2.5em;
-    width: 7em;
-    border-radius: 8px;
-    background-color: #399257;
-    font-weight: bold;
-    color: black;
-}
-
-.erstellen_spalte:hover {
-    background-color: #69eaa8;
-}
-
-.footer {
-    background-color: #2f4858;
-    padding-top: 2.25em;
-    padding-bottom: 1.25em;
-    font-size: 0.825em;
-}
-
-.hidden-link {
-    text-decoration: none;
-    color: inherit;
-    font-weight: bold;
-}
-
-.hidden-link:hover {
-    color: black;
-    font-weight: bold;
-}
-
-.hidden-link-footer {
-    text-decoration: none;
-    color: inherit;
-}
-
-.hidden-link-footer:hover {
-    color: black;
-    font-weight: bold;
-}
-
-.mg-left {
-    margin-left: 25em;
-}
-
-.navbar {
-    background-color: cornflowerblue;
-}
-
-.pen-square {
-    color: #399257;
-}
-
-.pen-square:hover {
-    color: black;
-}
-
-.row {
-    margin-bottom: 1em;
-}
-
-.spalten_kennzeichnung {
-    margin-left: 0.5em;
-    margin-right: 4em;
-    font-weight: bold;
-    align-content: center;
-}
-
-.spalte-beschreibung {
-    --bs-text-opacity: 1;
-    color: var(--bs-secondary-color);
-}
-
-.table-button {
-    margin-bottom: 0.5em;
-    border-radius: 12px;
-    width: 6em;
-    height: 2em;
-    color: black;
-    font-weight: bold;
-    background-color: dodgerblue;
-    font-size: 1.25em;
-}
-
-.table-button:hover {
-    background-color: lightskyblue;
-}
-
-.card-table-row td {
-    padding: 15px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    background: #f8f9fa;
-}
-
-.card-entry {
-    display: flex;
-    align-items: center;
-    padding: 8px 0;
-}
-
-.card-entry strong {
-    flex: 1;
-    text-align: left;
-    font-weight: bold;
-}
-
-.card-entry span {
-    flex: 3;
-    padding-left: 20px;
-    text-align: left;
-}
-
-.disabled-option {
-    pointer-events: none;
-    opacity: 0.5;
-}
-
-.text-grey {
-    color: #777777;
-}
-
-.textfeld {
-    margin-right: 1.25em;
-    border-radius: 4px;
-    border: 1px solid #000000;
-    padding-left: 0.75em;
-}
-
-.trash-can {
-    color: #399257;
-    margin-right: 0.75em;
-    margin-left: 0.5em;
-}
-
-.trash-can:hover {
-    color: black;
-}
-
-#bearbeiten {
-    width: 17.5%;
-}
-
-#board {
-    font-weight: bold;
-}
-
-#copyright {
-    margin-left: 1.25em;
-    margin-right: 2.25em;
-}
-
-#dropwdown_board {
-    width: 100%;
-    border-radius: 4px;
-    border: 1px solid #000000;
-    height: 34px;
-    margin-right: 10em;
-    padding-left: 0.5em;
-}
-
-#id {
-    width: 5%;
-}
-
-#sortid_erstellen {
-    padding-bottom: 0.25em;
-    padding-top: 0.25em;
-}
-
-#spalten {
-    font-weight: bold;
-}
-
-#spaltenbezeichnung {
-    padding-top: 0.25em;
-    padding-bottom: 0.25em;
-}
-
-#tasks {
-    font-weight: bold;
-}
-
-html, body {
-    height: 100%;
-    margin: 0;
-}
-
-.personenkuerzel {
-    text-align: center;
-    padding-top: 0.4em;
-    height: 2.5em;
-    width: 2.5em;
-}
-
-a:hover {
-    color: lightblue;
-}
-a:link{
-    text-decoration: none;
-}
-
-table th {
-    background-color: #a8a8a8 !important;
-}
-
-.fas-menue .fas {
-    vertical-align: baseline;
-    font-size: 0.8em;
-    width: 2em;
-}
-
-.icon-main-menu {
-    width: 1.5em;
-}
-
-.cursor-grab {
-    cursor: -webkit-grab;
-    cursor: grab;
-}
-
-.draggable-card {
-    cursor: grab;
-}
-
-.draggable-card:active {
-    cursor: grabbing;
-}
-
-.personenkuerzel {
-    text-align: center;
-    padding-top: 0.4em;
-    height: 2.5em;
-    width: 2.5em;
-}
-
-.menu-item {
-    position: relative;
-    display: inline-block;
-    margin: 0 10px;
-}
-
-.menu-item a {
-    display: flex;
-    align-items: center;
-    font-size: 18px;
-    text-decoration: none;
-    padding: 10px 20px;
-    position: relative;
-    background-size: 200% 100%;
-    background-position: 100%;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    transition: .8s ease-in-out;
-    cursor: pointer;
-}
-
-.menu-item:nth-child(1) a {
-    background-image: linear-gradient(to right, black, aliceblue , silver 50%, white 50%);
-}
-
-
-
-.menu-item:nth-child(2) a {
-    background-image: linear-gradient(to right, black, aliceblue , silver 50%, white 50%);
-}
-
-
-
-.menu-item:nth-child(3) a {
-    background-image: linear-gradient(to right, black, aliceblue , silver 50%, white 50%);
-}
-
-
-
-.menu-item:nth-child(4) a {
-    background-image: linear-gradient(to right, black, #3a3939, #6d7272 50%, white 50%);
-}
-
-
-
-
-.menu-item a:hover {
-    background-position: 0 0;
-}
-
-
-.menu-item.active a {
-    background-position: 0 0;
-    -webkit-text-fill-color: #020202;
-    font-weight: bold;
-}
-
-.btn-group .btn {
-    margin-right: -1px;
-}
-
-.dark-mode {
-    background-color: #121212;
-    color: #ffffff;
-}
-
-.dark-mode .bg-header,
-.dark-mode .footer {
-    background-color: #1e1e1e !important;
-}
-
-.dark-mode .navbar {
-    background-color: #343434 !important;
-}
-
-
-.dark-mode .card {
-    background-color: #2a2a2a;
-    color: #ffffff;
-}
-
-
-.dark-mode .card-header.outer {
-    background-color: #3a2f2f !important;
-    color: #ffffff !important;
-}
-
-.dark-mode .card.outer {
-    background-color: #2a2424 !important;
-    color: #ffffff !important;
-}
-
-.dark-mode .card-header.title {
-    background-color: #3b3636 !important;
-    color: #ffffff !important;
-    margin-right: -1px;
-}
-
-
-.dark-mode .card-header.inner {
-    background-color: #2e2a2a !important;
-    color: #ffffff !important;
-}
-
-.dark-mode .card.inner {
-    background-color: #252222 !important;
-    color: #ffffff !important;
-}
-
-
-.dark-mode .spalte-beschreibung {
-    color: rgba(var(--bs-secondary-rgb), var(--bs-text-opacity)) !important;
-}
-
-
-.dark-mode .btn-primary {
-    background-color: #696969 !important;
-    border-color: #555 !important;
-}
-
-.dark-mode .btn-primary:hover {
-    background-color: #383838 !important;
-    border-color: #555 !important;
-}
-
-
-.dark-mode .taskkarte {
-    color: #ffffff !important;
-}
-
-.dark-mode .boards-container,
-.dark-mode .spalten-container {
-    background-color: #1e1e1e !important;
-    color: #ffffff !important;
-    border: 1px solid #444 !important;
-}
-
-.dark-mode .footer {
-    background-color: #1e1e1e !important;
-    color: #ffffff !important;
-    padding: 10px;
-    text-align: center;
-}
-
-
-#searchTask {
-    background-color: #ffffff;
-    color: #000000;
-    border-color: #ced4da;
-}
-
-
-.dark-mode #searchTask {
-    background-color: #676464;
-    color: #ffffff;
-    border-color: #555555;
-}
-
-.dark-mode .form-floating {
-    background-color: #676464 !important;
-    color: #ffffff !important;
-    border-color: #555555 !important;
-}
-
-.dark-mode #table-search {
-    background-color: #676464;
-    color: #ffffff;
-    border-color: #555555;
-}
-
-.dark-mode .input-group-text {
-    background-color: #444444;
-    border-color: #555555;
-    color: #ffffff;
-}
-
-
-
-.dark-mode .dropdown-menu {
-    background-color: #333333;
-    color: #ffffff;
-}
-
-.dark-mode .dropdown-item {
-    background-color: #333333;
-    color: #ffffff;
-}
-
-.dark-mode .dropdown-item:hover {
-    background-color: #555555;
-}
-
-
-.dark-mode .inputText {
-    background-color: #444444;
-    color: #ffffff;
-    border-color: #555555;
-}
-
-.dark-mode .inputText::placeholder {
-    color: #a6a6a6;  /* Helles Grau für den Placeholder */
-}
-.dark-mode #personenmailInput {
-    background-color: #2a2a2a;
-    color: #ffffff;
-    border-color: #555555;
-}
-
-body.dark-mode .dropdown-item.active {
-    background-color: #333; /* Schwarzer Hintergrund für das aktive Item im normalen Modus */
-    color: #000000; /* Weiße Schrift für das aktive Item im normalen Modus */
-}
-
-
-
-/* Dark Mode Styles für die Tabellen */
-body.dark-mode .table thead {
-    background-color: #343a40 !important;
-}
-
-body.dark-mode .table thead th {
-    color: #ffffff !important;
-}
-
-body.dark-mode .table tbody tr {
-    background-color: #212529 !important;
-}
-
-body.dark-mode .table tbody td {
-    color: #ddd !important;
-}
-
-
-body.dark-mode .table tbody tr:hover {
-    background-color: #495057 !important;
-}
-
-
-body.dark-mode .table {
-    border-color: #495057 !important;
-}
-
-body.dark-mode .table-bordered tbody tr:hover {
-    background-color: #343a40 !important;
-}
-
-
-body.dark-mode {
-    background-color: #121212 !important;
-    color: #ddd !important;
-}
-
-body.dark-mode .table>:not(caption)>*>* {
-    color: #ddd;
-    background-color: #212529;
-    border-bottom-width: 1px;
-    box-shadow: inset 0 0 0 9999px #212529;
-}
-
-body.dark-mode .table thead>:not(caption)>*>* {
-    background-color: #343a40;
-    color: #ffffff;
-}
-
-/* Platzhalter für Tasks zu verschieben */
-.spalte {
-    min-height: 1em;
-}
-
-/* Push Animation für den SuchButton */
-.search_Button {
-    transition: transform 0.1s ease-in-out;
-}
-
-.search_Button:active {
-    transform: scale(0.9);
-}
+    background-color: color-mix(in oklab, var(--esr-accent) 85%, black);
+    border-color: color-mix(in oklab, var(--esr-accent) 85%, black);
+}
+
+/* Footer in neuem Farbsystem */
+.footer{
+    background: var(--esr-accent) !important;
+    border-top: 1px solid color-mix(in oklab, var(--esr-accent) 70%, black);
+}
+.footer p,.footer a,.footer span{ color: #111 !important; transition: color .18s ease, opacity .18s ease, text-decoration-color .18s ease; }
+.footer a:hover,.footer a:focus{
+    color: #fff !important;
+    text-decoration: underline;
+    text-decoration-color: rgba(255,255,255,.8);
+}
+
+/* ===========================
+   STRUKTUR-KLASSEN (aus CSS 1)
+   -> Farben auf Variablen umgestellt
+   =========================== */
+
+.container-card { margin: 20px; }
+
+/* Buttons „Erstellen/Abbrechen“ */
+.erstellen_spalte{
+    margin-left: .5em; height: 2.5em; width: 7em; border-radius: 8px;
+    background-color: var(--esr-accent);
+    font-weight: bold; color: #fff;
+}
+.erstellen_spalte:hover{
+    background-color: color-mix(in oklab, var(--esr-accent) 85%, black);
+}
+.abbrechen_spalte{
+    background-color: #777777; /* neutral lassen, oder: color-mix(in oklab, var(--esr-blue-700) 20%, #777) */
+    font-weight: bold; color: #fff;
+    width: 7em; height: 2.5em; margin-left: .5em; border-radius: 8px;
+}
+.abbrechen_spalte:hover{ background-color: #9a9a9a; }
+
+/* Links, Icons */
+.hidden-link{ text-decoration: none; color: inherit; font-weight: bold; }
+.hidden-link:hover{ color: var(--esr-blue-700); }
+.hidden-link-footer{ text-decoration: none; color: inherit; }
+.hidden-link-footer:hover{ color: var(--esr-blue-700); font-weight: bold; }
+
+.pen-square{ color: var(--esr-accent); }
+.pen-square:hover{ color: var(--esr-blue-700); }
+.trash-can{ color: var(--esr-accent); margin-right: .75em; margin-left: .5em; }
+.trash-can:hover{ color: var(--esr-blue-700); }
+
+/* Tabellen-Buttons (lokal) */
+.table-button{
+    margin-bottom: .5em; border-radius: 12px; width: 6em; height: 2em;
+    color: #fff; font-weight: bold; background-color: var(--esr-accent); font-size: 1.05em;
+}
+.table-button:hover{ background-color: color-mix(in oklab, var(--esr-accent) 85%, black); }
+
+/* Kartenansicht (aus CSS 1, farblich angepasst) */
+.card-table-row td{
+    padding: 15px; border: 1px solid var(--esr-border); border-radius: 10px; background: var(--esr-card);
+}
+.card-entry{ display: flex; align-items: center; padding: 8px 0; }
+.card-entry strong{ flex: 1; text-align: left; font-weight: 600; color: var(--esr-blue-700); }
+.card-entry span{ flex: 3; padding-left: 20px; text-align: left; }
+
+/* Utilities / Formteile */
+.text-grey{ color: #777; }
+.textfeld{
+    margin-right: 1.25em; border-radius: 4px; border: 1px solid #000; padding-left: .75em;
+}
+
+/* Tabellenbreite/Spalten-Labels aus CSS 1 beibehalten */
+.spalten_kennzeichnung{ margin-left: .5em; margin-right: 4em; font-weight: bold; align-content: center; }
+.spalte-beschreibung{ color: var(--bs-secondary-color); } /* belassen, nutzt BS-Variable */
+
+/* Diverse IDs aus CSS 1 (Breiten/Abstände) */
+#bearbeiten{ width: 17.5%; }
+#board, #spalten, #tasks{ font-weight: bold; }
+#copyright{ margin-left: 1.25em; margin-right: 2.25em; }
+#dropwdown_board{ /* Tippfehler belassen, falls im HTML so verwendet */
+    width: 100%; border-radius: 4px; border: 1px solid #000; height: 34px; margin-right: 10em; padding-left: .5em;
+}
+#id{ width: 5%; }
+#sortid_erstellen{ padding: .25em 0; }
+#spaltenbezeichnung{ padding: .25em 0; }
+
+/* Menüeffekte aus CSS 1: Farben auf neues Schema angepasst (dezent) */
+.menu-item{ position: relative; display: inline-block; margin: 0 10px; }
+.menu-item a{
+    display: flex; align-items: center; font-size: 18px; text-decoration: none; padding: 10px 20px;
+    position: relative; background-size: 200% 100%; background-position: 100%; background-clip: text;
+    -webkit-text-fill-color: transparent; transition: .8s ease-in-out; cursor: pointer;
+    background-image: linear-gradient(to right, var(--esr-blue-700), #ffffff 50%, var(--esr-accent) 50%);
+}
+.menu-item a:hover{ background-position: 0 0; }
+.menu-item.active a{ background-position: 0 0; -webkit-text-fill-color: #020202; font-weight: bold; }
+
+/* Sonstige Helfer */
+.btn-group .btn{ margin-right: -1px; }
+.cursor-grab, .draggable-card{ cursor: grab; }
+.draggable-card:active{ cursor: grabbing; }
+a:hover{ color: color-mix(in oklab, var(--esr-accent) 60%, black); }
+a:link{ text-decoration: none; }
+table th{ background-color: var(--esr-accent) !important; color: #fff !important; }
+
+/* Platzhalter-Spalten in Boards */
+.spalte{ min-height: 1em; }
+
+/* Such-Button-Press-Effekt */
+.search_Button{ transition: transform .1s ease-in-out; }
+.search_Button:active{ transform: scale(0.9); }
+
+/* Checkbox-Logik (aus deinem JS) */
+.column-toggle{}
+.disabled-option{ pointer-events: none; opacity: .5; }
+
+/* EINE Definition (doppelt war vorher): */
+.personenkuerzel{
+    text-align: center; padding-top: .4em; height: 2.5em; width: 2.5em;
+}
+
+/* ===========================
+   OPTIONAL: Dark Mode (deinen bestehenden beibehalten)
+   -> Kannst du später auf Variablen umbauen; funktioniert aber so.
+   =========================== */
+body.dark-mode{
+    background-color: #121212 !important; color: #ddd !important;
+}
+body.dark-mode .table thead{ background-color: #343a40 !important; }
+body.dark-mode .table thead th{ color: #fff !important; }
+body.dark-mode .table tbody tr{ background-color: #212529 !important; }
+body.dark-mode .table tbody td{ color: #ddd !important; }
+body.dark-mode .table tbody tr:hover{ background-color: #495057 !important; }
+body.dark-mode .table{ border-color: #495057 !important; }
+body.dark-mode .table>:not(caption)>*>*{
+    color: #ddd; background-color: #212529; border-bottom-width: 1px; box-shadow: inset 0 0 0 9999px #212529;
+}
+body.dark-mode .table thead>:not(caption)>*>*{ background-color: #343a40; color: #ffffff; }
+.dark-mode .footer{ background-color: #1e1e1e !important; color: #ffffff !important; padding: 10px; text-align: center; }
+.dark-mode .dropdown-menu{ background-color: #333333; color: #ffffff; }
+.dark-mode .dropdown-item{ background-color: #333333; color: #ffffff; }
+.dark-mode .dropdown-item:hover{ background-color: #555555; }
+.dark-mode #table-search{ background-color: #676464; color: #ffffff; border-color: #555555; }
