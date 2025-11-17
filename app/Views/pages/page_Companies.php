@@ -56,6 +56,7 @@
                         <tr>
                             <th data-field="id" data-sortable="true">ID</th>
                             <th data-field="name" data-sortable="true">Name</th>
+                            <th data-field="name" data-sortable="true">Bericht</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -64,6 +65,7 @@
                                     <tr>
                                         <td><?= $company['id'] ?></td>
                                         <td><?= $company['name'] ?></td>
+                                        <td><?= $company['bericht'] ?></td>
                                     </tr>
                                 <?php endforeach; ?>
                             <?php else: ?>
