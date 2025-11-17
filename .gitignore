@@ -1,0 +1,35 @@
+# --------------------------------
+# CodeIgniter specific
+# --------------------------------
+writable/cache/
+writable/logs/
+writable/session/
+writable/debugbar/
+writable/uploads/
+writable/build/
+writable/filecache/
+
+# Prevent environment-specific config leak
+.env
+.env.*
+
+# Composer vendor directory
+vendor/
+
+# System directory (if downloaded instead of composer managed)
+system/
+
+# --------------------------------
+# IDE & Editor files
+# --------------------------------
+.idea/
+.vscode/
+*.iml
+
+# --------------------------------
+# OS-specific files
+# --------------------------------
+.DS_Store
+Thumbs.db
+
+
