@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-class CompaniesController extends BaseController
+class HelpController extends BaseController
 {
     public function index()
     {
