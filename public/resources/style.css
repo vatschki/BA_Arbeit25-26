@@ -6,6 +6,7 @@
     --esr-bg:#f3f4f6;         /* Seitenhintergrund */
     --esr-card:#ffffff;       /* Karten/Flächen */
     --esr-border:#e5e7eb;     /* Rahmen/Trennlinien */
+    --esr-red-warning: #ff0000;     /* Red Warning */
 }
 
 html, body{
@@ -125,6 +126,36 @@ body > div:first-of-type{
             box-shadow .18s ease;
 }
 
+/* Sidbar im modal */
+.sidebar-nav {
+    width: 220px;
+    background-color: var(--esr-bg); /* leicht dunkles Grau */
+    border-right: 2px solid var(--esr-border); /* Vertikale Linie rechts */
+    padding-top: 15px;
+}
+
+/* Sidebar Buttons */
+.sidebar-nav .nav-link {
+    color: var(--esr-blue-700);
+    text-align: left;
+    padding: 10px 15px;
+    border-radius: 6px;
+    margin-bottom: 4px;
+    font-weight: 500;
+}
+
+/* Aktiver Button */
+.sidebar-nav .nav-link.active {
+    background-color: var(--esr-accent);
+    color: #ffffff !important;
+}
+
+/* Hover-Effekt */
+.sidebar-nav .nav-link:hover {
+    background-color: var(--esr-accent);
+    color: #ffffff;
+}
+
 
 /* Suchfeld + Button-Gruppe */
 #main-content .card-body > .d-flex.justify-content-between { align-items: center; gap: 1rem; }
@@ -145,17 +176,6 @@ body > div:first-of-type{
 }
 
 /* Dropdown */
-.btn-secondary {
-    background: #fff;
-    color: var(--esr-blue-700);
-    border: 1px solid var(--esr-border);
-    border-radius: .55rem;
-}
-.btn-secondary:hover,
-.btn-secondary:focus {
-    background: color-mix(in oklab, var(--esr-accent) 85%, black);
-    box-shadow: 0 2px 10px rgba(30,136,229,.15);
-}
 .dropdown-menu {
     border: 1px solid var(--esr-border);
     box-shadow: 0 16px 32px rgba(0,0,0,.08);
@@ -212,6 +232,66 @@ body > div:first-of-type{
     border-color: color-mix(in oklab, var(--esr-accent) 85%, black);
 }
 
+.btn-secondary {
+    background: #fff;
+    color: var(--esr-blue-700);
+    border: 1px solid var(--esr-border);
+    border-radius: .55rem;
+}
+.btn-secondary:hover,
+.btn-secondary:focus {
+    background: color-mix(in oklab, var(--esr-accent) 85%, black);
+    box-shadow: 0 2px 10px rgba(30,136,229,.15);
+}
+
+.erstellen_spalte{
+    margin-left: .5em; height: 2.5em; width: 7em; border-radius: 8px;
+    background-color: var(--esr-accent);
+    font-weight: bold; color: #fff;
+}
+.erstellen_spalte:hover{
+    background-color: color-mix(in oklab, var(--esr-accent) 85%, black);
+}
+.abbrechen_button{
+    background-color: #fff; /* neutral lassen, oder: color-mix(in oklab, var(--esr-blue-700) 20%, #777) */
+    font-weight: bold; color: var(--esr-red-warning);
+    width: 7em; height: 2.5em; margin-left: .5em; border-radius: 8px;
+    border: 1px solid var(--esr-border);
+    border-radius: .55rem;
+}
+
+.abbrechen_button:focus,
+.abbrechen_button:focus-visible,
+.abbrechen_button:active {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.abbrechen_button:hover {
+    background-color: var(--esr-red-warning);
+    color: #fff;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* Pdf Dropzone */
+.pdf-drop-zone{
+    border: 2px dashed var(--esr-border);
+    border-radius: 1rem;
+    background: color-mix(in oklab, var(--esr-bg) 80%, #ffffff);
+    padding: 2.5rem 1rem;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color .2s ease, border-color .2s ease;
+}
+
+.pdf-drop-zone.dragover{
+    background: color-mix(in oklab, var(--esr-accent) 10%, #ffffff);
+    border-color: var(--esr-accent);
+}
+
+
+
 /* Footer */
 .footer{
     background: var(--esr-accent) !important;
@@ -228,20 +308,7 @@ body > div:first-of-type{
 
 .container-card { margin: 20px; }
 
-.erstellen_spalte{
-    margin-left: .5em; height: 2.5em; width: 7em; border-radius: 8px;
-    background-color: var(--esr-accent);
-    font-weight: bold; color: #fff;
-}
-.erstellen_spalte:hover{
-    background-color: color-mix(in oklab, var(--esr-accent) 85%, black);
-}
-.abbrechen_spalte{
-    background-color: #777777; /* neutral lassen, oder: color-mix(in oklab, var(--esr-blue-700) 20%, #777) */
-    font-weight: bold; color: #fff;
-    width: 7em; height: 2.5em; margin-left: .5em; border-radius: 8px;
-}
-.abbrechen_spalte:hover{ background-color: #9a9a9a; }
+
 
 /* Links, Icons */
 .hidden-link{ text-decoration: none; color: inherit; font-weight: bold; }
