@@ -1,7 +1,7 @@
     <body>
     <?php
         $uri = service('uri');
-        $seg1 = $uri->getSegment(1);
+        $seg1 = $uri->getSegment(1) ?? '';
     ?>
 
         <header>
@@ -22,7 +22,7 @@
                     <div class="collapse navbar-collapse justify-content-end" id="navbarMenu">
                         <ul class="navbar-nav mb-2 mb-lg-0">
                             <li class="nav-item">
-                                <a class="nav-link <?= ($seg1 === '' || $seg1 === 'companies' || $seg1 === 'esr-reports') ? 'active' : '' ?>" aria-current="page" href="<?= base_url('/') ?>">
+                                <a class="nav-link <?= ($seg1 === '' || $seg1 === 'companies' || $seg1 === 'esg-reports') ? 'active' : '' ?>" aria-current="page" href="<?= base_url('/') ?>">
                                     Home
                                 </a>
                             </li>
@@ -46,7 +46,7 @@
                 </div>
             </nav>
 
-            <?php if ($seg1 === '' || $seg1 === 'companies' || $seg1 === 'esr-reports') : ?>
+            <?php if ($seg1 === '' || $seg1 === 'companies' || $seg1 === 'esg-reports') : ?>
                 <nav class="subnav">
                     <div class="subnav-inner">
                         <ul class="subnav-menu">
@@ -56,8 +56,8 @@
                                 </a>
                             </li>
                             <li>
-                                <a class="nav-link <?= ($seg1 === 'companies') ? 'active' : '' ?>" href="<?= base_url('esg-reports') ?>">
-                                    ESR Reports
+                                <a class="nav-link <?= ($seg1 === 'esg-reports') ? 'active' : '' ?>" href="<?= base_url('esg-reports') ?>">
+                                    ESG Reports
                                 </a>
                             </li>
                         </ul>

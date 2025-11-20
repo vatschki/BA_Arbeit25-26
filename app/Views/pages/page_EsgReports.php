@@ -15,7 +15,7 @@
 
                         <!-- Search Field mit kleinem Abstand -->
                         <button class="btn btn-secondary dropdown-toggle rounded-end" type="button" id="dropdownLandButton" data-bs-toggle="dropdown" aria-expanded="false">
-                           Land
+                            Land
                         </button>
 
                         <button class="btn btn-secondary dropdown-toggle rounded-end" type="button" id="dropdownSectorButton" data-bs-toggle="dropdown" aria-expanded="false">
@@ -65,25 +65,27 @@
                     <table class="table table-hover" id="boardTable" data-toggle="table">
                         <thead>
                         <tr>
-                            <th data-field="id" data-sortable="true">ID</th>
-                            <th data-field="name" data-sortable="true">Name</th>
-                            <th data-field="name" data-sortable="true">Bericht</th>
+                            <th data-field="id" data-sortable="true">Unternehmen</th>
+                            <th data-field="name" data-sortable="true">Verfasser</th>
+                            <th data-field="name" data-sortable="true">Jahr</th>
+                            <th data-field="name" data-sortable="true">ESRS-Punkt</th>
+                            <th data-field="name" data-sortable="true">Inhalt</th>
                         </tr>
                         </thead>
                         <tbody>
-                            <?php if (!empty($companies)): ?>
-                                <?php foreach ($companies as $company): ?>
-                                    <tr>
-                                        <td><?= $company['id'] ?></td>
-                                        <td><?= $company['name'] ?></td>
-                                        <td><?= $company['bericht'] ?></td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            <?php else: ?>
+                        <?php if (!empty($companies)): ?>
+                            <?php foreach ($companies as $company): ?>
+                                <tr>
+                                    <td><?= $company['id'] ?></td>
+                                    <td><?= $company['name'] ?></td>
+                                    <td><?= $company['bericht'] ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php else: ?>
                             <tr class="no-data-row">
                                 <td colspan="3">Keine Daten verfügbar.</td>
                             </tr>
-                            <?php endif; ?>
+                        <?php endif; ?>
                         </tbody>
                     </table>
                 </div>
@@ -94,20 +96,20 @@
             <div class="d-none card-body container-fluid" id="card-view">
                 <table class="table" id="cardTable">
                     <tbody>
-                        <?php if (!empty($companies)): ?>
-                            <?php foreach ($companies as $company): ?>
-                                <tr class="card-table-row">
-                                    <td colspan="2">
-                                        <div class="card-entry"><strong>ID:</strong> <span><?= $company['id'] ?></span></div>
-                                        <div class="card-entry"><strong>Name:</strong> <span><?= $company['name'] ?></span></div>
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
-                            <?php else: ?>
-                                <tr class="no-data-row">
-                                    <td colspan="2">Keine Daten verfügbar.</td>
-                                </tr>
-                            <?php endif; ?>
+                    <?php if (!empty($companies)): ?>
+                        <?php foreach ($companies as $company): ?>
+                            <tr class="card-table-row">
+                                <td colspan="2">
+                                    <div class="card-entry"><strong>ID:</strong> <span><?= $company['id'] ?></span></div>
+                                    <div class="card-entry"><strong>Name:</strong> <span><?= $company['name'] ?></span></div>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <tr class="no-data-row">
+                            <td colspan="2">Keine Daten verfügbar.</td>
+                        </tr>
+                    <?php endif; ?>
                     </tbody>
                 </table>
             </div>
@@ -393,7 +395,7 @@
                                                 <option value="Transportation">
 
                                             </datalist>
-                                         </div>
+                                        </div>
                                     </div>
 
 

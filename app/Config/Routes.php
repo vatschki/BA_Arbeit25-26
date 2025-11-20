@@ -7,6 +7,6 @@ use CodeIgniter\Router\RouteCollection;
  */
 $routes->get('/', 'CompaniesController::index'); //home page
 $routes->get('/companies', 'CompaniesController::index');
-$routes->get('/esr-reports', 'EsrReportsController::index');
+$routes->get('/esg-reports', 'EsgReportsController::index');
 $routes->get('/what-it-is', 'WhatItIs::index');
 $routes->get('/help', 'HelpController::index');
