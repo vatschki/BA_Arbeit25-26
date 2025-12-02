@@ -11,4 +11,14 @@ class CompaniesController extends BaseController
         echo view('pages/page_Companies');
         echo view('templates/footer');
     }
+
+    public function testDb()
+    {
+        $db = \Config\Database::connect();
+        $query = $db->query("SHOW TABLES");
+        $result = $query->getResult();
+
+        return print_r($result);
+    }
+
 }
