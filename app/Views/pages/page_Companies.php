@@ -14,17 +14,101 @@
                     <div class="d-flex align-items-center">
 
                         <!-- Search Field mit kleinem Abstand -->
-                        <button class="btn btn-secondary dropdown-toggle rounded-end" type="button" id="dropdownLandButton" data-bs-toggle="dropdown" aria-expanded="false">
-                           Land
-                        </button>
+                        <!-- Dropdown für Land mit Suchfeld -->
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle rounded-end" type="button"
+                                    id="dropdownLandButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                Land
+                            </button>
 
-                        <button class="btn btn-secondary dropdown-toggle rounded-end" type="button" id="dropdownSectorButton" data-bs-toggle="dropdown" aria-expanded="false">
-                            Sektor
-                        </button>
+                            <ul class="dropdown-menu p-2" aria-labelledby="dropdownLandButton" style="width: 220px;" id="countryDropdownMenu">
 
-                        <button class="btn btn-secondary dropdown-toggle rounded-end" type="button" id="dropdownIndustryButton" data-bs-toggle="dropdown" aria-expanded="false">
-                            Industrie
-                        </button>
+                                <!-- Suchfeld oben -->
+                                <li>
+                                    <input type="text" class="form-control" placeholder="Search..." id="searchCountryInput">
+                                </li>
+
+                                <li><hr class="dropdown-divider"></li>
+
+                                <!-- Country-Liste -->
+                                <?php if (!empty($countries)): ?>
+                                    <?php foreach ($countries as $country): ?>
+                                        <li class="country-item">
+                                            <label class="dropdown-item d-flex align-items-center">
+                                                <input class="form-check-input me-2 country-filter-checkbox" type="checkbox" value="<?= $country['id'] ?>">
+                                                <span class="country-name"><?= $country['name_de'] ?></span>
+                                            </label>
+                                        </li>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <li class="dropdown-item disabled">Keine Länder vorhanden</li>
+                                <?php endif; ?>
+                            </ul>
+                        </div>
+
+                        <!-- Dropdown für Sektor mit Suchfeld -->
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle rounded-end" type="button"
+                                    id="dropdownLandButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                Sektor
+                            </button>
+
+                            <ul class="dropdown-menu p-2" aria-labelledby="dropdownLandButton" style="width: 220px;" id="countryDropdownMenu">
+
+                                <!-- Suchfeld oben -->
+                                <li>
+                                    <input type="text" class="form-control" placeholder="Search..." id="searchCountryInput">
+                                </li>
+
+                                <li><hr class="dropdown-divider"></li>
+
+                                <!-- Country-Liste -->
+                                <?php if (!empty($sectors)): ?>
+                                    <?php foreach ($sectors as $sector): ?>
+                                        <li class="country-item">
+                                            <label class="dropdown-item d-flex align-items-center">
+                                                <input class="form-check-input me-2 country-filter-checkbox" type="checkbox" value="<?= $sector['id'] ?>">
+                                                <span class="country-name"><?= $sector['name'] ?></span>
+                                            </label>
+                                        </li>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <li class="dropdown-item disabled">Keine Sektoren vorhanden</li>
+                                <?php endif; ?>
+                            </ul>
+                        </div>
+
+                        <!-- Dropdown für Industry mit Suchfeld -->
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle rounded-end" type="button"
+                                    id="dropdownLandButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                Land
+                            </button>
+
+                            <ul class="dropdown-menu p-2" aria-labelledby="dropdownLandButton" style="width: 220px;" id="countryDropdownMenu">
+
+                                <!-- Suchfeld oben -->
+                                <li>
+                                    <input type="text" class="form-control" placeholder="Search..." id="searchCountryInput">
+                                </li>
+
+                                <li><hr class="dropdown-divider"></li>
+
+                                <!-- Country-Liste -->
+                                <?php if (!empty($industries)): ?>
+                                    <?php foreach ($industries as $industry): ?>
+                                        <li class="country-item">
+                                            <label class="dropdown-item d-flex align-items-center">
+                                                <input class="form-check-input me-2 country-filter-checkbox" type="checkbox" value="<?= $industry['id'] ?>">
+                                                <span class="country-name"><?= $industry['name'] ?></span>
+                                            </label>
+                                        </li>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <li class="dropdown-item disabled">Keine Industrien vorhanden</li>
+                                <?php endif; ?>
+                            </ul>
+                        </div>
 
                         <input id="table-search" class="form-control w-75" type="search" placeholder="Frimensuche" aria-label="Search" style="margin-right: 10px;">
 
@@ -49,7 +133,22 @@
                                 </li>
                                 <li>
                                     <label class="dropdown-item">
-                                        <input type="checkbox" class="column-toggle" data-column="1" checked> Name
+                                        <input type="checkbox" class="column-toggle" data-column="1" checked> Unternehmen
+                                    </label>
+                                </li>
+                                <li>
+                                    <label class="dropdown-item">
+                                        <input type="checkbox" class="column-toggle" data-column="0" checked> Land
+                                    </label>
+                                </li>
+                                <li>
+                                    <label class="dropdown-item">
+                                        <input type="checkbox" class="column-toggle" data-column="0" checked> Sektor
+                                    </label>
+                                </li>
+                                <li>
+                                    <label class="dropdown-item">
+                                        <input type="checkbox" class="column-toggle" data-column="0" checked> Industrie
                                     </label>
                                 </li>
                             </ul>
@@ -62,26 +161,30 @@
             <!-- Tabellenansicht -->
             <div class="card-body container-fluid" id="table-view">
                 <div class="table-responsive">
-                    <table class="table table-hover" id="boardTable" data-toggle="table">
+                    <table class="table table-hover table-border table-striped" id="boardTable" data-toggle="table">
                         <thead>
                         <tr>
                             <th data-field="id" data-sortable="true">ID</th>
-                            <th data-field="name" data-sortable="true">Name</th>
-                            <th data-field="name" data-sortable="true">Bericht</th>
+                            <th data-field="company" data-sortable="true">Unternhemen</th>
+                            <th data-field="country" data-sortable="true">Land</th>
+                            <th data-field="sector" data-sortable="true">Sektor</th>
+                            <th data-field="industry" data-sortable="true">Industrie</th>
                         </tr>
                         </thead>
                         <tbody>
                             <?php if (!empty($companies)): ?>
                                 <?php foreach ($companies as $company): ?>
-                                    <tr>
-                                        <td><?= $company['id'] ?></td>
-                                        <td><?= $company['name'] ?></td>
-                                        <td><?= $company['bericht'] ?></td>
+                                    <tr data-country-id="<?= esc($company['country_id']) ?>">
+                                        <td><?= esc($company['id']) ?></td>
+                                        <td><?= esc($company['name']) ?></td>
+                                        <td><?= esc($company['country_name_de']) ?></td>
+                                        <td><?= esc($company['sector_name']) ?></td>
+                                        <td><?= esc($company['industry_name']) ?></td>
                                     </tr>
                                 <?php endforeach; ?>
                             <?php else: ?>
                             <tr class="no-data-row">
-                                <td colspan="3">Keine Daten verfügbar.</td>
+                                <td colspan="5">Keine Daten verfügbar.</td>
                             </tr>
                             <?php endif; ?>
                         </tbody>
@@ -90,6 +193,7 @@
             </div>
 
 
+            <!-- Braucht man ?????ß -->
             <!-- Kartenansicht als Tabelle -->
             <div class="d-none card-body container-fluid" id="card-view">
                 <table class="table" id="cardTable">
@@ -127,7 +231,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
-            <form>
+            <form action="<?= base_url('companies/create') ?>" method="post" >
                 <div class="modal-body p-0">
 
                     <div class="d-flex" style="min-height: 350px;">
@@ -163,7 +267,7 @@
                                             <i class="fa-regular fa-circle-question text-muted" title="Name des Unternehmens"></i>
                                         </label>
                                         <div class="col-sm-9">
-                                            <input type="text" class="form-control">
+                                            <input type="text" class="form-control" name="company_name" placeholder="Firma eingeben">
                                         </div>
                                     </div>
 
@@ -171,202 +275,50 @@
                                     <div class="mb-3 row align-items-center">
                                         <label class="col-sm-3 col-form-label d-flex align-items-center gap-2">
                                             Land
-                                            <i class="fa-regular fa-circle-question text-muted" title="Wähle ein Land aus oder tippe es ein."></i>
+                                            <i class="fa-regular fa-circle-question text-muted" title="Wähle ein Land aus"></i>
                                         </label>
 
                                         <div class="col-sm-9">
-                                            <input list="countries" class="form-control" placeholder="Land auswählen oder tippen">
-                                            <datalist id="countries">
-                                                <option value="Afghanistan">
-                                                <option value="Ägypten">
-                                                <option value="Albanien">
-                                                <option value="Algerien">
-                                                <option value="Andorra">
-                                                <option value="Angola">
-                                                <option value="Antigua und Barbuda">
-                                                <option value="Äquatorialguinea">
-                                                <option value="Argentinien">
-                                                <option value="Armenien">
-                                                <option value="Aserbaidschan">
-                                                <option value="Äthiopien">
-                                                <option value="Australien">
-                                                <option value="Bahamas">
-                                                <option value="Bahrain">
-                                                <option value="Bangladesch">
-                                                <option value="Barbados">
-                                                <option value="Belarus">
-                                                <option value="Belgien">
-                                                <option value="Belize">
-                                                <option value="Benin">
-                                                <option value="Bhutan">
-                                                <option value="Bolivien">
-                                                <option value="Bosnien und Herzegowina">
-                                                <option value="Botswana">
-                                                <option value="Brasilien">
-                                                <option value="Brunei">
-                                                <option value="Bulgarien">
-                                                <option value="Burkina Faso">
-                                                <option value="Burundi">
-                                                <option value="Chile">
-                                                <option value="China">
-                                                <option value="Costa Rica">
-                                                <option value="Dänemark">
-                                                <option value="Deutschland">
-                                                <option value="Dominica">
-                                                <option value="Dominikanische Republik">
-                                                <option value="Dschibuti">
-                                                <option value="Ecuador">
-                                                <option value="El Salvador">
-                                                <option value="Elfenbeinküste">
-                                                <option value="Eritrea">
-                                                <option value="Estland">
-                                                <option value="Eswatini">
-                                                <option value="Fidschi">
-                                                <option value="Finnland">
-                                                <option value="Frankreich">
-                                                <option value="Gabun">
-                                                <option value="Gambia">
-                                                <option value="Georgien">
-                                                <option value="Ghana">
-                                                <option value="Grenada">
-                                                <option value="Griechenland">
-                                                <option value="Guatemala">
-                                                <option value="Guinea">
-                                                <option value="Guinea-Bissau">
-                                                <option value="Guyana">
-                                                <option value="Haiti">
-                                                <option value="Honduras">
-                                                <option value="Indien">
-                                                <option value="Indonesien">
-                                                <option value="Irak">
-                                                <option value="Iran">
-                                                <option value="Irland">
-                                                <option value="Island">
-                                                <option value="Israel">
-                                                <option value="Italien">
-                                                <option value="Jamaika">
-                                                <option value="Japan">
-                                                <option value="Jemen">
-                                                <option value="Jordanien">
-                                                <option value="Kambodscha">
-                                                <option value="Kamerun">
-                                                <option value="Kanada">
-                                                <option value="Kap Verde">
-                                                <option value="Kasachstan">
-                                                <option value="Katar">
-                                                <option value="Kenia">
-                                                <option value="Kirgisistan">
-                                                <option value="Kiribati">
-                                                <option value="Kolumbien">
-                                                <option value="Komoren">
-                                                <option value="Kongo, Demokratische Republik">
-                                                <option value="Kongo, Republik">
-                                                <option value="Kosovo">
-                                                <option value="Kroatien">
-                                                <option value="Kuba">
-                                                <option value="Kuwait">
-                                                <option value="Laos">
-                                                <option value="Lesotho">
-                                                <option value="Lettland">
-                                                <option value="Libanon">
-                                                <option value="Liberia">
-                                                <option value="Libyen">
-                                                <option value="Liechtenstein">
-                                                <option value="Litauen">
-                                                <option value="Luxemburg">
-                                                <option value="Madagaskar">
-                                                <option value="Malawi">
-                                                <option value="Malaysia">
-                                                <option value="Malediven">
-                                                <option value="Mali">
-                                                <option value="Malta">
-                                                <option value="Marokko">
-                                                <option value="Marshallinseln">
-                                                <option value="Mauretanien">
-                                                <option value="Mauritius">
-                                                <option value="Mexiko">
-                                                <option value="Mikronesien">
-                                                <option value="Moldau">
-                                                <option value="Monaco">
-                                                <option value="Mongolei">
-                                                <option value="Montenegro">
-                                                <option value="Mosambik">
-                                                <option value="Myanmar">
-                                                <option value="Namibia">
-                                                <option value="Nauru">
-                                                <option value="Nepal">
-                                                <option value="Neuseeland">
-                                                <option value="Nicaragua">
-                                                <option value="Niederlande">
-                                                <option value="Niger">
-                                                <option value="Nigeria">
-                                                <option value="Nordkorea">
-                                                <option value="Nordmazedonien">
-                                                <option value="Norwegen">
-                                                <option value="Oman">
-                                                <option value="Österreich">
-                                                <option value="Pakistan">
-                                                <option value="Palau">
-                                                <option value="Panama">
-                                                <option value="Papua-Neuguinea">
-                                                <option value="Paraguay">
-                                                <option value="Peru">
-                                                <option value="Philippinen">
-                                                <option value="Polen">
-                                                <option value="Portugal">
-                                                <option value="Ruanda">
-                                                <option value="Rumänien">
-                                                <option value="Russland">
-                                                <option value="Sambia">
-                                                <option value="Samoa">
-                                                <option value="San Marino">
-                                                <option value="São Tomé und Príncipe">
-                                                <option value="Saudi-Arabien">
-                                                <option value="Schweden">
-                                                <option value="Schweiz">
-                                                <option value="Senegal">
-                                                <option value="Serbien">
-                                                <option value="Seychellen">
-                                                <option value="Sierra Leone">
-                                                <option value="Simbabwe">
-                                                <option value="Singapur">
-                                                <option value="Slowakei">
-                                                <option value="Slowenien">
-                                                <option value="Somalia">
-                                                <option value="Spanien">
-                                                <option value="Sri Lanka">
-                                                <option value="Sudan">
-                                                <option value="Südsudan">
-                                                <option value="Suriname">
-                                                <option value="Syrien">
-                                                <option value="Tadschikistan">
-                                                <option value="Tansania">
-                                                <option value="Thailand">
-                                                <option value="Togo">
-                                                <option value="Tonga">
-                                                <option value="Trinidad und Tobago">
-                                                <option value="Tschad">
-                                                <option value="Tschechien">
-                                                <option value="Tunesien">
-                                                <option value="Türkei">
-                                                <option value="Turkmenistan">
-                                                <option value="Tuvalu">
-                                                <option value="Uganda">
-                                                <option value="Ukraine">
-                                                <option value="Ungarn">
-                                                <option value="Uruguay">
-                                                <option value="Usbekistan">
-                                                <option value="Vanuatu">
-                                                <option value="Vatikanstadt">
-                                                <option value="Venezuela">
-                                                <option value="Vereinigte Arabische Emirate">
-                                                <option value="Vereinigtes Königreich">
-                                                <option value="Vereinigte Staaten">
-                                                <option value="Vietnam">
-                                                <option value="Weißrussland">
-                                                <option value="Zentralafrikanische Republik">
-                                                <option value="Zypern">
-                                            </datalist>
+                                            <select class="form-select select2-country" name="country_id">
+                                                <option value="" disabled <?= old('country_id') ? '' : 'selected' ?>>Land auswählen</option>
+
+                                                <?php if (!empty($countries)): ?>
+                                                    <?php foreach ($countries as $country): ?>
+                                                        <option value="<?= esc($country['id']) ?>" <?= old('country_id') == $country['id'] ? 'selected' : '' ?>>
+                                                            <?= esc($country['name_de']) ?>
+                                                        </option>
+                                                    <?php endforeach; ?>
+                                                <?php else: ?>
+                                                    <option value="" disabled>Keine Länder Vorhanden</option>
+                                                <?php endif; ?>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <!-- INDUSTRIE -->
+                                    <div class="mb-3 row align-items-center">
+                                        <label class="col-sm-3 col-form-label d-flex align-items-center gap-2">
+                                            Industrie
+                                            <i class="fa-regular fa-circle-question text-muted" title="Industrie / Unterbranche"></i>
+                                        </label>
+
+                                        <div class="col-sm-9">
+                                            <select class="form-select select2-industry" name="industry_id" id="industry_id">
+                                                <option value="" disabled <?= old('industry_id') ? '' : 'selected' ?>>Industrie auswählen</option>
+
+                                                <?php if (!empty($industries)): ?>
+                                                    <?php foreach ($industries as $industry): ?>
+                                                        <option value="<?= esc($industry['id']) ?>" data-sector-name="<?= esc($industry['sector_name'] ?? '') ?>" <?= old('industry_id') == $industry['id'] ? 'selected' : '' ?>>
+                                                            <?= esc($industry['name']) ?>
+                                                            <?php if (! empty($industry['sector_name'])): ?>
+                                                                (<?= esc($industry['sector_name']) ?>)
+                                                            <?php endif; ?>
+                                                        </option>
+                                                    <?php endforeach; ?>
+                                                <?php else: ?>
+                                                    <option value="" disabled>Keine Industrien vorhanden</option>
+                                                <?php endif; ?>
+                                            </select>
                                         </div>
                                     </div>
 
@@ -378,49 +330,30 @@
                                         </label>
 
                                         <div class="col-sm-9">
-                                            <input list="sectors" class="form-control" placeholder="Sektor auswählen oder tippen">
-                                            <datalist id="sectors">
-                                                <option value="Consumer Goods">
-                                                <option value="Extractive & Mineral Processing">
-                                                <option value="Financials">
-                                                <option value="Food & Beverage">
-                                                <option value="Health Care">
-                                                <option value="Infrastructure">
-                                                <option value="Renewable Resources & Alternative Energy">
-                                                <option value="Resource Transformation">
-                                                <option value="Services">
-                                                <option value="Technology & Communications">
-                                                <option value="Transportation">
-
-                                            </datalist>
-                                         </div>
-                                    </div>
-
-
-                                    <!-- INDUSTRIE -->
-                                    <div class="mb-3 row align-items-center">
-                                        <label class="col-sm-3 col-form-label d-flex align-items-center gap-2">
-                                            Industrie
-                                            <i class="fa-regular fa-circle-question text-muted" title="Industrie / Unterbranche"></i>
-                                        </label>
-
-                                        <div class="col-sm-9">
-                                            <input list="industries" class="form-control" placeholder="Industrie auswählen oder tippen">
-                                            <datalist id="industries">
-                                                <option value="Advertising & Marketing">
-                                                <option value="Aerospace & Defense">
-                                                <option value="Agricultural Products">
-                                                <option value="Air Freight & Logistics">
-                                                <option value="Airlines">
-                                                <option value="Alcoholic Beverages">
-                                                <option value="Apparel, Accessories & Footwear">
-                                                <option value="Appliance Manufacturers">
-                                                <option value="Asset Management & Custody Activities">
-                                                <option value="Auto Parts">
-                                                <option value="Automobiles">
-                                            </datalist>
+                                            <input
+                                                    type="text"
+                                                    class="form-control"
+                                                    id="sector_display"
+                                                    placeholder="Sektor wird automatisch anhand der Industrie gesetzt"
+                                                    value=""
+                                                    readonly
+                                            >
                                         </div>
                                     </div>
+
+                                    <!-- DESCRIPTION -->
+                                    <div class="mb-3 row align-items-center">
+                                        <label class="col-sm-3 col-form-label d-flex align-items-center gap-2">
+                                            Beschreibung
+                                            <i class="fa-regular fa-circle-question text-muted"
+                                               title="Beschreibung oder zusätzliche Informationen zum Unternehmen"></i>
+                                        </label>
+                                        <div class="col-sm-9">
+                                            <textarea class="form-control" name="description" rows="3" placeholder="Kurze Beschreibung des Unternehmens eingeben"><?= esc(old('description') ?? '') ?></textarea>
+
+                                        </div>
+                                    </div>
+
                                 </div>
                                 <!-- Tab 2: Bericht mit Drag & Drop -->
                                 <div class="tab-pane fade" id="tab-report" role="tabpanel">
@@ -466,7 +399,7 @@
 
                 <div class="modal-footer">
                     <button type="button" class="btn abbrechen_button" data-bs-dismiss="modal">Abbrechen</button>
-                    <button type="button" id="createSaveBtn" class="btn btn-success">Speichern</button>
+                    <button type="submit" id="createSaveBtn" class="btn btn-success">Speichern</button>
                 </div>
             </form>
 
@@ -476,7 +409,7 @@
 
 <script>
 
-    // Suchfunktion
+    // Suchfunktion tabelle
     document.getElementById("table-search").addEventListener("keyup", function () {
         let value = this.value.toLowerCase();
         let rows = document.querySelectorAll("#boardTable tbody tr");
@@ -510,6 +443,55 @@
         } else {
             noResultsMessage.classList.add("d-none");
         }
+    });
+
+    // Suchfunktion Dropdown Land
+    document.addEventListener('DOMContentLoaded', function () {
+
+        const searchInput = document.getElementById('searchCountryInput');
+
+        // Live-Suche im Länder-Dropdown
+        if (searchInput) {
+            searchInput.addEventListener('keyup', function () {
+                const value = this.value.toLowerCase();
+
+                const items = document.querySelectorAll('#countryDropdownMenu .country-item');
+
+                items.forEach(function (li) {
+                    const nameSpan = li.querySelector('.country-name');
+                    if (!nameSpan) return;
+
+                    const text = nameSpan.textContent.toLowerCase();
+                    li.style.display = text.includes(value) ? '' : 'none';
+                });
+            });
+        }
+
+        // Filter-Logik für Tabelle
+        function filterTableByCountries() {
+            // IDs der ausgewählten Länder
+            const selected = Array.from(document.querySelectorAll('.country-filter-checkbox:checked'))
+                .map(cb => cb.value);
+
+            // Alle Tabellenzeilen jedes Mal frisch holen
+            const rows = document.querySelectorAll('#boardTable tbody tr');
+
+            rows.forEach(function (row) {
+                const countryId = row.getAttribute('data-country-id');
+
+                if (selected.length === 0 || selected.includes(countryId)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        // Event-Listener für Checkboxen
+        document.querySelectorAll('.country-filter-checkbox').forEach(function (cb) {
+            cb.addEventListener('change', filterTableByCountries);
+        });
+
     });
 
     //Dropdowns open
@@ -576,6 +558,24 @@
             tableView.classList.add("d-none");
             cardView.classList.remove("d-none");
         }
+    });
+
+    // Industrie zu Sektor automatisch setzen
+    $(document).ready(function () {
+        const $industrySelect = $('#industry_id');
+        const $sectorInput = $('#sector_display');
+
+        function updateSector() {
+            const selectedOption = $industrySelect.find('option:selected');
+            const sectorName = selectedOption.data('sector-name') || '';
+            $sectorInput.val(sectorName);
+        }
+
+        // Select2 feuert ebenfalls ein 'change'-Event, daher reicht das
+        $industrySelect.on('change', updateSector);
+
+        // Initial setzen (falls ein Wert vorausgewählt ist)
+        updateSector();
     });
 
     // PDF Drag & Drop
