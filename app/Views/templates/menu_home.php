@@ -52,12 +52,12 @@
                         <ul class="subnav-menu">
                             <li>
                                 <a class="nav-link <?= ($seg1 === '' || $seg1 === 'companies') ? 'active' : '' ?>" href="<?= base_url('companies') ?>">
-                                    Companies
+                                    Unternehmen
                                 </a>
                             </li>
                             <li>
                                 <a class="nav-link <?= ($seg1 === 'esg-reports') ? 'active' : '' ?>" href="<?= base_url('esg-reports') ?>">
-                                    ESG Reports
+                                    ESG Berichte
                                 </a>
                             </li>
                         </ul>

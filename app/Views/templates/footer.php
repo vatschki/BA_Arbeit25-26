@@ -18,3 +18,17 @@
     </div>
   </div>
 </footer>
+
+<?php
+// URL-Segment bestimmen
+$uri = service('uri');
+$seg1 = $uri->getSegment(1) ?? '';
+?>
+
+<!-- Page-spezifische JS-Dateien laden -->
+<?php if (in_array($seg1, ['companies', 'esg-reports'], true)): ?>
+    <script src="<?= base_url('resources/js/home_board.js') ?>"></script>
+<?php endif; ?>
+
+</body>
+</html>

@@ -28,10 +28,13 @@ class CompanyModel extends BaseModel{
     {
         return $this->select("
             companies.*,
+            industries.id   AS industry_id,
             industries.name AS industry_name,
+            countries.id    AS country_id,
             countries.name_de AS country_name_de,
             countries.name_eng AS country_name_eng,
-            sectors.name AS sector_name"
+            sectors.id      AS sector_id,
+            sectors.name    AS sector_name"
         )
         ->join("industries", "companies.industry_id = industries.id", "left")
         ->join("countries", "companies.country_id = countries.id", "left")

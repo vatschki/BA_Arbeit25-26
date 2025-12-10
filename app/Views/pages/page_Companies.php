@@ -33,10 +33,10 @@
                                 <!-- Country-Liste -->
                                 <?php if (!empty($countries)): ?>
                                     <?php foreach ($countries as $country): ?>
-                                        <li class="country-item">
+                                        <li class="filter-item-country">
                                             <label class="dropdown-item d-flex align-items-center">
                                                 <input class="form-check-input me-2 country-filter-checkbox" type="checkbox" value="<?= $country['id'] ?>">
-                                                <span class="country-name"><?= $country['name_de'] ?></span>
+                                                <span class="filter-name-country"><?= $country['name_de'] ?></span>
                                             </label>
                                         </li>
                                     <?php endforeach; ?>
@@ -49,26 +49,26 @@
                         <!-- Dropdown für Sektor mit Suchfeld -->
                         <div class="dropdown">
                             <button class="btn btn-secondary dropdown-toggle rounded-end" type="button"
-                                    id="dropdownLandButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                    id="dropdownSectorButton" data-bs-toggle="dropdown" aria-expanded="false">
                                 Sektor
                             </button>
 
-                            <ul class="dropdown-menu p-2" aria-labelledby="dropdownLandButton" style="width: 220px;" id="countryDropdownMenu">
+                            <ul class="dropdown-menu p-2" aria-labelledby="dropdownSectorButton" style="width: 220px;" id="sectorDropdownMenu">
 
                                 <!-- Suchfeld oben -->
                                 <li>
-                                    <input type="text" class="form-control" placeholder="Search..." id="searchCountryInput">
+                                    <input type="text" class="form-control" placeholder="Search..." id="searchSectorInput">
                                 </li>
 
                                 <li><hr class="dropdown-divider"></li>
 
-                                <!-- Country-Liste -->
+                                <!-- Sektors-Liste -->
                                 <?php if (!empty($sectors)): ?>
                                     <?php foreach ($sectors as $sector): ?>
-                                        <li class="country-item">
+                                        <li class="filter-item-sector">
                                             <label class="dropdown-item d-flex align-items-center">
-                                                <input class="form-check-input me-2 country-filter-checkbox" type="checkbox" value="<?= $sector['id'] ?>">
-                                                <span class="country-name"><?= $sector['name'] ?></span>
+                                                <input class="form-check-input me-2 sector-filter-checkbox" type="checkbox" value="<?= $sector['id'] ?>">
+                                                <span class="filter-name-sector"><?= $sector['name'] ?></span>
                                             </label>
                                         </li>
                                     <?php endforeach; ?>
@@ -81,26 +81,26 @@
                         <!-- Dropdown für Industry mit Suchfeld -->
                         <div class="dropdown">
                             <button class="btn btn-secondary dropdown-toggle rounded-end" type="button"
-                                    id="dropdownLandButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                Land
+                                    id="dropdownIndustryButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                Industrie
                             </button>
 
-                            <ul class="dropdown-menu p-2" aria-labelledby="dropdownLandButton" style="width: 220px;" id="countryDropdownMenu">
+                            <ul class="dropdown-menu p-2" aria-labelledby="dropdownIndustryButton" style="width: 220px;" id="industryDropdownMenu">
 
                                 <!-- Suchfeld oben -->
                                 <li>
-                                    <input type="text" class="form-control" placeholder="Search..." id="searchCountryInput">
+                                    <input type="text" class="form-control" placeholder="Search..." id="searchIndustryInput">
                                 </li>
 
                                 <li><hr class="dropdown-divider"></li>
 
-                                <!-- Country-Liste -->
+                                <!-- Industry-Liste -->
                                 <?php if (!empty($industries)): ?>
                                     <?php foreach ($industries as $industry): ?>
-                                        <li class="country-item">
+                                        <li class="filter-item-industry">
                                             <label class="dropdown-item d-flex align-items-center">
-                                                <input class="form-check-input me-2 country-filter-checkbox" type="checkbox" value="<?= $industry['id'] ?>">
-                                                <span class="country-name"><?= $industry['name'] ?></span>
+                                                <input class="form-check-input me-2 industry-filter-checkbox" type="checkbox" value="<?= $industry['id'] ?>">
+                                                <span class="filter-name-industry"><?= $industry['name'] ?></span>
                                             </label>
                                         </li>
                                     <?php endforeach; ?>
@@ -110,49 +110,42 @@
                             </ul>
                         </div>
 
-                        <input id="table-search" class="form-control w-75" type="search" placeholder="Frimensuche" aria-label="Search" style="margin-right: 10px;">
+                        <!-- Spaltenfilter Dropdown (Direkt in der Gruppe) -->
+                        <button class="btn btn-secondary dropdown-toggle rounded-end" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fa-solid fa-bars"></i>
+                        </button>
 
-                        <!-- Button Group für bessere Verbindung -->
-                        <div class="btn-group">
-                            <!-- Ansicht umschalten Button -->
-                            <button id="toggleView" class="btn btn-secondary rounded-start" type="button" name="toggle" aria-label="Show card view" title="Show card view">
-                                <i class="fa-solid fa-wand-magic-sparkles"></i>
-                            </button>
+                        <!-- Dropdown-Menü außerhalb von btn-group -->
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <li>
+                                <label class="dropdown-item">
+                                    <input type="checkbox" class="column-toggle" data-column="0" checked> ID
+                                </label>
+                            </li>
+                            <li>
+                                <label class="dropdown-item">
+                                    <input type="checkbox" class="column-toggle" data-column="1" checked> Unternehmen
+                                </label>
+                            </li>
+                            <li>
+                                <label class="dropdown-item">
+                                    <input type="checkbox" class="column-toggle" data-column="2" checked> Land
+                                </label>
+                            </li>
+                            <li>
+                                <label class="dropdown-item">
+                                    <input type="checkbox" class="column-toggle" data-column="3" checked> Sektor
+                                </label>
+                            </li>
+                            <li>
+                                <label class="dropdown-item">
+                                    <input type="checkbox" class="column-toggle" data-column="4" checked> Industrie
+                                </label>
+                            </li>
+                        </ul>
 
-                            <!-- Spaltenfilter Dropdown (Direkt in der Gruppe) -->
-                            <button class="btn btn-secondary dropdown-toggle rounded-end" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fa-solid fa-bars"></i>
-                            </button>
+                        <input id="table-search" class="form-control w-75" type="search" placeholder="Firmensuche" aria-label="Search">
 
-                            <!-- Dropdown-Menü außerhalb von btn-group -->
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <li>
-                                    <label class="dropdown-item">
-                                        <input type="checkbox" class="column-toggle" data-column="0" checked> ID
-                                    </label>
-                                </li>
-                                <li>
-                                    <label class="dropdown-item">
-                                        <input type="checkbox" class="column-toggle" data-column="1" checked> Unternehmen
-                                    </label>
-                                </li>
-                                <li>
-                                    <label class="dropdown-item">
-                                        <input type="checkbox" class="column-toggle" data-column="0" checked> Land
-                                    </label>
-                                </li>
-                                <li>
-                                    <label class="dropdown-item">
-                                        <input type="checkbox" class="column-toggle" data-column="0" checked> Sektor
-                                    </label>
-                                </li>
-                                <li>
-                                    <label class="dropdown-item">
-                                        <input type="checkbox" class="column-toggle" data-column="0" checked> Industrie
-                                    </label>
-                                </li>
-                            </ul>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -165,7 +158,7 @@
                         <thead>
                         <tr>
                             <th data-field="id" data-sortable="true">ID</th>
-                            <th data-field="company" data-sortable="true">Unternhemen</th>
+                            <th data-field="company" data-sortable="true">Unternehmen</th>
                             <th data-field="country" data-sortable="true">Land</th>
                             <th data-field="sector" data-sortable="true">Sektor</th>
                             <th data-field="industry" data-sortable="true">Industrie</th>
@@ -174,7 +167,10 @@
                         <tbody>
                             <?php if (!empty($companies)): ?>
                                 <?php foreach ($companies as $company): ?>
-                                    <tr data-country-id="<?= esc($company['country_id']) ?>">
+                                    <tr data-country-id="<?= esc($company['country_id']) ?>"
+                                        data-sector-id="<?= esc($company['sector_id']) ?>"
+                                        data-industry-id="<?= esc($company['industry_id']) ?>"
+                                    >
                                         <td><?= esc($company['id']) ?></td>
                                         <td><?= esc($company['name']) ?></td>
                                         <td><?= esc($company['country_name_de']) ?></td>
@@ -190,33 +186,6 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
-
-
-            <!-- Braucht man ?????ß -->
-            <!-- Kartenansicht als Tabelle -->
-            <div class="d-none card-body container-fluid" id="card-view">
-                <table class="table" id="cardTable">
-                    <tbody>
-                        <?php if (!empty($companies)): ?>
-                            <?php foreach ($companies as $company): ?>
-                                <tr class="card-table-row">
-                                    <td colspan="2">
-                                        <div class="card-entry"><strong>ID:</strong> <span><?= $company['id'] ?></span></div>
-                                        <div class="card-entry"><strong>Name:</strong> <span><?= $company['name'] ?></span></div>
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
-                            <?php else: ?>
-                                <tr class="no-data-row">
-                                    <td colspan="2">Keine Daten verfügbar.</td>
-                                </tr>
-                            <?php endif; ?>
-                    </tbody>
-                </table>
-            </div>
-            <div id="no-results-message" class="text-center mt-3 text-danger d-none">
-                Leider musst du das Board noch erstellen
             </div>
         </div>
     </div>
@@ -299,7 +268,7 @@
                                     <div class="mb-3 row align-items-center">
                                         <label class="col-sm-3 col-form-label d-flex align-items-center gap-2">
                                             Industrie
-                                            <i class="fa-regular fa-circle-question text-muted" title="Industrie / Unterbranche"></i>
+                                            <i class="fa-regular fa-circle-question text-muted" title="Industrie / Unternehmensbranche"></i>
                                         </label>
 
                                         <div class="col-sm-9">
@@ -406,284 +375,3 @@
         </div>
     </div>
 </div>
-
-<script>
-
-    // Suchfunktion tabelle
-    document.getElementById("table-search").addEventListener("keyup", function () {
-        let value = this.value.toLowerCase();
-        let rows = document.querySelectorAll("#boardTable tbody tr");
-        let visibleRows = 0;
-
-        rows.forEach(row => {
-            if (row.textContent.toLowerCase().includes(value)) {
-                row.style.display = "table-row";
-                visibleRows++;
-            } else {
-                row.style.display = "none";
-            }
-        });
-
-        let cards = document.querySelectorAll("#cardTable tbody .card-table-row");
-        let visibleCards = 0;
-
-        cards.forEach(card => {
-            if (card.textContent.toLowerCase().includes(value)) {
-                card.style.display = "table-row";
-                visibleCards++;
-            } else {
-                card.style.display = "none";
-            }
-        });
-
-        let noResultsMessage = document.getElementById("no-results-message");
-
-        if (visibleRows === 0 && visibleCards === 0) {
-            noResultsMessage.classList.remove("d-none");
-        } else {
-            noResultsMessage.classList.add("d-none");
-        }
-    });
-
-    // Suchfunktion Dropdown Land
-    document.addEventListener('DOMContentLoaded', function () {
-
-        const searchInput = document.getElementById('searchCountryInput');
-
-        // Live-Suche im Länder-Dropdown
-        if (searchInput) {
-            searchInput.addEventListener('keyup', function () {
-                const value = this.value.toLowerCase();
-
-                const items = document.querySelectorAll('#countryDropdownMenu .country-item');
-
-                items.forEach(function (li) {
-                    const nameSpan = li.querySelector('.country-name');
-                    if (!nameSpan) return;
-
-                    const text = nameSpan.textContent.toLowerCase();
-                    li.style.display = text.includes(value) ? '' : 'none';
-                });
-            });
-        }
-
-        // Filter-Logik für Tabelle
-        function filterTableByCountries() {
-            // IDs der ausgewählten Länder
-            const selected = Array.from(document.querySelectorAll('.country-filter-checkbox:checked'))
-                .map(cb => cb.value);
-
-            // Alle Tabellenzeilen jedes Mal frisch holen
-            const rows = document.querySelectorAll('#boardTable tbody tr');
-
-            rows.forEach(function (row) {
-                const countryId = row.getAttribute('data-country-id');
-
-                if (selected.length === 0 || selected.includes(countryId)) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
-            });
-        }
-
-        // Event-Listener für Checkboxen
-        document.querySelectorAll('.country-filter-checkbox').forEach(function (cb) {
-            cb.addEventListener('change', filterTableByCountries);
-        });
-
-    });
-
-    //Dropdowns open
-    document.querySelectorAll(".dropdown-menu").forEach(menu => {
-        menu.addEventListener("click", function (event) {
-            event.stopPropagation();
-        });
-    });
-
-    // Spaltenfilter
-    document.querySelectorAll(".column-toggle").forEach(checkbox => {
-        checkbox.addEventListener("change", function () {
-            let checkboxes = document.querySelectorAll(".column-toggle:checked");
-            let columnIndex = this.getAttribute("data-column");
-            let isChecked = this.checked;
-
-
-            if (checkboxes.length === 0) {
-                this.checked = true;
-                return;
-            }
-
-
-            document.querySelectorAll("#boardTable tr").forEach(row => {
-                let cells = row.querySelectorAll("th, td");
-                if (cells[columnIndex]) {
-                    cells[columnIndex].style.display = isChecked ? "" : "none";
-                }
-            });
-
-
-            document.querySelectorAll("#cardTable .card-table-row").forEach(row => {
-                let cardEntries = row.querySelectorAll(".card-entry");
-                if (cardEntries[columnIndex]) {
-                    cardEntries[columnIndex].style.display = isChecked ? "" : "none";
-                }
-            });
-
-
-            checkboxes = document.querySelectorAll(".column-toggle:checked");
-
-
-            document.querySelectorAll(".column-toggle").forEach(cb => {
-                cb.disabled = false;
-                cb.parentElement.classList.remove("disabled-option");
-            });
-
-            if (checkboxes.length === 1) {
-                checkboxes[0].disabled = true;
-                checkboxes[0].parentElement.classList.add("disabled-option");
-            }
-        });
-    });
-
-    // Ansicht umschalten
-    document.getElementById("toggleView").addEventListener("click", function () {
-        let tableView = document.getElementById("table-view");
-        let cardView = document.getElementById("card-view");
-
-        if (tableView.classList.contains("d-none")) {
-            tableView.classList.remove("d-none");
-            cardView.classList.add("d-none");
-        } else {
-            tableView.classList.add("d-none");
-            cardView.classList.remove("d-none");
-        }
-    });
-
-    // Industrie zu Sektor automatisch setzen
-    $(document).ready(function () {
-        const $industrySelect = $('#industry_id');
-        const $sectorInput = $('#sector_display');
-
-        function updateSector() {
-            const selectedOption = $industrySelect.find('option:selected');
-            const sectorName = selectedOption.data('sector-name') || '';
-            $sectorInput.val(sectorName);
-        }
-
-        // Select2 feuert ebenfalls ein 'change'-Event, daher reicht das
-        $industrySelect.on('change', updateSector);
-
-        // Initial setzen (falls ein Wert vorausgewählt ist)
-        updateSector();
-    });
-
-    // PDF Drag & Drop
-    document.addEventListener("DOMContentLoaded", function () {
-        const dropZone   = document.getElementById("pdf-drop-zone");
-        const fileInput  = document.getElementById("pdf-input");
-        const browseBtn  = document.getElementById("pdf-browse-btn");
-        const fileListEl = document.getElementById("pdf-file-list");
-        const saveBtn    = document.getElementById("createSaveBtn");
-
-        let selectedFiles = [];
-
-        function setFiles(files) {
-            selectedFiles = Array.from(files).filter(f =>
-                f.type === "application/pdf" || f.name.toLowerCase().endsWith(".pdf")
-            );
-
-            if (selectedFiles.length === 0) {
-                fileListEl.textContent = "Keine gültigen PDF-Dateien ausgewählt.";
-                return;
-            }
-
-            fileListEl.innerHTML = selectedFiles
-                .map(f => "• " + f.name + " (" + Math.round(f.size / 1024) + " KB)")
-                .join("<br>");
-        }
-
-        // Klick auf Zone oder Button
-        dropZone.addEventListener("click", () => fileInput.click());
-        browseBtn.addEventListener("click", (e) => {
-            e.stopPropagation();
-            fileInput.click();
-        });
-
-        // Auswahl über Dialog
-        fileInput.addEventListener("change", (e) => {
-            setFiles(e.target.files);
-        });
-
-        // Drag & Drop
-        dropZone.addEventListener("dragover", (e) => {
-            e.preventDefault();
-            dropZone.classList.add("dragover");
-        });
-
-        dropZone.addEventListener("dragleave", (e) => {
-            e.preventDefault();
-            dropZone.classList.remove("dragover");
-        });
-
-        dropZone.addEventListener("drop", (e) => {
-            e.preventDefault();
-            dropZone.classList.remove("dragover");
-            if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-                setFiles(e.dataTransfer.files);
-                e.dataTransfer.clearData();
-            }
-        });
-
-        // Speichern-Button send PDF to Backend
-        saveBtn.addEventListener("click", () => {
-            // Beispiel: wenn du sicherstellen willst, dass ein Bericht hochgeladen ist
-            // if (selectedFiles.length === 0) {
-            //   alert("Bitte mindestens einen PDF-Bericht auswählen.");
-            //   return;
-            // }
-
-            const formData = new FormData();
-            selectedFiles.forEach((file, idx) => {
-                formData.append("reports[]", file);
-            });
-
-            // TODO: hier deine URL eintragen
-            // fetch("/api/company/create", {
-            //   method: "POST",
-            //   body: formData
-            // });
-
-            console.log("Ausgewählte PDFs:", selectedFiles);
-        });
-
-        //Modal-Titel
-        const titleElement  = document.getElementById("dynamicModalTitle");
-        const tabCompanyBtn = document.getElementById("tab-company-btn");
-        const tabReportBtn  = document.getElementById("tab-report-btn");
-        const modalEl       = document.getElementById("createCompanyModal");
-
-        if (titleElement) {
-            // Standard
-            if (modalEl) {
-                modalEl.addEventListener("shown.bs.modal", () => {
-                    titleElement.textContent = "Firma hinzufügen";
-                });
-            } else {
-                titleElement.textContent = "Firma hinzufügen";
-            }
-
-            if (tabCompanyBtn) {
-                tabCompanyBtn.addEventListener("click", () => {
-                    titleElement.textContent = "Firma hinzufügen";
-                });
-            }
-
-            if (tabReportBtn) {
-                tabReportBtn.addEventListener("click", () => {
-                    titleElement.textContent = "ESG Bericht hinzufügen";
-                });
-            }
-        }
-    });
-</script>
