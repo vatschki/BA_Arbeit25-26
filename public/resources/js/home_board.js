@@ -16,20 +16,22 @@
         });
     });
 
-    // Suchfunktion Dropdown Land
+    // Suchfunktion Dropdown
     document.addEventListener('DOMContentLoaded', function () {
 
-        const searchInput = document.getElementById('searchCountryInput');
+        const searchInputCountry = document.getElementById('searchCountryInput');
+        const searchInputSector = document.getElementById('searchSectorInput');
+        const searchInputIndustry = document.getElementById('searchIndustryInput');
 
-        // Live-Suche im Länder-Dropdown
-        if (searchInput) {
-            searchInput.addEventListener('keyup', function () {
-                const value = this.value.toLowerCase();
+        // Live-Suche im Dropdown von Ländern
+        if (searchInputCountry) {
+            searchInputCountry.addEventListener('input', function () {
+                const value = this.value.toLowerCase().trim();
 
-                const items = document.querySelectorAll('#countryDropdownMenu .country-item');
+                const items = document.querySelectorAll('#countryDropdownMenu .filter-item-country');
 
                 items.forEach(function (li) {
-                    const nameSpan = li.querySelector('.country-name');
+                    const nameSpan = li.querySelector('.filter-name-country');
                     if (!nameSpan) return;
 
                     const text = nameSpan.textContent.toLowerCase();
@@ -38,7 +40,41 @@
             });
         }
 
-        // Filter-Logik für Tabelle
+        // Live-Suche im Dropdown von Sector
+        if (searchInputSector) {
+            searchInputSector.addEventListener('input', function () {
+                const value = this.value.toLowerCase().trim();
+
+                const items = document.querySelectorAll('#sectorDropdownMenu .filter-item-sector');
+
+                items.forEach(function (li) {
+                    const nameSpan = li.querySelector('.filter-name-sector');
+                    if (!nameSpan) return;
+
+                    const text = nameSpan.textContent.toLowerCase();
+                    li.style.display = text.includes(value) ? '' : 'none';
+                });
+            });
+        }
+
+        // Live-Suche im Dropdown von Industry
+        if (searchInputIndustry) {
+            searchInputIndustry.addEventListener('input', function () {
+                const value = this.value.toLowerCase().trim();
+
+                const items = document.querySelectorAll('#industryDropdownMenu .filter-item-industry');
+
+                items.forEach(function (li) {
+                    const nameSpan = li.querySelector('.filter-name-industry');
+                    if (!nameSpan) return;
+
+                    const text = nameSpan.textContent.toLowerCase();
+                    li.style.display = text.includes(value) ? '' : 'none';
+                });
+            });
+        }
+
+        // Filter-Logik für Tabelle nach Ländern
         function filterTableByCountries() {
             // IDs der ausgewählten Länder
             const selected = Array.from(document.querySelectorAll('.country-filter-checkbox:checked'))
@@ -58,9 +94,61 @@
             });
         }
 
-        // Event-Listener für Checkboxen
+        // Filter-Logik für Tabelle nach Sektoren
+        function filterTableBySectors() {
+            // IDs der ausgewählten Länder
+            const selected = Array.from(document.querySelectorAll('.sector-filter-checkbox:checked'))
+                .map(cb => cb.value);
+
+            // Alle Tabellenzeilen jedes Mal frisch holen
+            const rows = document.querySelectorAll('#boardTable tbody tr');
+
+            rows.forEach(function (row) {
+                const countryId = row.getAttribute('data-sector-id');
+
+                if (selected.length === 0 || selected.includes(countryId)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        // Filter-Logik für Tabelle nach Industrien
+        function filterTableByIndustries() {
+            // IDs der ausgewählten Länder
+            const selected = Array.from(document.querySelectorAll('.industry-filter-checkbox:checked'))
+                .map(cb => cb.value);
+
+            // Alle Tabellenzeilen jedes Mal frisch holen
+            const rows = document.querySelectorAll('#boardTable tbody tr');
+
+            rows.forEach(function (row) {
+                const countryId = row.getAttribute('data-industry-id');
+
+                if (selected.length === 0 || selected.includes(countryId)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+
+
+        // Event-Listener für Checkboxen Country
         document.querySelectorAll('.country-filter-checkbox').forEach(function (cb) {
             cb.addEventListener('change', filterTableByCountries);
+        });
+
+        // Event-Listener für Checkboxen Sektoren
+        document.querySelectorAll('.sector-filter-checkbox').forEach(function (cb) {
+            cb.addEventListener('change', filterTableBySectors);
+        });
+
+        // Event-Listener für Checkboxen Industrien
+        document.querySelectorAll('.industry-filter-checkbox').forEach(function (cb) {
+            cb.addEventListener('change', filterTableByIndustries);
         });
 
     });

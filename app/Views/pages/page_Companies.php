@@ -21,7 +21,7 @@
                                 Land
                             </button>
 
-                            <ul class="dropdown-menu p-2" aria-labelledby="dropdownLandButton" style="width: 220px;" id="countryDropdownMenu">
+                            <ul class="dropdown-menu p-2 dropdown-overflow-control" aria-labelledby="dropdownLandButton" style="width: 220px;" id="countryDropdownMenu">
 
                                 <!-- Suchfeld oben -->
                                 <li>
@@ -53,7 +53,7 @@
                                 Sektor
                             </button>
 
-                            <ul class="dropdown-menu p-2" aria-labelledby="dropdownSectorButton" style="width: 220px;" id="sectorDropdownMenu">
+                            <ul class="dropdown-menu p-2 dropdown-overflow-control" aria-labelledby="dropdownSectorButton" style="width: 220px;" id="sectorDropdownMenu">
 
                                 <!-- Suchfeld oben -->
                                 <li>
@@ -85,7 +85,7 @@
                                 Industrie
                             </button>
 
-                            <ul class="dropdown-menu p-2" aria-labelledby="dropdownIndustryButton" style="width: 220px;" id="industryDropdownMenu">
+                            <ul class="dropdown-menu p-2 dropdown-overflow-control" aria-labelledby="dropdownIndustryButton" style="width: 220px;" id="industryDropdownMenu">
 
                                 <!-- Suchfeld oben -->
                                 <li>

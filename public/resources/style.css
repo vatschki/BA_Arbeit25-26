@@ -185,6 +185,12 @@ body > div:first-of-type{
 .dropdown-item:hover { background: color-mix(in oklab, var(--esr-accent) 12%, white); }
 .dropdown-item input[type="checkbox"] { accent-color: var(--esr-accent); }
 
+.dropdown-overflow-control{
+    width: 220px;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
 /* Tabelle */
 .table{
     width: 100%;
