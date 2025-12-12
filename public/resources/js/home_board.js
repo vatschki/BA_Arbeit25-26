@@ -289,33 +289,4 @@
 
             console.log("Ausgewählte PDFs:", selectedFiles);
         });
-
-        //Modal-Titel
-        const titleElement  = document.getElementById("dynamicModalTitle");
-        const tabCompanyBtn = document.getElementById("tab-company-btn");
-        const tabReportBtn  = document.getElementById("tab-report-btn");
-        const modalEl       = document.getElementById("createCompanyModal");
-
-        if (titleElement) {
-        // Standard
-            if (modalEl) {
-                modalEl.addEventListener("shown.bs.modal", () => {
-                    titleElement.textContent = "Firma hinzufügen";
-                });
-            } else {
-            titleElement.textContent = "Firma hinzufügen";
-            }
-
-            if (tabCompanyBtn) {
-                tabCompanyBtn.addEventListener("click", () => {
-                    titleElement.textContent = "Firma hinzufügen";
-                });
-            }
-
-            if (tabReportBtn) {
-                tabReportBtn.addEventListener("click", () => {
-                    titleElement.textContent = "ESG Bericht hinzufügen";
-                });
-            }
-        }
     });

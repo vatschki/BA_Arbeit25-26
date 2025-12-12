@@ -40,7 +40,6 @@ class IndustryModel extends BaseModel{
         if (! $this->insert($data)) {
             $errors = $this->errors() ?? [];
 
-            // Hier kannst du auch eine eigene Exception-Klasse nehmen, wenn du willst
             throw new \RuntimeException(
                 'Validation of Industry failed: ' . implode(' | ', $errors)
             );

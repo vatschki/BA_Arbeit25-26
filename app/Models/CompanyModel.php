@@ -28,6 +28,7 @@ class CompanyModel extends BaseModel{
     {
         return $this->select("
             companies.*,
+            companies.id    AS company_id,
             industries.id   AS industry_id,
             industries.name AS industry_name,
             countries.id    AS country_id,
@@ -47,7 +48,6 @@ class CompanyModel extends BaseModel{
         if (! $this->insert($data)) {
             $errors = $this->errors() ?? [];
 
-            // Hier kannst du auch eine eigene Exception-Klasse nehmen, wenn du willst
             throw new \RuntimeException(
                 'Validation of Company failed: ' . implode(' | ', $errors)
             );

@@ -37,7 +37,6 @@ class CountryModel extends BaseModel
         if (!$this->insert($data)) {
             $errors = $this->errors() ?? [];
 
-            // Hier kannst du auch eine eigene Exception-Klasse nehmen, wenn du willst
             throw new \RuntimeException(
                 'Validation of Country failed: ' . implode(' | ', $errors)
             );

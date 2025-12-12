@@ -21,8 +21,6 @@ class CompaniesController extends BaseController
         $this->countryModel = new CountryModel();
         $this->industryModel = new IndustryModel();
         $this->sectorModel = new SectorModel();
-
-
     }
 
     public function index()

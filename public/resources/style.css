@@ -157,7 +157,16 @@ body > div:first-of-type{
 }
 
 
-/* Suchfeld + Button-Gruppe */
+#main-content .container{
+    max-width: 100% !important;
+    padding: 1px;
+}
+
+#main-content .card {
+    width: 100%;
+    margin: 0;
+}
+
 #main-content .card-body > .d-flex.justify-content-between { align-items: center; gap: 1rem; }
 #main-content .card-body .d-flex.align-items-center { gap: .75rem; }
 
@@ -363,7 +372,7 @@ body > div:first-of-type{
 #sortid_erstellen{ padding: .25em 0; }
 #spaltenbezeichnung{ padding: .25em 0; }
 
-/* Menüeffekte aus CSS 1: Farben auf neues Schema angepasst (dezent) */
+/* Menüeffekte */
 .menu-item{ position: relative; display: inline-block; margin: 0 10px; }
 .menu-item a{
     display: flex; align-items: center; font-size: 18px; text-decoration: none; padding: 10px 20px;
@@ -382,21 +391,17 @@ a:hover{ color: color-mix(in oklab, var(--esr-accent) 60%, black); }
 a:link{ text-decoration: none; }
 table th{ background-color: var(--esr-accent) !important; color: #fff !important; }
 
-/* Platzhalter-Spalten in Boards */
+/* Platzhalter-Spalten */
 .spalte{ min-height: 1em; }
 
 /* Such-Button-Press-Effekt */
 .search_Button{ transition: transform .1s ease-in-out; }
 .search_Button:active{ transform: scale(0.9); }
 
-/* Checkbox-Logik (aus deinem JS) */
+/* Checkbox-Logik */
 .column-toggle{}
 .disabled-option{ pointer-events: none; opacity: .5; }
 
-/* EINE Definition (doppelt war vorher): ------------------------------- */
-.personenkuerzel{
-    text-align: center; padding-top: .4em; height: 2.5em; width: 2.5em;
-}
 
 /* Darkmode */
 body.dark-mode{

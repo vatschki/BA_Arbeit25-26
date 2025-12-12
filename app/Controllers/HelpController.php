@@ -8,7 +8,7 @@ class HelpController extends BaseController
     {
         echo view('templates/header_home');
         echo view('templates/menu_home');
-        echo view('pages/page_Companies');
+        echo view('pages/page_Help');
         echo view('templates/footer');
     }
 }

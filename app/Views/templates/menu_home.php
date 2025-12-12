@@ -24,21 +24,18 @@
                             <li class="nav-item">
                                 <a class="nav-link <?= ($seg1 === '' || $seg1 === 'companies' || $seg1 === 'esg-reports') ? 'active' : '' ?>" aria-current="page" href="<?= base_url('/') ?>">
                                     Home
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link <?= ($seg1 === 'what-it-is') ? 'active' : '' ?>" href="<?= base_url('what-it-is') ?>">
-                                    What it is
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link <?= ($seg1 === 'how-it-works') ? 'active' : '' ?>" href="<?= base_url('how-it-works') ?>">
-                                    How it Works
+                                    <i class="fa-regular fa-house"></i>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link <?= ($seg1 === 'help') ? 'active' : '' ?>" href="<?= base_url('help') ?>">
-                                    Help
+                                    Hilfe
+                                    <i class="fa-regular fa-circle-question"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link <?= ($seg1 === 'config') ? 'active' : '' ?>" href="<?= base_url('config') ?>">
+                                    <i class="fa-solid fa-gear"></i>
                                 </a>
                             </li>
                         </ul>

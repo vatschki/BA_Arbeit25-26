@@ -196,7 +196,7 @@
         <div class="modal-content">
 
             <div class="modal-header">
-                <h5 class="modal-title" id="dynamicModalTitle"></h5>
+                <h5 class="modal-title" id="dynamicModalTitle">Unternehmen hinzufügen</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
@@ -204,24 +204,6 @@
                 <div class="modal-body p-0">
 
                     <div class="d-flex" style="min-height: 350px;">
-
-                        <!-- Sidebar -->
-                        <div class="sidebar-nav p-3">
-                            <div class="nav flex-column nav-pills" id="modalMenu" role="tablist">
-                                <button class="nav-link active" id="tab-company-btn"
-                                        data-bs-toggle="pill" data-bs-target="#tab-company"
-                                        type="button" role="tab">
-                                    Firma
-                                </button>
-
-                                <button class="nav-link" id="tab-report-btn"
-                                        data-bs-toggle="pill" data-bs-target="#tab-report"
-                                        type="button" role="tab">
-                                    Bericht
-                                </button>
-                            </div>
-                        </div>
-
                         <!-- Content Area -->
                         <div class="flex-grow-1 p-4">
                             <div class="tab-content" id="modalContent">
@@ -321,40 +303,6 @@
                                             <textarea class="form-control" name="description" rows="3" placeholder="Kurze Beschreibung des Unternehmens eingeben"><?= esc(old('description') ?? '') ?></textarea>
 
                                         </div>
-                                    </div>
-
-                                </div>
-                                <!-- Tab 2: Bericht mit Drag & Drop -->
-                                <div class="tab-pane fade" id="tab-report" role="tabpanel">
-
-                                    <h5 class="mb-3">ESG-Bericht hinzufügen:</h5>
-
-
-                                    <div class="mb-4 d-flex align-items-center">
-                                        <label for="CNameReport" class="form-label me-3 mb-0" style="white-space: nowrap;">
-                                            Company Name:
-                                        </label>
-                                        <input type="text" id="CNameReport" name="CNameReport"
-                                               class="form-control" style="max-width: 300px;">
-                                    </div>
-
-                                    <!-- Drag and Drop Zone -->
-                                    <div id="pdf-drop-zone" class="pdf-drop-zone">
-                                        <!-- verstecktes File-Input -->
-                                        <input id="pdf-input" type="file"
-                                               accept="application/pdf,.pdf"
-                                               multiple hidden>
-
-                                        <button type="button" class="btn btn-primary" id="pdf-browse-btn">
-                                            PDF auswählen
-                                        </button>
-
-                                        <div class="mt-2 text-grey">
-                                            oder<br>
-                                            <strong>drag a PDF</strong>
-                                        </div>
-
-                                        <div id="pdf-file-list" class="mt-3 text-grey" style="font-size:.9rem;"></div>
                                     </div>
 
                                 </div>
