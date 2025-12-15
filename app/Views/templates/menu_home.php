@@ -34,7 +34,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link <?= ($seg1 === 'config') ? 'active' : '' ?>" href="<?= base_url('config') ?>">
+                                <a class="nav-link <?= ($seg1 === 'config/general') ? 'active' : '' ?>" href="<?= base_url('config/general') ?>">
                                     <i class="fa-solid fa-gear"></i>
                                 </a>
                             </li>

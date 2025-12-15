@@ -1,4 +1,3 @@
-<!-- Darstellung des ausgewählten Menüs style="background-color: aliceblue !important; -->
 <div id="main-content" class="container-card">
     <div class="container">
         <div class="card">

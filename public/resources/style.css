@@ -339,7 +339,7 @@ body > div:first-of-type{
 /* Tabellen-Buttons (lokal) */
 .table-button{
     margin-bottom: .5em; border-radius: 12px; width: 6em; height: 2em;
-    color: #fff; font-weight: bold; background-color: var(--esr-accent); font-size: 1.05em;
+    color: var(--esr-card); font-weight: bold; background-color: var(--esr-accent); font-size: 1.05em;
 }
 .table-button:hover{ background-color: color-mix(in oklab, var(--esr-accent) 85%, black); }
 
@@ -378,7 +378,7 @@ body > div:first-of-type{
     display: flex; align-items: center; font-size: 18px; text-decoration: none; padding: 10px 20px;
     position: relative; background-size: 200% 100%; background-position: 100%; background-clip: text;
     -webkit-text-fill-color: transparent; transition: .8s ease-in-out; cursor: pointer;
-    background-image: linear-gradient(to right, var(--esr-blue-700), #ffffff 50%, var(--esr-accent) 50%);
+    background-image: linear-gradient(to right, var(--esr-blue-700), var(--esr-card) 50%, var(--esr-accent) 50%);
 }
 .menu-item a:hover{ background-position: 0 0; }
 .menu-item.active a{ background-position: 0 0; -webkit-text-fill-color: #020202; font-weight: bold; }
@@ -389,7 +389,7 @@ body > div:first-of-type{
 .draggable-card:active{ cursor: grabbing; }
 a:hover{ color: color-mix(in oklab, var(--esr-accent) 60%, black); }
 a:link{ text-decoration: none; }
-table th{ background-color: var(--esr-accent) !important; color: #fff !important; }
+table th{ background-color: var(--esr-accent) !important; color: var(--esr-card) !important; }
 
 /* Platzhalter-Spalten */
 .spalte{ min-height: 1em; }
@@ -402,6 +402,102 @@ table th{ background-color: var(--esr-accent) !important; color: #fff !important
 .column-toggle{}
 .disabled-option{ pointer-events: none; opacity: .5; }
 
+/* Sidebar */
+
+/* Seite wie modal-content */
+.config-page{
+    background: var(--esr-card);
+    border-radius: 0.75rem;
+}
+
+.config-sidebar-nav{
+    flex: 0 0 220px;
+    width: 220px;
+    background-color: var(--esr-bg);
+    border-right: 2px solid var(--esr-border);
+
+    padding-top: 15px;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+
+    position: relative;
+    z-index: 1;
+}
+
+/* Links */
+.config-sidebar-nav .nav-link{
+    display: block;
+    color: var(--esr-blue-700);
+    text-align: left;
+    padding: 10px 15px;
+    border-radius: 6px;
+    margin-bottom: 4px;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+/* Hover */
+.config-sidebar-nav .nav-link:hover{
+    background-color: var(--esr-accent);
+    color: var(--esr-card);
+}
+
+/* Active (verschmilzt mit Content) */
+.config-sidebar-nav .nav-link.active,
+.config-sidebar-nav .nav-link.is-active{
+    background: var(--esr-card);
+    color: var(--esr-black-205) !important;
+
+    margin-right: calc(-0.75rem - 2px);
+    padding-right: calc(15px + 0.75rem + 2px);
+
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+
+    position: relative;
+    z-index: 2;
+}
+
+.config-page__header,
+.config-page__footer{
+    padding: 1rem 1.25rem;
+    min-height: 56px;
+    display: flex;
+    align-items: center;
+}
+
+
+.config-page__header{
+    border-bottom: 2px solid var(--esr-border);
+}
+
+.config-page__title{
+    font-weight: 600;
+}
+
+/* Body: links Menü, rechts Content – ohne Außenabstände */
+.config-page__body{
+    display: flex;
+    min-height: 60vh;
+}
+
+/* Footer-Linie wie „unten nochmal Strich“ */
+.config-page__footer{
+    border-top: 2px solid var(--esr-border);
+}
+
+/* WICHTIG: Bootstrap-Gutter/Padding killen */
+#main-content.container-card{
+    padding: 0; /* falls container-card Padding hat */
+}
+
+
+
+.config-content{
+    background: #fff;       /* falls nicht schon */
+    flex: 1;
+    padding: 1rem 1.25rem;  /* damit der Content nicht am Rand klebt */
+}
 
 /* Darkmode */
 body.dark-mode{
