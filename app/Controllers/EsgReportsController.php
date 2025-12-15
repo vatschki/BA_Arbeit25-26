@@ -8,6 +8,8 @@ use App\Models\StandardModel;
 use App\Models\CountryModel;
 use App\Models\IndustryModel;
 use App\Models\SectorModel;
+use App\Models\RequirementModel;
+//use App\Models\ReportValueModel;
 
 class EsgReportsController extends BaseController
 {
@@ -18,7 +20,7 @@ class EsgReportsController extends BaseController
 
     protected StandardModel $standardModel;
     protected ReportModel $reportModel;
-    //protected requirementModel $requirementModel;
+    protected RequirementModel $requirementModel;
     //protected reportvalueModel $reportvalueModel;
 
     public function __construct()
@@ -29,6 +31,7 @@ class EsgReportsController extends BaseController
         $this->industryModel = new IndustryModel();
         $this->reportModel = new ReportModel();
         $this->sectorModel = new SectorModel();
+        $this->requirementModel = new RequirementModel();
     }
 
 
@@ -41,6 +44,7 @@ class EsgReportsController extends BaseController
             'industries' => $this->industryModel->getIndustriesWithSectors(),
             'reports' => $this->reportModel->getReports(),
             'standards' => $this->standardModel->getStandards(),
+            'requirements' => $this->requirementModel->getRequirements(),
         ];
 
         echo view('templates/header_home');

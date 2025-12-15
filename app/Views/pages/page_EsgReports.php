@@ -265,12 +265,12 @@
                                     <div class="mb-3 row align-items-center">
                                         <label class="col-sm-3 col-form-label d-flex align-items-center gap-2">
                                             ESRS-Standard
-                                            <i class="fa-regular fa-circle-question text-muted" title="Wähle ein unternehmen"></i>
+                                            <i class="fa-regular fa-circle-question text-muted" title="Wähle ein ESRS-Standard"></i>
                                         </label>
 
                                         <div class="col-sm-9">
                                             <select class="form-select select2-standard" name="standard_id">
-                                                <option value="" disabled <?= old('standard_id') ? '' : 'selected' ?>>ESRS Standard auswählen</option>
+                                                <option value="" disabled <?= old('standard_id') ? '' : 'selected' ?>>ESRS-Standard auswählen</option>
 
                                                 <?php if (!empty($standards)): ?>
                                                     <?php foreach ($standards as $standard): ?>
@@ -279,7 +279,31 @@
                                                         </option>
                                                     <?php endforeach; ?>
                                                 <?php else: ?>
-                                                    <option value="" disabled>Keine Unternehmen Vorhanden</option>
+                                                    <option value="" disabled>Keine ESRS-Standard Vorhanden</option>
+                                                <?php endif; ?>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <!-- ESRS-Requirement -->
+                                    <div class="mb-3 row align-items-center">
+                                        <label class="col-sm-3 col-form-label d-flex align-items-center gap-2">
+                                            ESRS-Anforderung
+                                            <i class="fa-regular fa-circle-question text-muted" title="Wähle eine ESRS-Anforderung"></i>
+                                        </label>
+
+                                        <div class="col-sm-9">
+                                            <select class="form-select select2-standard" name="requirement_id">
+                                                <option value="" disabled <?= old('requirement_id') ? '' : 'selected' ?>>ESRS-Anforderung auswählen</option>
+
+                                                <?php if (!empty($requirements)): ?>
+                                                    <?php foreach ($requirements as $requirement): ?>
+                                                        <option value="<?= esc($requirement['id']) ?>" <?= old('requirement_id') == $requirement['id'] ? 'selected' : '' ?>>
+                                                            <?= esc($requirement['name']) ?>
+                                                        </option>
+                                                    <?php endforeach; ?>
+                                                <?php else: ?>
+                                                    <option value="" disabled>Keine ESRS-Anforderung Vorhanden</option>
                                                 <?php endif; ?>
                                             </select>
                                         </div>
