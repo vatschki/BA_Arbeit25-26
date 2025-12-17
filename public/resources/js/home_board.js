@@ -211,6 +211,50 @@
         updateSector();
     });
 
+    document.addEventListener("DOMContentLoaded", function () {
+        const $standard = $("#standardSelect");
+        const $requirement = $("#requirementSelect");
+
+        // Originale Optionen sichern
+        const allRequirementOptions = $requirement.find("option").clone();
+
+        function filterRequirements() {
+            const standardId = $standard.val();
+
+            // Dropdown resetten
+            $requirement.empty();
+
+            // Placeholder wieder einfügen
+            $requirement.append(
+                `<option value="" disabled selected>ESRS-Anforderung auswählen</option>`
+            );
+
+            // Wenn kein Standard gewählt → keine Requirements anzeigen
+            if (!standardId) {
+                $requirement.trigger("change");
+                return;
+            }
+
+            // Relevante Requirements herausfiltern und hinzufügen
+            allRequirementOptions.each(function () {
+                const reqStandardId = $(this).data("standard-id");
+
+                if (reqStandardId == standardId) {
+                    $requirement.append($(this).clone());
+                }
+            });
+
+            // Select2 aktualisieren
+            $requirement.trigger("change");
+        }
+
+        // Event Listener
+        $standard.on("change", filterRequirements);
+
+        // Falls old() Werte vorhanden → automatisch filtern
+        filterRequirements();
+    });
+
     // PDF Drag & Drop
     document.addEventListener("DOMContentLoaded", function () {
 
@@ -281,7 +325,7 @@
                 return;
             }
 
-            const modal = document.getElementById("createCompanyModal");
+            const modal = document.getElementById("createReportModal");
             const companyId     = modal.querySelector('select[name="company_id"]').value;
             const year          = modal.querySelector('select[name="year"]').value;
             const standardId    = modal.querySelector('select[name="standard_id"]').value;

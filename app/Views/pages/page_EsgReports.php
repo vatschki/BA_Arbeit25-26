@@ -6,7 +6,7 @@
                 <div class="d-flex justify-content-between mb-3">
                     <!-- Left: "Neu" Button -->
 
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createCompanyModal">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createReportModal">
                         <i class="fas fa-plus-circle"></i> Neu
                     </button>
 
@@ -190,7 +190,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="createCompanyModal" tabindex="-1" aria-labelledby="dynamicModalTitle" aria-hidden="true">
+<div class="modal fade" id="createReportModal" tabindex="-1" aria-labelledby="dynamicModalTitle" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
 
@@ -269,7 +269,7 @@
                                         </label>
 
                                         <div class="col-sm-9">
-                                            <select class="form-select select2-standard" name="standard_id">
+                                            <select class="form-select select2-standard" name="standard_id" id="standardSelect">
                                                 <option value="" disabled <?= old('standard_id') ? '' : 'selected' ?>>ESRS-Standard auswählen</option>
 
                                                 <?php if (!empty($standards)): ?>
@@ -293,12 +293,12 @@
                                         </label>
 
                                         <div class="col-sm-9">
-                                            <select class="form-select select2-standard" name="requirement_id">
+                                            <select class="form-select select2-requirement" name="requirement_id" id="requirementSelect">
                                                 <option value="" disabled <?= old('requirement_id') ? '' : 'selected' ?>>ESRS-Anforderung auswählen</option>
 
                                                 <?php if (!empty($requirements)): ?>
                                                     <?php foreach ($requirements as $requirement): ?>
-                                                        <option value="<?= esc($requirement['id']) ?>" <?= old('requirement_id') == $requirement['id'] ? 'selected' : '' ?>>
+                                                        <option value="<?= esc($requirement['id']) ?>" data-standard-id = "<?= esc($requirement['standard_id']) ?>" <?= old('requirement_id') == $requirement['id'] ? 'selected' : '' ?>>
                                                             <?= esc($requirement['code']) ?>
                                                         </option>
                                                     <?php endforeach; ?>
