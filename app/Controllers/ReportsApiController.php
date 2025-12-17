@@ -4,14 +4,14 @@ namespace App\Controllers;
 
 use CodeIgniter\RESTful\ResourceController;
 
-class ReportsApiController extends BaseController{
+class ReportsApiController extends ResourceController{
 
     public function process()
     {
         try {
             $request = $this->request;
 
-            $pdf = $request->getFile('report ');
+            $pdf = $request->getFile('report');
 
             if (!$pdf || !$pdf->isValid()) {
                 return $this->fail('Kein gültiges PDF vorhanden');

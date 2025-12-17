@@ -227,11 +227,13 @@
             const isPdf = file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf");
             if (!isPdf) {
                 selectedFile = null;
+                window.selectedPdfFile = null
                 fileListEl.textContent = "Bitte eine gültige PDF-Datei auswählen.";
                 return;
             }
 
             selectedFile = file;
+            window.selectedPdfFile = selectedFile;
             fileListEl.innerHTML = `• ${file.name} (${Math.round(file.size / 1024)} KB)`;
         }
 
@@ -295,7 +297,7 @@
             saveBtn.disabled = true;
             saveBtn.textContent = "Wird gespeichert...";
 
-            const res = await fetch("/api/reports/process", {
+            const res = await fetch("/esg-reports/process", {
                 method: "POST",
                 body: formData
             });

@@ -299,7 +299,7 @@
                                                 <?php if (!empty($requirements)): ?>
                                                     <?php foreach ($requirements as $requirement): ?>
                                                         <option value="<?= esc($requirement['id']) ?>" <?= old('requirement_id') == $requirement['id'] ? 'selected' : '' ?>>
-                                                            <?= esc($requirement['name']) ?>
+                                                            <?= esc($requirement['code']) ?>
                                                         </option>
                                                     <?php endforeach; ?>
                                                 <?php else: ?>
