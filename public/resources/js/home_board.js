@@ -213,42 +213,39 @@
 
     // PDF Drag & Drop
     document.addEventListener("DOMContentLoaded", function () {
+
         const dropZone   = document.getElementById("pdf-drop-zone");
         const fileInput  = document.getElementById("pdf-input");
         const browseBtn  = document.getElementById("pdf-browse-btn");
         const fileListEl = document.getElementById("pdf-file-list");
-        const saveBtn    = document.getElementById("createSaveBtn");
 
-        let selectedFiles = [];
+        let selectedFile = null;
 
-        function setFiles(files) {
-            selectedFiles = Array.from(files).filter(f =>
-                f.type === "application/pdf" || f.name.toLowerCase().endsWith(".pdf")
-            );
+        function setFile(file) {
+            if (!file) return;
 
-            if (selectedFiles.length === 0) {
-                fileListEl.textContent = "Keine gültigen PDF-Dateien ausgewählt.";
+            const isPdf = file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf");
+            if (!isPdf) {
+                selectedFile = null;
+                fileListEl.textContent = "Bitte eine gültige PDF-Datei auswählen.";
                 return;
             }
 
-            fileListEl.innerHTML = selectedFiles
-            .map(f => "• " + f.name + " (" + Math.round(f.size / 1024) + " KB)")
-            .join("<br>");
+            selectedFile = file;
+            fileListEl.innerHTML = `• ${file.name} (${Math.round(file.size / 1024)} KB)`;
         }
 
-        // Klick auf Zone oder Button
+        // Click
         dropZone.addEventListener("click", () => fileInput.click());
         browseBtn.addEventListener("click", (e) => {
             e.stopPropagation();
             fileInput.click();
         });
 
-        // Auswahl über Dialog
-        fileInput.addEventListener("change", (e) => {
-            setFiles(e.target.files);
-        });
+        // File input
+        fileInput.addEventListener("change", (e) => setFile(e.target.files?.[0]));
 
-        // Drag & Drop
+        // Drag Events
         dropZone.addEventListener("dragover", (e) => {
             e.preventDefault();
             dropZone.classList.add("dragover");
@@ -262,31 +259,58 @@
         dropZone.addEventListener("drop", (e) => {
             e.preventDefault();
             dropZone.classList.remove("dragover");
-            if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-                setFiles(e.dataTransfer.files);
-                e.dataTransfer.clearData();
-            }
+            setFile(e.dataTransfer.files?.[0]);
         });
 
-        // Speichern-Button send PDF to Backend
-        saveBtn.addEventListener("click", () => {
-            // Beispiel: wenn du sicherstellen willst, dass ein Bericht hochgeladen ist
-            // if (selectedFiles.length === 0) {
-            //   alert("Bitte mindestens einen PDF-Bericht auswählen.");
-            //   return;
-            // }
+        // Expose selectedFile to save button handler
+        window.selectedPdfFile = selectedFile;
+    });
+
+    // Save Button - Pipeline starten
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const saveBtn = document.getElementById("createSaveBtn");
+
+        saveBtn.addEventListener("click", async () => {
+
+            const file = window.selectedPdfFile;
+            if (!file) {
+                alert("Bitte eine PDF auswählen.");
+                return;
+            }
+
+            const modal = document.getElementById("createCompanyModal");
+            const companyId     = modal.querySelector('select[name="company_id"]').value;
+            const year          = modal.querySelector('select[name="year"]').value;
+            const standardId    = modal.querySelector('select[name="standard_id"]').value;
+            const requirementId = modal.querySelector('select[name="requirement_id"]').value;
 
             const formData = new FormData();
-                selectedFiles.forEach((file, idx) => {
-                formData.append("reports[]", file);
+            formData.append("report", file);
+            formData.append("company_id", companyId);
+            formData.append("year", year);
+            formData.append("standard_id", standardId);
+            formData.append("requirement_id", requirementId);
+
+            saveBtn.disabled = true;
+            saveBtn.textContent = "Wird gespeichert...";
+
+            const res = await fetch("/api/reports/process", {
+                method: "POST",
+                body: formData
             });
 
-            // TODO: hier deine URL eintragen
-            // fetch("/api/company/create", {
-            //   method: "POST",
-            //   body: formData
-            // });
+            const data = await res.json();
 
-            console.log("Ausgewählte PDFs:", selectedFiles);
+            saveBtn.disabled = false;
+            saveBtn.textContent = "Speichern";
+
+            if (!res.ok) {
+                alert(data?.message ?? "Fehler beim Upload.");
+                return;
+            }
+
+            alert("OK. Job-ID: " + data.job_id);
         });
     });
+

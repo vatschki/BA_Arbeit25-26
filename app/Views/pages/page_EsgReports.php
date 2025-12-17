@@ -312,9 +312,9 @@
                                     <!-- Drag and Drop Zone -->
                                     <div id="pdf-drop-zone" class="pdf-drop-zone">
                                         <!-- verstecktes File-Input -->
-                                        <input id="pdf-input" type="file"
+                                        <input id="pdf-input" type="file" name="report"
                                                accept="application/pdf,.pdf"
-                                               multiple hidden>
+                                               hidden>
 
                                         <button type="button" class="btn btn-primary" id="pdf-browse-btn">
                                             PDF auswählen
