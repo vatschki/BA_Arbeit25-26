@@ -215,27 +215,22 @@
         const $standard = $("#standardSelect");
         const $requirement = $("#requirementSelect");
 
-        // Originale Optionen sichern
         const allRequirementOptions = $requirement.find("option").clone();
 
         function filterRequirements() {
             const standardId = $standard.val();
 
-            // Dropdown resetten
             $requirement.empty();
 
-            // Placeholder wieder einfügen
             $requirement.append(
                 `<option value="" disabled selected>ESRS-Anforderung auswählen</option>`
             );
 
-            // Wenn kein Standard gewählt → keine Requirements anzeigen
             if (!standardId) {
                 $requirement.trigger("change");
                 return;
             }
 
-            // Relevante Requirements herausfiltern und hinzufügen
             allRequirementOptions.each(function () {
                 const reqStandardId = $(this).data("standard-id");
 
@@ -244,14 +239,11 @@
                 }
             });
 
-            // Select2 aktualisieren
             $requirement.trigger("change");
         }
 
-        // Event Listener
         $standard.on("change", filterRequirements);
 
-        // Falls old() Werte vorhanden → automatisch filtern
         filterRequirements();
     });
 
@@ -281,7 +273,6 @@
             fileListEl.innerHTML = `• ${file.name} (${Math.round(file.size / 1024)} KB)`;
         }
 
-        // Click
         dropZone.addEventListener("click", () => fileInput.click());
         browseBtn.addEventListener("click", (e) => {
             e.stopPropagation();
@@ -308,7 +299,6 @@
             setFile(e.dataTransfer.files?.[0]);
         });
 
-        // Expose selectedFile to save button handler
         window.selectedPdfFile = selectedFile;
     });
 
