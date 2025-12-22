@@ -52,4 +52,23 @@ class EsgReportsController extends BaseController
         echo view('pages/page_EsgReports', $data);
         echo view('templates/footer');
     }
+
+    public function byCompany($company_id){
+
+        $company = $this->companyModel->find($company_id);
+
+        if (!$company) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Company not found');
+        }
+
+        $data = [
+            'company' => $this->companyModel->find($company_id),
+            'reportsbycompany' => $this->reportModel->getByCompanyId($company_id),
+        ];
+
+        echo view('templates/header_home');
+        echo view('templates/menu_home');
+        echo view('pages/page_EsgReports_byCompany', $data);
+        echo view('templates/footer');
+    }
 }

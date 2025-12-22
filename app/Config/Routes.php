@@ -10,6 +10,8 @@ $routes->get('/companies', 'CompaniesController::index');
 $routes->post('/companies/create', 'CompaniesController::create');
 
 $routes->get('/esg-reports', 'EsgReportsController::index');
+$routes->get('/esg-reports/company/(:num)', 'EsgReportsController::byCompany/$1');
+
 $routes->post('/esg-reports/process', 'ReportsApiController::process');
 
 

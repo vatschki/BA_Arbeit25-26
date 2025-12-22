@@ -39,6 +39,12 @@ class ReportModel extends BaseModel{
             ->findAll();
     }
 
+    public function getByCompanyId(int $company_id){
+        return $this->where("company_id", $company_id)
+            ->orderBy("reporting_year", "DESC")
+            ->findAll();
+    }
+
     public function createReport(array $data): int
     {
         if (! $this->insert($data)) {

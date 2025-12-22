@@ -171,7 +171,11 @@
                                         data-industry-id="<?= esc($company['industry_id']) ?>"
                                     >
                                         <td><?= esc($company['id']) ?></td>
-                                        <td><?= esc($company['name']) ?></td>
+                                        <td>
+                                            <a href="<?= site_url('esg-reports/company/' . $company['id']) ?>">
+                                                <?= esc($company['name']) ?>
+                                            </a>
+                                        </td>
                                         <td><?= esc($company['country_name_de']) ?></td>
                                         <td><?= esc($company['sector_name']) ?></td>
                                         <td><?= esc($company['industry_name']) ?></td>
