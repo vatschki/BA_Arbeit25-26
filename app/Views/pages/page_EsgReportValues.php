@@ -55,10 +55,10 @@
                     <table class="table table-hover table-border table-striped" id="reportValueTable" data-toggle="table">
                         <thead>
                         <tr>
-                            <th data-field="id" data-sortable="true">ID</th>
-                            <th data-field="value" data-sortable="true">Bericht</th>
-                            <th data-field="value" data-sortable="true">Anforderung</th>
-                            <th data-field="value" data-sortable="true">Inhalt</th>
+                            <th data-field="value_id" data-sortable="true">ID</th>
+                            <th data-field="report_id" data-sortable="true">Bericht</th>
+                            <th data-field="requirement_code" data-sortable="true">Anforderung</th>
+                            <th data-field="value_text" data-sortable="true">Inhalt</th>
                         </tr>
                         </thead>
                         <tbody>

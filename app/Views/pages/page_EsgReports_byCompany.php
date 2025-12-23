@@ -55,20 +55,16 @@
                     <table class="table table-hover table-border table-striped" id="reportsByCompaniesTable" data-toggle="table">
                         <thead>
                         <tr>
-                            <th data-field="id" data-sortable="true">ID</th>
-                            <th data-field="report" data-sortable="true">Unternehmen</th>
-                            <th data-field="report" data-sortable="true">Author</th>
-                            <th data-field="report" data-sortable="true">Jahr</th>
+                            <th data-field="report_id" data-sortable="true">ID</th>
+                            <th data-field="company_name" data-sortable="true">Unternehmen</th>
+                            <th data-field="author_name" data-sortable="true">Author</th>
+                            <th data-field="reporting_year" data-sortable="true">Jahr</th>
                         </tr>
                         </thead>
                         <tbody>
                         <?php if (!empty($reportsbycompany)): ?>
                             <?php foreach ($reportsbycompany as $report): ?>
-                                <tr data-country-id="<?= esc($report['report__id']) ?>"
-                                    data-sector-id="<?= esc($report['company_name']) ?>"
-                                    data-industry-id="<?= esc($report['author_name']) ?>"
-                                    data-company-id="<?= esc($report['reporting_year']) ?>"
-                                    data-href="<?= site_url('/esg-reports/value/' . $report['report_id']) ?>"
+                                <tr data-href="<?= site_url('/esg-reports/value/' . $report['report_id']) ?>"
                                     style="cursor: pointer;"
                                 >
                                     <td><?= esc($report['report_id']) ?></td>
@@ -91,12 +87,11 @@
 </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        document.querySelectorAll("#reportsByCompaniesTable tbody tr[data-href]").forEach(function (row) {
-            row.addEventListener("click", function () {
-                window.location.href = this.dataset.href;
-            });
-        });
+    document.addEventListener("click", function (e) {
+        const row = e.target.closest("#reportsByCompaniesTable tbody tr[data-href]");
+        if (!row) return;
+
+        window.location.href = row.dataset.href;
     });
 
     document.querySelectorAll(".column-toggle").forEach(checkbox => {

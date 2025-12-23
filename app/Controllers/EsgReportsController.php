@@ -66,6 +66,8 @@ class EsgReportsController extends BaseController
             'reportsbycompany' => $this->reportModel->getByCompanyId($company_id),
         ];
 
+        #dd($data);
+
         echo view('templates/header_home');
         echo view('templates/menu_home');
         echo view('pages/page_EsgReports_byCompany', $data);

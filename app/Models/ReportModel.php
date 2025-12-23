@@ -39,10 +39,31 @@ class ReportModel extends BaseModel{
             ->findAll();
     }
 
-    public function getByCompanyId(int $company_id){
-        return $this->where("company_id", $company_id)
-            ->orderBy("reporting_year", "DESC")
-            ->findAll();
+    public function getByCompanyId(int $company_id): array
+    {
+        return $this->db->table('reports')
+            ->select('
+            reports.id AS report_id,
+            reports.reporting_year,
+            reports.company_id,
+            reports.author_id,
+            companies.name AS company_name,
+            authors.name AS author_name
+        ')
+            ->join(
+                'companies',
+                'companies.id = reports.company_id',
+                'left'
+            )
+            ->join(
+                'authors',
+                'authors.id = reports.author_id',
+                'left'
+            )
+            ->where('reports.company_id', $company_id)
+            ->orderBy('reports.reporting_year', 'DESC')
+            ->get()
+            ->getResultArray();
     }
 
     public function createReport(array $data): int
