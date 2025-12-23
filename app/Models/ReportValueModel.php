@@ -26,7 +26,21 @@ class ReportValueModel extends BaseModel{
 
     public function getReportValues($report_id): array
     {
-        return $this->where("report_id", $report_id)->findAll();
+        return $this->db->table('esrs_reportvalue')
+            ->select('
+            esrs_reportvalue.id AS value_id,
+            esrs_reportvalue.report_id,
+            esrs_requirements.code AS requirement_code,
+            esrs_reportvalue.value_text
+        ')
+            ->join(
+                'esrs_requirements',
+                'esrs_requirements.id = esrs_reportvalue.requirement_id',
+                'left'
+            )
+            ->where('esrs_reportvalue.report_id', $report_id)
+            ->get()
+            ->getResultArray();
     }
 }
 

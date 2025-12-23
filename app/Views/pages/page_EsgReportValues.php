@@ -27,17 +27,17 @@
                             </li>
                             <li>
                                 <label class="dropdown-item">
-                                    <input type="checkbox" class="column-toggle" data-column="1" checked> Unternehmen
+                                    <input type="checkbox" class="column-toggle" data-column="1" checked> Bericht
                                 </label>
                             </li>
                             <li>
                                 <label class="dropdown-item">
-                                    <input type="checkbox" class="column-toggle" data-column="2" checked> Author
+                                    <input type="checkbox" class="column-toggle" data-column="2" checked> Anforderung
                                 </label>
                             </li>
                             <li>
                                 <label class="dropdown-item">
-                                    <input type="checkbox" class="column-toggle" data-column="3" checked> Jahr
+                                    <input type="checkbox" class="column-toggle" data-column="3" checked> Inhalt
                                 </label>
                             </li>
                         </ul>
@@ -56,19 +56,18 @@
                         <thead>
                         <tr>
                             <th data-field="id" data-sortable="true">ID</th>
-                            <th data-field="value" data-sortable="true">Unternehmen</th>
-                            <th data-field="value" data-sortable="true">Author</th>
+                            <th data-field="value" data-sortable="true">Bericht</th>
+                            <th data-field="value" data-sortable="true">Anforderung</th>
+                            <th data-field="value" data-sortable="true">Inhalt</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <?php if (!empty($reportvalues)): ?>
-                            <?php foreach ($reportvalues as $value): ?>
-                                <tr data-country-id="<?= esc($value['requirement_id']) ?>"
-                                    data-sector-id="<?= esc($value['report_id']) ?>"
-                                    data-industry-id="<?= esc($value['value_text']) ?>"
-                                >
-                                    <td><?= esc($value['requirement_id']) ?></td>
+                        <?php if (!empty($report_values)): ?>
+                            <?php foreach ($report_values as $value): ?>
+                                <tr>
+                                    <td><?= esc($value['value_id']) ?></td>
                                     <td><?= esc($value['report_id']) ?></td>
+                                    <td><?= esc($value['requirement_code']) ?></td>
                                     <td><?= esc($value['value_text']) ?></td>
                                 </tr>
                             <?php endforeach; ?>
