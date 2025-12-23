@@ -121,5 +121,20 @@
             }
         });
     });
+
+    document.getElementById("table-search").addEventListener("keyup", function () {
+        let value = this.value.toLowerCase();
+        let rows = document.querySelectorAll("#reportValueTable tbody tr");
+        let visibleRows = 0;
+
+        rows.forEach(row => {
+            if (row.textContent.toLowerCase().includes(value)) {
+                row.style.display = "table-row";
+                visibleRows++;
+            } else {
+                row.style.display = "none";
+            }
+        });
+    });
 </script>
 

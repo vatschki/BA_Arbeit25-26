@@ -42,7 +42,7 @@
                             </li>
                         </ul>
 
-                        <input id="table-search" class="form-control w-75" type="search" placeholder="Firmensuche" aria-label="Search">
+                        <input id="table-search" class="form-control w-75" type="search" placeholder="Berichtssuche " aria-label="Search">
 
                     </div>
                 </div>
@@ -131,6 +131,21 @@
             if (checkedBoxes.length === 1) {
                 checkedBoxes[0].disabled = true;
                 checkedBoxes[0].parentElement?.classList.add("disabled-option");
+            }
+        });
+    });
+
+    document.getElementById("table-search").addEventListener("keyup", function () {
+        let value = this.value.toLowerCase();
+        let rows = document.querySelectorAll("#reportsByCompaniesTable tbody tr");
+        let visibleRows = 0;
+
+        rows.forEach(row => {
+            if (row.textContent.toLowerCase().includes(value)) {
+                row.style.display = "table-row";
+                visibleRows++;
+            } else {
+                row.style.display = "none";
             }
         });
     });
