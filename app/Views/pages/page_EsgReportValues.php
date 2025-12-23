@@ -42,7 +42,7 @@
                             </li>
                         </ul>
 
-                        <input id="table-search" class="form-control w-75" type="search" placeholder="Firmensuche" aria-label="Search">
+                        <input id="table-search" class="form-control w-75" type="search" placeholder="Wert Suche" aria-label="Search">
 
                     </div>
                 </div>
@@ -52,29 +52,24 @@
             <!-- Tabellenansicht -->
             <div class="card-body container-fluid" id="table-view">
                 <div class="table-responsive">
-                    <table class="table table-hover table-border table-striped" id="reportsByCompaniesTable" data-toggle="table">
+                    <table class="table table-hover table-border table-striped" id="reportValueTable" data-toggle="table">
                         <thead>
                         <tr>
                             <th data-field="id" data-sortable="true">ID</th>
-                            <th data-field="report" data-sortable="true">Unternehmen</th>
-                            <th data-field="report" data-sortable="true">Author</th>
-                            <th data-field="report" data-sortable="true">Jahr</th>
+                            <th data-field="value" data-sortable="true">Unternehmen</th>
+                            <th data-field="value" data-sortable="true">Author</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <?php if (!empty($reportsbycompany)): ?>
-                            <?php foreach ($reportsbycompany as $report): ?>
-                                <tr data-country-id="<?= esc($report['report__id']) ?>"
-                                    data-sector-id="<?= esc($report['company_name']) ?>"
-                                    data-industry-id="<?= esc($report['author_name']) ?>"
-                                    data-company-id="<?= esc($report['reporting_year']) ?>"
-                                    data-href="<?= site_url('/esg-reports/value/' . $report['report_id']) ?>"
-                                    style="cursor: pointer;"
+                        <?php if (!empty($reportvalues)): ?>
+                            <?php foreach ($reportvalues as $value): ?>
+                                <tr data-country-id="<?= esc($value['requirement_id']) ?>"
+                                    data-sector-id="<?= esc($value['report_id']) ?>"
+                                    data-industry-id="<?= esc($value['value_text']) ?>"
                                 >
-                                    <td><?= esc($report['report_id']) ?></td>
-                                    <td><?= esc($report['company_name']) ?></td>
-                                    <td><?= esc($report['author_name']) ?></td>
-                                    <td><?= esc($report['reporting_year']) ?></td>
+                                    <td><?= esc($value['requirement_id']) ?></td>
+                                    <td><?= esc($value['report_id']) ?></td>
+                                    <td><?= esc($value['value_text']) ?></td>
                                 </tr>
                             <?php endforeach; ?>
                         <?php else: ?>
@@ -91,14 +86,6 @@
 </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        document.querySelectorAll("#reportsByCompaniesTable tbody tr[data-href]").forEach(function (row) {
-            row.addEventListener("click", function () {
-                window.location.href = this.dataset.href;
-            });
-        });
-    });
-
     document.querySelectorAll(".column-toggle").forEach(checkbox => {
         checkbox.addEventListener("change", function () {
 
@@ -112,7 +99,7 @@
                 return;
             }
 
-            document.querySelectorAll("#reportsByCompaniesTable tr").forEach(row => {
+            document.querySelectorAll("#reportValueTable tr").forEach(row => {
                 let cells = row.querySelectorAll("th, td");
                 if (cells[columnIndex]) {
                     cells[columnIndex].style.display = isChecked ? "" : "none";
@@ -135,3 +122,4 @@
         });
     });
 </script>
+
