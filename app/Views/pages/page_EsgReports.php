@@ -158,9 +158,9 @@
                         <thead>
                         <tr>
                             <th data-field="id" data-sortable="true">ID</th>
-                            <th data-field="company" data-sortable="true">Unternehmen</th>
-                            <th data-field="company" data-sortable="true">Author</th>
-                            <th data-field="company" data-sortable="true">Jahr</th>
+                            <th data-field="company_name" data-sortable="true">Unternehmen</th>
+                            <th data-field="author_name" data-sortable="true">Author</th>
+                            <th data-field="reporting_year" data-sortable="true">Jahr</th>
                         </tr>
                         </thead>
                         <tbody>

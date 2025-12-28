@@ -27,15 +27,22 @@ class ReportModel extends BaseModel{
     public function getReports(): array
     {
         return $this->select("
-            reports.*,
-            reports.id    AS report_id,
-            companies.id   AS company_id,
-            companies.name AS company_name,
-            authors.id    AS author_id,
-            authors.name AS author_name"
-        )
-            ->join("companies", "reports.company_id = companies.id", "left")
-            ->join("authors", "reports.author_id = authors.id", "left")
+                reports.id AS report_id,
+                reports.reporting_year,
+        
+                companies.id AS company_id,
+                companies.name AS company_name,
+                companies.country_id,
+                companies.industry_id,
+        
+                industries.sector_id,
+        
+                authors.id AS author_id,
+                authors.name AS author_name
+            ")
+            ->join('companies', 'reports.company_id = companies.id', 'left')
+            ->join('industries', 'companies.industry_id = industries.id', 'left')
+            ->join('authors', 'reports.author_id = authors.id', 'left')
             ->findAll();
     }
 
