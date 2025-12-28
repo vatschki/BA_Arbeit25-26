@@ -35,6 +35,11 @@ class IndustryModel extends BaseModel{
             ->findAll();
     }
 
+    public function getIndustries(): array
+    {
+        return $this->findAll();
+    }
+
     public function createSector(array $data): int
     {
         if (! $this->insert($data)) {

@@ -15,7 +15,7 @@
                             <div class="d-flex justify-content-between mb-3">
                                 <!-- Left: "Neu" Button -->
 
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createStandardModal">
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createCompanyModal">
                                     <i class="fas fa-plus-circle"></i> Neu
                                 </button>
 
@@ -36,27 +36,22 @@
                                         </li>
                                         <li>
                                             <label class="dropdown-item">
-                                                <input type="checkbox" class="column-toggle" data-column="1" checked> Code
+                                                <input type="checkbox" class="column-toggle" data-column="1" checked> Name
                                             </label>
                                         </li>
                                         <li>
                                             <label class="dropdown-item">
-                                                <input type="checkbox" class="column-toggle" data-column="2" checked> Name
+                                                <input type="checkbox" class="column-toggle" data-column="2" checked> Beschreibung
                                             </label>
                                         </li>
                                         <li>
                                             <label class="dropdown-item">
-                                                <input type="checkbox" class="column-toggle" data-column="3" checked> Beschreibung
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="dropdown-item">
-                                                <input type="checkbox" class="column-toggle" data-column="4" checked> Zeitstempel
+                                                <input type="checkbox" class="column-toggle" data-column="3" checked> Zeitstempel
                                             </label>
                                         </li>
                                     </ul>
 
-                                    <input id="table-search" class="form-control w-75" type="search" placeholder="Standard" aria-label="Search">
+                                    <input id="table-search" class="form-control w-75" type="search" placeholder="Sektor" aria-label="Search">
 
                                 </div>
                             </div>
@@ -66,34 +61,31 @@
                         <!-- Tabellenansicht -->
                         <div class="card-body container-fluid" id="table-view">
                             <div class="table-responsive">
-                                <table class="table table-hover table-border table-striped" id="standardsTable" data-toggle="table">
+                                <table class="table table-hover table-border table-striped" id="sectorTable" data-toggle="table">
                                     <thead>
-                                        <tr>
-                                            <th data-field="id" data-sortable="true">ID</th>
-                                            <th data-field="code" data-sortable="true">Code</th>
-                                            <th data-field="name" data-sortable="true">Name</th>
-                                            <th data-field="description" data-sortable="true">Beschreibung</th>
-                                            <th data-field="timestamp" data-sortable="true">Zeitstämpel</th>
-                                        </tr>
+                                    <tr>
+                                        <th data-field="id" data-sortable="true">ID</th>
+                                        <th data-field="name" data-sortable="true">Name</th>
+                                        <th data-field="description" data-sortable="true">Description</th>
+                                        <th data-field="timestamp" data-sortable="true">Timestamp</th>
+                                    </tr>
                                     </thead>
                                     <tbody>
-                                    <?php if (!empty($standards)): ?>
-                                        <?php foreach ($standards as $standard): ?>
+                                    <?php if (!empty($sectors)): ?>
+                                        <?php foreach ($sectors as $sector): ?>
                                             <tr>
-                                                <td><?= esc($standard['id']) ?></td>
-                                                <td><?= esc($standard['code']) ?></td>
-                                                <td><?= esc($standard['name']) ?></td>
-                                                <td><?= esc($standard['description']) ?></td>
-                                                <td><?= esc($standard['timestamp']) ?></td>
+                                                <td><?= esc($sector['id']) ?></td>
+                                                <td><?= esc($sector['name']) ?></td>
+                                                <td><?= esc($sector['description']) ?></td>
+                                                <td><?= esc($sector['timestamp']) ?></td>
                                             </tr>
                                         <?php endforeach; ?>
                                     <?php else: ?>
                                         <tr class="no-data-row">
-                                            <td colspan="5">Keine Daten verfügbar.</td>
+                                            <td colspan="4">Keine Daten verfügbar.</td>
                                         </tr>
                                     <?php endif; ?>
                                     </tbody>
-
                                 </table>
                             </div>
                         </div>
@@ -108,3 +100,4 @@
 
     </div>
 </div>
+

@@ -232,6 +232,12 @@ body > div:first-of-type{
     text-align: center;
     font-weight: 500;
 }
+.table-scroll {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
 
 /* Buttons */
 .btn-primary{
@@ -491,12 +497,18 @@ table th{ background-color: var(--esr-accent) !important; color: var(--esr-card)
     padding: 0; /* falls container-card Padding hat */
 }
 
+#requirementsTable {
+    width: max-content;
+    min-width: 100%;
+}
+
 
 
 .config-content{
     background: #fff;       /* falls nicht schon */
     flex: 1;
     padding: 1rem 1.25rem;  /* damit der Content nicht am Rand klebt */
+    min-width: 0;
 }
 
 /* Darkmode */

@@ -20,6 +20,8 @@ $routes->get('/help', 'HelpController::index');
 
 $routes->get('/config/general', 'ConfigController::general');
 $routes->get('/config/api-key', 'ConfigController::apikey');
+$routes->get('/config/sector', 'ConfigController::sector');
+$routes->get('/config/industry', 'ConfigController::industry');
 $routes->get('/config/standard', 'ConfigController::standard');
 $routes->get('/config/requirement', 'ConfigController::requirement');
 
