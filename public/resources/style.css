@@ -492,11 +492,6 @@ table th{ background-color: var(--esr-accent) !important; color: var(--esr-card)
     border-top: 2px solid var(--esr-border);
 }
 
-/* WICHTIG: Bootstrap-Gutter/Padding killen */
-#main-content.container-card{
-    padding: 0; /* falls container-card Padding hat */
-}
-
 #requirementsTable {
     width: max-content;
     min-width: 100%;

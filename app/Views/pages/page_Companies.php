@@ -1,7 +1,7 @@
 <div id="main-content" class="container-card">
     <div class="container">
         <div class="card">
-            <div class="card-body container-fluid">
+            <div class="card-body">
                 <div class="d-flex justify-content-between mb-3">
                     <!-- Left: "Neu" Button -->
 
@@ -151,9 +151,9 @@
 
 
             <!-- Tabellenansicht -->
-            <div class="card-body container-fluid" id="table-view">
+            <div class="card-body" id="table-view">
                 <div class="table-responsive">
-                    <table class="table table-hover table-border table-striped" id="boardTable" data-toggle="table">
+                    <table class="table table-hover table-border table-striped" id="companiesTable" data-toggle="table">
                         <thead>
                         <tr>
                             <th data-field="id" data-sortable="true">ID</th>
