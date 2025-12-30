@@ -30,47 +30,47 @@
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                         <li>
                                             <label class="dropdown-item">
-                                                <input type="checkbox" class="column-toggle" data-column="0" checked> ID
+                                                <input type="checkbox" class="column-toggle" data-column="0" data-table-id="requirementsTable" checked> ID
                                             </label>
                                         </li>
                                         <li>
                                             <label class="dropdown-item">
-                                                <input type="checkbox" class="column-toggle" data-column="1" checked> Standard ID
+                                                <input type="checkbox" class="column-toggle" data-column="1" data-table-id="requirementsTable" checked> Standard ID
                                             </label>
                                         </li>
                                         <li>
                                             <label class="dropdown-item">
-                                                <input type="checkbox" class="column-toggle" data-column="2" checked> Disclosure Requirement
+                                                <input type="checkbox" class="column-toggle" data-column="2" data-table-id="requirementsTable" checked> Disclosure Requirement
                                             </label>
                                         </li>
                                         <li>
                                             <label class="dropdown-item">
-                                                <input type="checkbox" class="column-toggle" data-column="3" checked> Paragraph
+                                                <input type="checkbox" class="column-toggle" data-column="3" data-table-id="requirementsTable" checked> Paragraph
                                             </label>
                                         </li>
                                         <li>
                                             <label class="dropdown-item">
-                                                <input type="checkbox" class="column-toggle" data-column="5" checked> Titel
+                                                <input type="checkbox" class="column-toggle" data-column="5" data-table-id="requirementsTable" checked> Titel
                                             </label>
                                         </li>
                                         <li>
                                             <label class="dropdown-item">
-                                                <input type="checkbox" class="column-toggle" data-column="6" checked> Data Type
+                                                <input type="checkbox" class="column-toggle" data-column="6" data-table-id="requirementsTable" checked> Data Type
                                             </label>
                                         </li>
                                         <li>
                                             <label class="dropdown-item">
-                                                <input type="checkbox" class="column-toggle" data-column="7" checked> Conditional / Alternative Disclosure
+                                                <input type="checkbox" class="column-toggle" data-column="7" data-table-id="requirementsTable" checked> Conditional / Alternative Disclosure
                                             </label>
                                         </li>
                                         <li>
                                             <label class="dropdown-item">
-                                                <input type="checkbox" class="column-toggle" data-column="8" checked> Timestamp
+                                                <input type="checkbox" class="column-toggle" data-column="8" data-table-id="requirementsTable" checked> Timestamp
                                             </label>
                                         </li>
                                     </ul>
 
-                                    <input id="table-search" class="form-control w-75" type="search" placeholder="Anforderung" aria-label="Search">
+                                    <input id="table-search" class="form-control w-75" type="search" placeholder="Anforderung" data-table-id="requirementsTable" aria-label="Search">
 
                                 </div>
                             </div>

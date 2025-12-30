@@ -31,32 +31,32 @@
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                         <li>
                                             <label class="dropdown-item">
-                                                <input type="checkbox" class="column-toggle" data-column="0" checked> ID
+                                                <input type="checkbox" class="column-toggle" data-column="0" data-table-id="industryTable" checked> ID
                                             </label>
                                         </li>
                                         <li>
                                             <label class="dropdown-item">
-                                                <input type="checkbox" class="column-toggle" data-column="0" checked> Sektor_ID
+                                                <input type="checkbox" class="column-toggle" data-column="1" data-table-id="industryTable" checked> Sektor_ID
                                             </label>
                                         </li>
                                         <li>
                                             <label class="dropdown-item">
-                                                <input type="checkbox" class="column-toggle" data-column="1" checked> Name
+                                                <input type="checkbox" class="column-toggle" data-column="2" data-table-id="industryTable" checked> Name
                                             </label>
                                         </li>
                                         <li>
                                             <label class="dropdown-item">
-                                                <input type="checkbox" class="column-toggle" data-column="2" checked> Beschreibung
+                                                <input type="checkbox" class="column-toggle" data-column="3" data-table-id="industryTable" checked> Beschreibung
                                             </label>
                                         </li>
                                         <li>
                                             <label class="dropdown-item">
-                                                <input type="checkbox" class="column-toggle" data-column="3" checked> Zeitstempel
+                                                <input type="checkbox" class="column-toggle" data-column="4" data-table-id="industryTable" checked> Zeitstempel
                                             </label>
                                         </li>
                                     </ul>
 
-                                    <input id="table-search" class="form-control w-75" type="search" placeholder="Industrie" aria-label="Search">
+                                    <input id="table-search" class="form-control w-75" type="search" placeholder="Industrie" data-table-id="industryTable" aria-label="Search">
 
                                 </div>
                             </div>
@@ -66,7 +66,7 @@
                         <!-- Tabellenansicht -->
                         <div class="card-body container-fluid" id="table-view">
                             <div class="table-responsive">
-                                <table class="table table-hover table-border table-striped" id="sectorTable" data-toggle="table">
+                                <table class="table table-hover table-border table-striped" id="industryTable" data-toggle="table">
                                     <thead>
                                     <tr>
                                         <th data-field="id" data-sortable="true">ID</th>

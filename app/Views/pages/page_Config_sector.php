@@ -31,27 +31,27 @@
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                         <li>
                                             <label class="dropdown-item">
-                                                <input type="checkbox" class="column-toggle" data-column="0" checked> ID
+                                                <input type="checkbox" class="column-toggle" data-column="0" data-table-id="sectorTable" checked> ID
                                             </label>
                                         </li>
                                         <li>
                                             <label class="dropdown-item">
-                                                <input type="checkbox" class="column-toggle" data-column="1" checked> Name
+                                                <input type="checkbox" class="column-toggle" data-column="1" data-table-id="sectorTable" checked> Name
                                             </label>
                                         </li>
                                         <li>
                                             <label class="dropdown-item">
-                                                <input type="checkbox" class="column-toggle" data-column="2" checked> Beschreibung
+                                                <input type="checkbox" class="column-toggle" data-column="2" data-table-id="sectorTable" checked> Beschreibung
                                             </label>
                                         </li>
                                         <li>
                                             <label class="dropdown-item">
-                                                <input type="checkbox" class="column-toggle" data-column="3" checked> Zeitstempel
+                                                <input type="checkbox" class="column-toggle" data-column="3" data-table-id="sectorTable" checked> Zeitstempel
                                             </label>
                                         </li>
                                     </ul>
 
-                                    <input id="table-search" class="form-control w-75" type="search" placeholder="Sektor" aria-label="Search">
+                                    <input id="table-search" class="form-control w-75" type="search" placeholder="Sektor" data-table-id="sectorTable" aria-label="Search">
 
                                 </div>
                             </div>

@@ -118,32 +118,32 @@
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                             <li>
                                 <label class="dropdown-item">
-                                    <input type="checkbox" class="column-toggle" data-column="0" checked> ID
+                                    <input type="checkbox" class="column-toggle" data-column="0" data-table-id="companiesTable" checked> ID
                                 </label>
                             </li>
                             <li>
                                 <label class="dropdown-item">
-                                    <input type="checkbox" class="column-toggle" data-column="1" checked> Unternehmen
+                                    <input type="checkbox" class="column-toggle" data-column="1" data-table-id="companiesTable" checked> Unternehmen
                                 </label>
                             </li>
                             <li>
                                 <label class="dropdown-item">
-                                    <input type="checkbox" class="column-toggle" data-column="2" checked> Land
+                                    <input type="checkbox" class="column-toggle" data-column="2" data-table-id="companiesTable" checked> Land
                                 </label>
                             </li>
                             <li>
                                 <label class="dropdown-item">
-                                    <input type="checkbox" class="column-toggle" data-column="3" checked> Sektor
+                                    <input type="checkbox" class="column-toggle" data-column="3" data-table-id="companiesTable" checked> Sektor
                                 </label>
                             </li>
                             <li>
                                 <label class="dropdown-item">
-                                    <input type="checkbox" class="column-toggle" data-column="4" checked> Industrie
+                                    <input type="checkbox" class="column-toggle" data-column="4" data-table-id="companiesTable" checked> Industrie
                                 </label>
                             </li>
                         </ul>
 
-                        <input id="table-search" class="form-control w-75" type="search" placeholder="Firmensuche" aria-label="Search">
+                        <input id="table-search" class="form-control w-75" type="search" placeholder="Firma..." data-table-id="companiesTable" aria-label="Search">
 
                     </div>
                 </div>

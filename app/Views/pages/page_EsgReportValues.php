@@ -22,27 +22,27 @@
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                             <li>
                                 <label class="dropdown-item">
-                                    <input type="checkbox" class="column-toggle" data-column="0" checked> ID
+                                    <input type="checkbox" class="column-toggle" data-column="0" data-table-id="reportValueTable" checked> ID
                                 </label>
                             </li>
                             <li>
                                 <label class="dropdown-item">
-                                    <input type="checkbox" class="column-toggle" data-column="1" checked> Bericht
+                                    <input type="checkbox" class="column-toggle" data-column="1" data-table-id="reportValueTable" checked> Bericht
                                 </label>
                             </li>
                             <li>
                                 <label class="dropdown-item">
-                                    <input type="checkbox" class="column-toggle" data-column="2" checked> Anforderung
+                                    <input type="checkbox" class="column-toggle" data-column="2" data-table-id="reportValueTable" checked> Anforderung
                                 </label>
                             </li>
                             <li>
                                 <label class="dropdown-item">
-                                    <input type="checkbox" class="column-toggle" data-column="3" checked> Inhalt
+                                    <input type="checkbox" class="column-toggle" data-column="3" data-table-id="reportValueTable" checked> Inhalt
                                 </label>
                             </li>
                         </ul>
 
-                        <input id="table-search" class="form-control w-75" type="search" placeholder="Wert Suche" aria-label="Search">
+                        <input id="table-search" class="form-control w-75" type="search" placeholder="Wert Suche" data-table-id="reportValueTable" aria-label="Search">
 
                     </div>
                 </div>
@@ -83,57 +83,4 @@
         </div>
     </div>
 </div>
-
-<script>
-    document.querySelectorAll(".column-toggle").forEach(checkbox => {
-        checkbox.addEventListener("change", function () {
-
-            let checkedBoxes = document.querySelectorAll(".column-toggle:checked");
-            let columnIndex = parseInt(this.getAttribute("data-column"), 10);
-            let isChecked = this.checked;
-
-            // Mindestens eine Spalte sichtbar lassen
-            if (checkedBoxes.length === 0) {
-                this.checked = true;
-                return;
-            }
-
-            document.querySelectorAll("#reportValueTable tr").forEach(row => {
-                let cells = row.querySelectorAll("th, td");
-                if (cells[columnIndex]) {
-                    cells[columnIndex].style.display = isChecked ? "" : "none";
-                }
-            });
-
-            checkedBoxes = document.querySelectorAll(".column-toggle:checked");
-
-            // Alle Checkboxen wieder aktivieren
-            document.querySelectorAll(".column-toggle").forEach(cb => {
-                cb.disabled = false;
-                cb.parentElement?.classList.remove("disabled-option");
-            });
-
-            // Letzte verbleibende Spalte sperren
-            if (checkedBoxes.length === 1) {
-                checkedBoxes[0].disabled = true;
-                checkedBoxes[0].parentElement?.classList.add("disabled-option");
-            }
-        });
-    });
-
-    document.getElementById("table-search").addEventListener("keyup", function () {
-        let value = this.value.toLowerCase();
-        let rows = document.querySelectorAll("#reportValueTable tbody tr");
-        let visibleRows = 0;
-
-        rows.forEach(row => {
-            if (row.textContent.toLowerCase().includes(value)) {
-                row.style.display = "table-row";
-                visibleRows++;
-            } else {
-                row.style.display = "none";
-            }
-        });
-    });
-</script>
 

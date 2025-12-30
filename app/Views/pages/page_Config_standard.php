@@ -31,32 +31,32 @@
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                         <li>
                                             <label class="dropdown-item">
-                                                <input type="checkbox" class="column-toggle" data-column="0" checked> ID
+                                                <input type="checkbox" class="column-toggle" data-column="0" data-table-id="standardTable" checked> ID
                                             </label>
                                         </li>
                                         <li>
                                             <label class="dropdown-item">
-                                                <input type="checkbox" class="column-toggle" data-column="1" checked> Code
+                                                <input type="checkbox" class="column-toggle" data-column="1" data-table-id="standardTable" checked> Code
                                             </label>
                                         </li>
                                         <li>
                                             <label class="dropdown-item">
-                                                <input type="checkbox" class="column-toggle" data-column="2" checked> Name
+                                                <input type="checkbox" class="column-toggle" data-column="2" data-table-id="standardTable" checked> Name
                                             </label>
                                         </li>
                                         <li>
                                             <label class="dropdown-item">
-                                                <input type="checkbox" class="column-toggle" data-column="3" checked> Beschreibung
+                                                <input type="checkbox" class="column-toggle" data-column="3" data-table-id="standardTable" checked> Beschreibung
                                             </label>
                                         </li>
                                         <li>
                                             <label class="dropdown-item">
-                                                <input type="checkbox" class="column-toggle" data-column="4" checked> Zeitstempel
+                                                <input type="checkbox" class="column-toggle" data-column="4" data-table-id="standardTable" checked> Zeitstempel
                                             </label>
                                         </li>
                                     </ul>
 
-                                    <input id="table-search" class="form-control w-75" type="search" placeholder="Standard" aria-label="Search">
+                                    <input id="table-search" class="form-control w-75" type="search" placeholder="Standard" data-table-id="standardTable" aria-label="Search">
 
                                 </div>
                             </div>

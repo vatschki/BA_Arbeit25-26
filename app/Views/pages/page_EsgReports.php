@@ -119,22 +119,22 @@
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                             <li>
                                 <label class="dropdown-item">
-                                    <input type="checkbox" class="column-toggle" data-column="0" checked> ID
+                                    <input type="checkbox" class="column-toggle" data-column="0" data-table-id="reportTable" checked> ID
                                 </label>
                             </li>
                             <li>
                                 <label class="dropdown-item">
-                                    <input type="checkbox" class="column-toggle" data-column="1" checked> Unternehmen
+                                    <input type="checkbox" class="column-toggle" data-column="1" data-table-id="reportTable" checked> Unternehmen
                                 </label>
                             </li>
                             <li>
                                 <label class="dropdown-item">
-                                    <input type="checkbox" class="column-toggle" data-column="2" checked> Land
+                                    <input type="checkbox" class="column-toggle" data-column="2" data-table-id="reportTable" checked> Land
                                 </label>
                             </li>
                             <li>
                                 <label class="dropdown-item">
-                                    <input type="checkbox" class="column-toggle" data-column="3" checked> Sektor
+                                    <input type="checkbox" class="column-toggle" data-column="3" data-table-id="reportTable" checked> Sektor
                                 </label>
                             </li>
                             <li>
@@ -144,7 +144,7 @@
                             </li>
                         </ul>
 
-                        <input id="table-search" class="form-control w-75" type="search" placeholder="Firmensuche" aria-label="Search">
+                        <input id="table-search" class="form-control w-75" type="search" placeholder="Bericht..." data-table-id="reportTable" aria-label="Search">
 
                     </div>
                 </div>
@@ -154,14 +154,14 @@
             <!-- Tabellenansicht -->
             <div class="card-body container-fluid" id="table-view">
                 <div class="table-responsive">
-                    <table class="table table-hover table-border table-striped" id="boardTable" data-toggle="table">
+                    <table class="table table-hover table-border table-striped" id="reportTable" data-toggle="table">
                         <thead>
-                        <tr>
-                            <th data-field="id" data-sortable="true">ID</th>
-                            <th data-field="company_name" data-sortable="true">Unternehmen</th>
-                            <th data-field="author_name" data-sortable="true">Author</th>
-                            <th data-field="reporting_year" data-sortable="true">Jahr</th>
-                        </tr>
+                            <tr>
+                                <th data-field="id" data-sortable="true">ID</th>
+                                <th data-field="company_name" data-sortable="true">Unternehmen</th>
+                                <th data-field="author_name" data-sortable="true">Author</th>
+                                <th data-field="reporting_year" data-sortable="true">Jahr</th>
+                            </tr>
                         </thead>
                         <tbody>
                         <?php if (!empty($reports)): ?>
@@ -170,6 +170,8 @@
                                     data-sector-id="<?= esc($report['sector_id']) ?>"
                                     data-industry-id="<?= esc($report['industry_id']) ?>"
                                     data-company-id="<?= esc($report['company_id']) ?>"
+                                    data-href="<?= site_url('/esg-reports/value/' . $report['report_id']) ?>"
+                                    style="cursor: pointer;"
                                 >
                                     <td><?= esc($report['report_id']) ?></td>
                                     <td><?= esc($report['company_name']) ?></td>
@@ -346,3 +348,12 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener("click", function (e) {
+        const row = e.target.closest("#reportTable tbody tr[data-href]");
+        if (!row) return;
+
+        window.location.href = row.dataset.href;
+    });
+</script>
