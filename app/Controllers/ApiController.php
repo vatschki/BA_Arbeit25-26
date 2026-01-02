@@ -2,9 +2,36 @@
 
 namespace App\Controllers;
 
+use App\Models\CompanyModel;
+use App\Models\CountryModel;
+use App\Models\IndustryModel;
+use App\Models\ReportModel;
+use App\Models\RequirementModel;
+use App\Models\SectorModel;
+use App\Models\StandardModel;
 use CodeIgniter\RESTful\ResourceController;
 
 class ApiController extends ResourceController{
+
+    protected CompanyModel $companyModel;
+    protected CountryModel $countryModel;
+    protected IndustryModel $industryModel;
+    protected SectorModel $sectorModel;
+
+    protected StandardModel $standardModel;
+    protected ReportModel $reportModel;
+    protected RequirementModel $requirementModel;
+
+    public function __construct()
+    {
+        $this->companyModel = new CompanyModel();
+        $this->standardModel = new StandardModel();
+        $this->countryModel = new CountryModel();
+        $this->industryModel = new IndustryModel();
+        $this->reportModel = new ReportModel();
+        $this->sectorModel = new SectorModel();
+        $this->requirementModel = new RequirementModel();
+    }
 
     public function saveapikey()
     {
@@ -97,7 +124,46 @@ class ApiController extends ResourceController{
         } catch (\Throwable $e) {
             return 'API-Fehler: ' . $e->getMessage();
         }
+    }
+
+    public function process()
+    {
+        $api_config = session()->get('api_config');
+
+        if (empty($api_config)) {
+            return redirect()->back()->with('error', 'API-Konfiguration fehlt.');
+        }
+
+        $company_id     = $this->request->getPost('company_id');
+        $year           = $this->request->getPost('year');
+        $standard_id    = $this->request->getPost('standard_id');
+        $requirement_id = $this->request->getPost('requirement_id');
+
+        $company  = $this->companyModel->find($company_id);
+        $standard = $this->standardModel->find($standard_id);
+
+        if ($requirement_id === 'ALL') {
+            //Alle
+            $requirements = $this->requirementModel
+                ->where('standard_id', $standard_id)
+                ->findAll();
+
+        } else {
+            //Ein bestimmtes
+            $requirement = $this->requirementModel
+                ->where('id', $requirement_id)
+                ->where('standard_id', $standard_id)
+                ->first();
+
+            if (!$requirement) {
+                throw new \RuntimeException('Ungültige ESRS-Anforderung');
+            }
+
+            $requirements = [$requirement];
+        }
 
 
+        // Placeholder for future implementation
+        return $this->respond(['message' => 'Process endpoint is under construction.'], 200);
     }
 }

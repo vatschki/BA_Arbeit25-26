@@ -201,7 +201,11 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
-            <form>
+            <form action="<?= site_url('/esg-reports/process') ?>"
+                  method="post"
+                  enctype="multipart/form-data"
+                  id="createReportForm">
+
                 <div class="modal-body p-0">
 
                     <div class="d-flex" style="min-height: 350px;">
@@ -298,6 +302,10 @@
                                             <select class="form-select select2-requirement" name="requirement_id" id="requirementSelect">
                                                 <option value="" disabled <?= old('requirement_id') ? '' : 'selected' ?>>ESRS-Anforderung auswählen</option>
 
+                                                <option value="ALL">
+                                                    Alle Anforderungen des gewählten Standards
+                                                </option>
+
                                                 <?php if (!empty($requirements)): ?>
                                                     <?php foreach ($requirements as $requirement): ?>
                                                         <option value="<?= esc($requirement['id']) ?>" data-standard-id = "<?= esc($requirement['standard_id']) ?>" <?= old('requirement_id') == $requirement['id'] ? 'selected' : '' ?>>
@@ -341,7 +349,7 @@
 
                 <div class="modal-footer">
                     <button type="button" class="btn abbrechen_button" data-bs-dismiss="modal">Abbrechen</button>
-                    <button type="button" id="createSaveBtn" class="btn btn-success">Speichern</button>
+                    <button type="submit" id="createSaveBtn" class="btn btn-success">Speichern</button>
                 </div>
             </form>
 
