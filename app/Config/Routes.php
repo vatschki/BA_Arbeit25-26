@@ -15,7 +15,6 @@ $routes->get('/esg-reports/company/(:num)', 'EsgReportsController::byCompany/$1'
 $routes->get('/esg-reports/value/(:num)', 'ValueController::index/$1');
 
 $routes->post('/esg-reports/process', 'ApiController::process');
-//$routes->post('/esg-reports/process', 'ReportsApiController::process');
 
 $routes->get('/help', 'HelpController::index');
 

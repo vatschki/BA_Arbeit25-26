@@ -126,6 +126,7 @@ class ApiController extends ResourceController{
         }
     }
 
+    /*
     public function process()
     {
         $api_config = session()->get('api_config');
@@ -163,7 +164,97 @@ class ApiController extends ResourceController{
         }
 
 
-        // Placeholder for future implementation
-        return $this->respond(['message' => 'Process endpoint is under construction.'], 200);
+
+    }
+    */
+
+    public function process()
+    {
+        try {
+            $request = $this->request;
+
+            $pdf = $request->getFile('report');
+
+            if (!$pdf || !$pdf->isValid()) {
+                return $this->fail('Kein gültiges PDF vorhanden');
+            }
+
+            $uploadPath = realpath(FCPATH . '../storage/uploads') . DIRECTORY_SEPARATOR;
+
+            if (!is_dir($uploadPath)) {
+                return $this->failServerError('Upload-Verzeichnis existiert nicht.');
+            }
+
+            $newName = $pdf->getRandomName();
+            $pdf->move($uploadPath, $newName);
+
+            $absolutePath = $uploadPath . $newName;
+
+            $company_id = $request->getPost('company_id');
+            $year = $request->getPost('year');
+            $standard_id = $request->getPost('standard_id');
+            $requirement_id = $request->getPost('requirement_id');
+
+            $requirement = $this->requirementModel
+                ->where('id', $requirement_id)
+                ->where('standard_id', $standard_id)
+                ->first();
+
+            if (!$requirement) {
+                return $this->fail('Ungültige ESRS-Anforderung');
+            }
+
+            $requirementPayload = [
+                'id'          => $requirement['id'],
+                'code'        => $requirement['code'],
+                'title'       => $requirement['title'],
+                'description' => $requirement['description'],
+            ];
+
+            $api_config = session()->get('api_config');
+
+            if (empty($api_config) || !is_array($api_config)) {
+                return $this->fail('API-Konfiguration fehlt.');
+            }
+
+            $payload = [
+                'document' => [
+                    'path'     => $absolutePath,
+                    'filename' => $newName,
+                    'type'     => 'pdf',
+                ],
+
+                'requirement' => $requirementPayload,
+
+                'context' => [
+                    'company_id'  => $company_id,
+                    'year'        => $year,
+                    'standard_id' => $standard_id,
+                ],
+
+                'api_config' => $api_config,
+            ];
+
+            $client = \Config\Services::curlrequest();
+            $res = $client->post('http://localhost:8001/pipeline/start', [
+                'json' => $payload,
+                'headers' => [
+                    'Accept' => 'application/json',
+                    'Content-Type' => 'application/json'
+                ],
+                'timeout' => 300
+            ]);
+
+            $data = json_decode($res->getBody(), true);
+
+            return $this->respond([
+                'status' => 'success',
+                'job_id' => $data['job_id'] ?? null,
+                'message' => 'Pipeline gestartet'
+            ]);
+
+        }catch (\Throwable $e){
+            return $this->failServerError($e->getMessage());
+        }
     }
 }

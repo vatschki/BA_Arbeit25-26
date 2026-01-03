@@ -23,6 +23,15 @@
 
 <!-- Core JS-Dateien laden -->
 <script src="<?= base_url('resources/js/core.js') ?>"></script>
+<?php
+    $uri = service('uri');
+    $seg1 = $uri->getSegment(1) ?? '';
+?>
+<?php if ($seg1 === 'esg-reports'): ?>
+    <script src="<?= base_url('resources/js/esg_form.js') ?>"></script>
+<?php endif; ?>
+
+
 
 
 
