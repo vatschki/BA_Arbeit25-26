@@ -196,17 +196,21 @@ class ApiController extends ResourceController{
             $standard_id = $request->getPost('standard_id');
             $requirement_id = $request->getPost('requirement_id');
 
-            $company_name = $this->companyModel->getCompanyNameById($company_id);
+            $company = $this->companyModel->getCompanyNameById($company_id);
 
-            if (!$company_name) {
+            if (!$company ||empty($company['name'])) {
                 return $this->fail('Ungültige Firmen-ID');
             }
 
-            $standard_code = $this->standardModel->getStandardCodeById($standard_id);
+            $company_name = $company['name'];
 
-            if (!$standard_code) {
+            $standard= $this->standardModel->getStandardCodeById($standard_id);
+
+            if (!$standard || empty($standard['code'])) {
                 return $this->fail('Ungültige Standard-ID');
             }
+
+            $standard_code = $standard['code'];
 
             $requirement = $this->requirementModel
                 ->where('id', $requirement_id)
@@ -255,14 +259,29 @@ class ApiController extends ResourceController{
                     'Accept' => 'application/json',
                     'Content-Type' => 'application/json'
                 ],
-                'timeout' => 300
+                'timeout' => 300,
+                'http_errors' => false,
             ]);
+
+            $statusCode = $res->getStatusCode();
+            $body       = $res->getBody();
+
+            log_message('error', 'PIPELINE STATUS: ' . $statusCode);
+            log_message('error', 'PIPELINE BODY: ' . $body);
+
+            if ($statusCode !== 200) {
+                return $this->respond([
+                    'status' => 'error',
+                    'pipeline_status' => $statusCode,
+                    'pipeline_error' => json_decode($body, true) ?? $body
+                ], $statusCode);
+            }
 
             $data = json_decode($res->getBody(), true);
 
             return $this->respond([
                 'status' => 'success',
-                'job_id' => $data['job_id'] ?? null,
+                'job_id' => $data['job_id'],
                 'message' => 'Pipeline gestartet'
             ]);
 

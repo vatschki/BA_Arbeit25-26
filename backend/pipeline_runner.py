@@ -1,10 +1,29 @@
-def run_pipeline(pdf_path, requirement=None, context=None, job_id=None):
+def run_pipeline(
+    pdf_path: str,
+    job_id: str,
+    requirement: dict | None = None,
+    context: dict | None = None,
+    api_config: dict | None = None
+):
     print(f"[JOB {job_id}] Pipeline gestartet")
-    print(f"PDF: {pdf_path}")
-    print(f"Requirement: {requirement.code if requirement else 'N/A'}")
+    print(f"[JOB {job_id}] PDF: {pdf_path}")
 
-    # Hier kommt später echte Logik rein
+    if context:
+        print(f"[JOB {job_id}] Firma: {context.company_name}")
+        print(f"[JOB {job_id}] Jahr: {context.year}")
+        print(f"[JOB {job_id}] Standard: {context.standard_code}")
+
+
+    if requirement:
+        print(f"[JOB {job_id}] Requirement: {requirement.code}")
+
+    # HIER später:
+    # extract_text(pdf_path)
+    # chunk_text(...)
+    # embed(...)
+    # store_results(...)
+
     return {
-        "message": "Pipeline ausgeführt (Dummy)",
+        "message": "Pipeline Dummy ausgeführt",
         "job_id": job_id
     }

@@ -2,5 +2,5 @@ from pydantic import BaseModel
 
 class Context(BaseModel):
     company_name: str
-    year: int
+    year: str
     standard_code: str
