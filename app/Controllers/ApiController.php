@@ -171,6 +171,7 @@ class ApiController extends ResourceController{
     public function process()
     {
         try {
+
             $request = $this->request;
 
             $pdf = $request->getFile('report');
@@ -195,6 +196,18 @@ class ApiController extends ResourceController{
             $standard_id = $request->getPost('standard_id');
             $requirement_id = $request->getPost('requirement_id');
 
+            $company_name = $this->companyModel->getCompanyNameById($company_id);
+
+            if (!$company_name) {
+                return $this->fail('Ungültige Firmen-ID');
+            }
+
+            $standard_code = $this->standardModel->getStandardCodeById($standard_id);
+
+            if (!$standard_code) {
+                return $this->fail('Ungültige Standard-ID');
+            }
+
             $requirement = $this->requirementModel
                 ->where('id', $requirement_id)
                 ->where('standard_id', $standard_id)
@@ -207,8 +220,8 @@ class ApiController extends ResourceController{
             $requirementPayload = [
                 'id'          => $requirement['id'],
                 'code'        => $requirement['code'],
-                'title'       => $requirement['title'],
-                'description' => $requirement['description'],
+                'title'          => $requirement['title'],
+                'data_type'          => $requirement['data_type'],
             ];
 
             $api_config = session()->get('api_config');
@@ -227,9 +240,9 @@ class ApiController extends ResourceController{
                 'requirement' => $requirementPayload,
 
                 'context' => [
-                    'company_id'  => $company_id,
+                    'company_name'  => $company_name,
                     'year'        => $year,
-                    'standard_id' => $standard_id,
+                    'standard_code' => $standard_code,
                 ],
 
                 'api_config' => $api_config,

@@ -55,4 +55,11 @@ class CompanyModel extends BaseModel{
 
         return (int) $this->getInsertID();
     }
+
+    public function getCompanyNameById(int $company_id)
+    {
+        return $this->select("name")
+            ->where("id", $company_id)
+            ->first();
+    }
 }

@@ -204,7 +204,8 @@
             <form action="<?= site_url('/esg-reports/process') ?>"
                   method="post"
                   enctype="multipart/form-data"
-                  id="createReportForm">
+                  id="createReportForm"
+            >
 
                 <div class="modal-body p-0">
 

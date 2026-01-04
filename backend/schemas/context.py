@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
 class Context(BaseModel):
-    company_id: int
+    company_name: str
     year: int
-    standard_id: int
+    standard_code: str

@@ -26,5 +26,12 @@ class StandardModel extends BaseModel{
     {
         return $this->findAll();
     }
+
+    public function getStandardCodeById(int $standard_id)
+    {
+        return $this->select("code")
+            ->where("id", $standard_id)
+            ->first();
+    }
 }
 
