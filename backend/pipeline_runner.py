@@ -1,27 +1,45 @@
+import logging
+from pathlib import Path
+from typing import Dict
+from schemas.context import Context
+from schemas.api_config import ApiConfig
+from schemas.requirement import Requirement
+from pdf_parsing.parser_manager import Parser 
+from pdf_parsing.schema.extensions import FileExtensionType
+
+
+logger = logging.getLogger(__name__)
+
 def run_pipeline(
     pdf_path: str,
     job_id: str,
-    requirement: dict | None = None,
-    context: dict | None = None,
-    api_config: dict | None = None
+    requirement: Requirement,
+    context: Context,
+    api_config: ApiConfig
 ):
-    print(f"[JOB {job_id}] Pipeline gestartet")
-    print(f"[JOB {job_id}] PDF: {pdf_path}")
+    logger.info(f"[JOB {job_id}] Pipeline gestartet")
+    logger.info(f"[JOB {job_id}] PDF: {pdf_path}")
 
-    if context:
-        print(f"[JOB {job_id}] Firma: {context.company_name}")
-        print(f"[JOB {job_id}] Jahr: {context.year}")
-        print(f"[JOB {job_id}] Standard: {context.standard_code}")
+    # 1. Kontext validieren
+    if context is None or context.company_name is None:
+        raise ValueError("context.company_name ist erforderlich für den Parser")
 
+    # 2. Parser initialisieren
+    parser = Parser(
+        company=context.company_name
+    )
 
-    if requirement:
-        print(f"[JOB {job_id}] Requirement: {requirement.code}")
+    logger.info(f"[JOB {job_id}] Parser initialisiert für Firma: {context.company_name}")
 
-    # HIER später:
-    # extract_text(pdf_path)
-    # chunk_text(...)
-    # embed(...)
-    # store_results(...)
+    # 3. PDF parsen
+    doob_document = parser.toBlock(
+        file_path=Path(pdf_path),
+        file_extension=FileExtensionType.PDF
+    )
+
+    logger.info(
+        f"[JOB {job_id}] Parsing abgeschlossen | Blocks: {len(doob_document.content)}"
+    )
 
     return {
         "message": "Pipeline Dummy ausgeführt",

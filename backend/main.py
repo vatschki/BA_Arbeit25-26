@@ -5,43 +5,13 @@ import uuid
 import os
 
 from pipeline_runner import run_pipeline
-
-app = FastAPI()
-
-
-# -----------------------------
-# Request Models (passend zu CI4)
-# -----------------------------
-
-class DocumentModel(BaseModel):
-    path: str
-    filename: str
-    type: str
-
-
-class RequirementModel(BaseModel):
-    id: int
-    code: str
-    title: str
-    data_type: str
-
-
-class ContextModel(BaseModel):
-    company_name: str
-    year: str
-    standard_code: str
-
-
-class PipelineRequest(BaseModel):
-    document: DocumentModel
-    requirement: RequirementModel
-    context: ContextModel
-    api_config: Dict[str, Any]
-
+from schemas.pipeline import PipelineRequest
 
 # -----------------------------
 # Endpoint
 # -----------------------------
+
+app = FastAPI()
 
 @app.post("/pipeline/start")
 async def pipeline_start(req: PipelineRequest):
