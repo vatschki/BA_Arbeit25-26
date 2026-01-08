@@ -4,8 +4,8 @@ import logging
 from unstructured.partition.pdf import partition_pdf
 from unstructured.documents.elements import Element
 
-from schema.extensions import FileExtensionType
-from validation_filtering.clean_up import Filter
+from app.pdf_parsing.schema.extensions import FileExtensionType
+from app.pdf_parsing.validation_filtering.clean_up import Filter
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')

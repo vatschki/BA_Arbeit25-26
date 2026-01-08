@@ -204,14 +204,39 @@ class ApiController extends ResourceController{
 
             $company_name = $company['name'];
 
-            $standard= $this->standardModel->getStandardCodeById($standard_id);
+            $main_standard= $this->standardModel->getStandardCodeById($standard_id);
+            #das ist temporär nur funktional - DB pointer via ID auf nächsten standard muss in Zukunft geändert werden
+            $second_standard= $this->standardModel->getStandardCodeById($standard_id + 1);
 
-            if (!$standard || empty($standard['code'])) {
+            if (!$main_standard || empty($main_standard['code'])) {
                 return $this->fail('Ungültige Standard-ID');
             }
 
-            $standard_code = $standard['code'];
+            $main_standard_code = $main_standard['code'];
+            $main_standard_name = $main_standard['name'];
+            $main_standard_description = $main_standard['description'];
+            $main_standard_description_eng = $main_standard['description_eng'];
+            $second_standard_code = $second_standard['code'];
+            $second_standard_name = $second_standard['name'];
+            $second_standard_description = $second_standard['description'];
+            $second_standard_description_eng = $second_standard['description_eng'];
 
+            $context_payload = [
+                'company_name'  => $company_name,
+                'year'        => $year,
+                'main_standard_code' => $main_standard_code,
+                'main_standard_name' => $main_standard_name,
+                'main_standard_description' => $main_standard_description,
+                'main_standard_description_eng' => $main_standard_description_eng,
+                'second_standard_code' => $second_standard_code,
+                'second_standard_name' => $second_standard_name,
+                'second_standard_description' => $second_standard_description,
+                'second_standard_description_eng' => $second_standard_description_eng,
+            ];
+
+
+            # Ein bestimmtes - mit model aufruf KEIN DB ZUFRIFF IN CONTROLLER
+            # ALLE MACHEN DAFÜR AUCH MODEL FKT SCHREIBEN
             $requirement = $this->requirementModel
                 ->where('id', $requirement_id)
                 ->where('standard_id', $standard_id)
@@ -243,11 +268,7 @@ class ApiController extends ResourceController{
 
                 'requirement' => $requirementPayload,
 
-                'context' => [
-                    'company_name'  => $company_name,
-                    'year'        => $year,
-                    'standard_code' => $standard_code,
-                ],
+                'context' => $context_payload,
 
                 'api_config' => $api_config,
             ];
@@ -280,13 +301,52 @@ class ApiController extends ResourceController{
             $data = json_decode($res->getBody(), true);
 
             return $this->respond([
-                'status' => 'success',
-                'job_id' => $data['job_id'],
-                'message' => 'Pipeline gestartet'
+                'status'  => 'success',
+                'job_id'  => $data['job_id'],
+                'message' => $data['message'],
+                'result'  => $data['result']
             ]);
 
         }catch (\Throwable $e){
             return $this->failServerError($e->getMessage());
         }
     }
+
+    public function pipelinestatus(string $job_id)
+    {
+        try {
+            $client = \Config\Services::curlrequest();
+
+            $res = $client->get(
+                "http://localhost:8001/pipeline/status/$job_id",
+                [
+                    'headers' => ['Accept' => 'application/json'],
+                    'timeout' => 3,
+                    'http_errors' => false,
+                ]
+            );
+
+            $statusCode = $res->getStatusCode();
+            $data = json_decode($res->getBody(), true);
+
+            if ($statusCode !== 200 || !is_array($data)) {
+                return $this->respond([
+                    'percent' => 0,
+                    'message' => 'Pipeline wird initialisiert'
+                ]);
+            }
+
+            return $this->respond([
+                'percent' => $data['percent'] ?? 0,
+                'message' => $data['message'] ?? 'Pipeline läuft'
+            ]);
+
+        } catch (\Throwable $e) {
+            return $this->respond([
+                'percent' => 0,
+                'message' => 'Status nicht verfügbar'
+            ]);
+        }
+    }
+
 }

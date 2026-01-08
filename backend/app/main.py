@@ -3,9 +3,10 @@ from pydantic import BaseModel
 from typing import Dict, Any
 import uuid
 import os
+import json
 
-from pipeline_runner import run_pipeline
-from schemas.pipeline import PipelineRequest
+from app.pipeline_runner import run_pipeline
+from app.schemas.pipeline import PipelineRequest
 
 # -----------------------------
 # Endpoint
@@ -44,3 +45,18 @@ async def pipeline_start(req: PipelineRequest):
     return {
         "job_id": job_id
     }
+
+@app.get("/pipeline/status/{job_id}")
+def pipeline_status(job_id: str):
+    path = f"storage/jobs/{job_id}/status.json"
+
+    if not os.path.exists(path):
+        return {
+            "job_id": job_id,
+            "step": "starting",
+            "percent": 0,
+            "message": "Pipeline wird initialisiert"
+        }
+    
+    with open(path, "r", encoding="utf-8") as f:
+        return json.load(f)

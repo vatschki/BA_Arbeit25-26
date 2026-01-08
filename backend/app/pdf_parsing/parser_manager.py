@@ -4,9 +4,9 @@ from unstructured.documents.elements import Element
 from pprint import pprint
 import logging
 
-from loading_extraction.loading_pdf import Loader
-from validation_filtering.validator import Validator
-from schema.doob_document import (
+from app.pdf_parsing.loading_extraction.loading_pdf import Loader
+from app.pdf_parsing.validation_filtering.validator import Validator
+from app.pdf_parsing.schema.doob_document import (
     Block, 
     TitleBlock, 
     HeaderBlock, 
@@ -16,8 +16,8 @@ from schema.doob_document import (
     SubtitleBlock, 
     FooterBlock,
     DOOB)
-from schema.extensions import FileExtensionType
-from loading_extraction.extract_metadata import MetadataExtractor
+from app.pdf_parsing.schema.extensions import FileExtensionType
+from app.pdf_parsing.loading_extraction.extract_metadata import MetadataExtractor
 
 class Parser:
 

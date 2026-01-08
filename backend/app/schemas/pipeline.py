@@ -1,7 +1,7 @@
 from pydantic import BaseModel
-from schemas.document import Document
-from schemas.requirement import Requirement
-from schemas.context import Context
+from app.schemas.document import Document
+from app.schemas.requirement import Requirement
+from app.schemas.context import Context
 
 class PipelineRequest(BaseModel):
     document: Document

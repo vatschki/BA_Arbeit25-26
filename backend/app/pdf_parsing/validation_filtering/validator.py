@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import Optional, Union
 
-from pdf_parsing.schema.extensions import FileExtensionType
+from app.pdf_parsing.schema.extensions import FileExtensionType
 
 
 class Validator:
