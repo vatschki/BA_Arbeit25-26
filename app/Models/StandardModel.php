@@ -33,5 +33,18 @@ class StandardModel extends BaseModel{
             ->where("id", $standard_id)
             ->first();
     }
+
+    public function getStandardById(int $standard_id): array
+    {
+        return $this->select([
+            'code',
+            'name',
+            'description',
+            'description_eng'
+        ])
+            ->where('id', $standard_id)
+            ->first();
+    }
+
 }
 

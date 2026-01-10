@@ -4,4 +4,4 @@ class Requirement(BaseModel):
     id: int
     code: str
     title: str
-    data_type: str
+    data_type: str | None = None

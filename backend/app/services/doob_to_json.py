@@ -1,6 +1,7 @@
-from typing import Dict, List
+from typing import Dict, List, Any
 from pathlib import Path
 import json
+from app.schemas.requirement import Requirement
 from app.pdf_parsing.schema.doob_document import (
     DOOB,
     Block,
@@ -57,6 +58,7 @@ def doob_to_json(
         ],
     }
 
+
 def doob_to_json_blocklimit(
     doob: DOOB,
     job_id: str,
@@ -76,7 +78,12 @@ def doob_to_json_blocklimit(
     }
 
 
-def write_output_json(final_json: dict, output_dir="output", filename="matches_final.json"):
+def requirements_to_json(requirements: List[Requirement]) -> List[Dict[str, Any]]:
+
+    return [req.model_dump() for req in requirements]
+
+
+def write_output_json(final_json: dict, output_dir="debug", filename="default_name.json"):
     Path(output_dir).mkdir(parents=True, exist_ok=True)
 
     output_path = Path(output_dir) / filename
@@ -84,7 +91,33 @@ def write_output_json(final_json: dict, output_dir="output", filename="matches_f
     with output_path.open("w", encoding="utf-8") as f:
         json.dump(final_json, f, ensure_ascii=False, indent=2)
 
-    print(f"[OUTPUT] Final JSON written to {output_path}")
+
+
+def make_flat_result_json(result_json: dict, job_id: str, company_name: str) -> dict:
+
+    flat_results = []
+
+    for i, match in enumerate(result_json.get("matches", []), start=1):
+        for b, block in enumerate(match.get("matched_blocks", []), start=1):
+            page = block.get("page")
+
+            flat_results.append({
+                "job_id": job_id,
+                "company": company_name,
+                "report_requirement": match.get("report_requirement"),
+                "disclosure_requirement": match.get("disclosure_requirement"),
+                "paragraph": match.get("paragraph"),
+                "title": match.get("title"),
+                "associated_requirements": match.get("associated_requirements", []),
+                "page": page,
+                "text": block.get("text"),
+                "page_id": f"{page}-{i}-{b}"
+            })
+
+    return {
+        "results": flat_results
+    }
+
 
 
 

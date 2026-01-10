@@ -19,8 +19,16 @@
             }
 
             allRequirementOptions.each(function () {
+                const value = $(this).val();
                 const reqStandardId = $(this).data("standard-id");
 
+                // Sonderfall: "Alle Anforderungen"
+                if (value === 'ALL') {
+                    $requirement.append($(this).clone());
+                    return;
+                }
+
+                // Normale Requirements nach Standard filtern
                 if (reqStandardId == standardId) {
                     $requirement.append($(this).clone());
                 }

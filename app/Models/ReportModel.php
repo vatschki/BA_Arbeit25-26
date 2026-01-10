@@ -46,6 +46,13 @@ class ReportModel extends BaseModel{
             ->findAll();
     }
 
+    public function getReportById(int $report_id): array
+    {
+        return $this->select('reporting_year')
+            ->where('id', $report_id)
+            ->first();
+    }
+
     public function getByCompanyId(int $company_id): array
     {
         return $this->db->table('reports')

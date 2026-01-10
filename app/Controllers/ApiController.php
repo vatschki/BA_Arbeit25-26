@@ -9,6 +9,7 @@ use App\Models\ReportModel;
 use App\Models\RequirementModel;
 use App\Models\SectorModel;
 use App\Models\StandardModel;
+use App\Models\JobModel;
 use CodeIgniter\RESTful\ResourceController;
 
 class ApiController extends ResourceController{
@@ -21,6 +22,7 @@ class ApiController extends ResourceController{
     protected StandardModel $standardModel;
     protected ReportModel $reportModel;
     protected RequirementModel $requirementModel;
+    protected JobModel $jobModel;
 
     public function __construct()
     {
@@ -31,6 +33,7 @@ class ApiController extends ResourceController{
         $this->reportModel = new ReportModel();
         $this->sectorModel = new SectorModel();
         $this->requirementModel = new RequirementModel();
+        $this->jobModel = new JobModel();
     }
 
     public function saveapikey()
@@ -126,47 +129,6 @@ class ApiController extends ResourceController{
         }
     }
 
-    /*
-    public function process()
-    {
-        $api_config = session()->get('api_config');
-
-        if (empty($api_config)) {
-            return redirect()->back()->with('error', 'API-Konfiguration fehlt.');
-        }
-
-        $company_id     = $this->request->getPost('company_id');
-        $year           = $this->request->getPost('year');
-        $standard_id    = $this->request->getPost('standard_id');
-        $requirement_id = $this->request->getPost('requirement_id');
-
-        $company  = $this->companyModel->find($company_id);
-        $standard = $this->standardModel->find($standard_id);
-
-        if ($requirement_id === 'ALL') {
-            //Alle
-            $requirements = $this->requirementModel
-                ->where('standard_id', $standard_id)
-                ->findAll();
-
-        } else {
-            //Ein bestimmtes
-            $requirement = $this->requirementModel
-                ->where('id', $requirement_id)
-                ->where('standard_id', $standard_id)
-                ->first();
-
-            if (!$requirement) {
-                throw new \RuntimeException('Ungültige ESRS-Anforderung');
-            }
-
-            $requirements = [$requirement];
-        }
-
-
-
-    }
-    */
 
     public function process()
     {
@@ -198,15 +160,16 @@ class ApiController extends ResourceController{
 
             $company = $this->companyModel->getCompanyNameById($company_id);
 
-            if (!$company ||empty($company['name'])) {
+
+            if (!$company || empty($company['name'])) {
                 return $this->fail('Ungültige Firmen-ID');
             }
 
             $company_name = $company['name'];
 
-            $main_standard= $this->standardModel->getStandardCodeById($standard_id);
+            $main_standard = $this->standardModel->getStandardById($standard_id);
             #das ist temporär nur funktional - DB pointer via ID auf nächsten standard muss in Zukunft geändert werden
-            $second_standard= $this->standardModel->getStandardCodeById($standard_id + 1);
+            $second_standard = $this->standardModel->getStandardById($standard_id + 1);
 
             if (!$main_standard || empty($main_standard['code'])) {
                 return $this->fail('Ungültige Standard-ID');
@@ -222,8 +185,8 @@ class ApiController extends ResourceController{
             $second_standard_description_eng = $second_standard['description_eng'];
 
             $context_payload = [
-                'company_name'  => $company_name,
-                'year'        => $year,
+                'company_name' => $company_name,
+                'year' => $year,
                 'main_standard_code' => $main_standard_code,
                 'main_standard_name' => $main_standard_name,
                 'main_standard_description' => $main_standard_description,
@@ -235,29 +198,75 @@ class ApiController extends ResourceController{
             ];
 
 
-            # Ein bestimmtes - mit model aufruf KEIN DB ZUFRIFF IN CONTROLLER
-            # ALLE MACHEN DAFÜR AUCH MODEL FKT SCHREIBEN
-            $requirement = $this->requirementModel
-                ->where('id', $requirement_id)
-                ->where('standard_id', $standard_id)
-                ->first();
+            if ($requirement_id === 'ALL') {
 
-            if (!$requirement) {
-                return $this->fail('Ungültige ESRS-Anforderung');
+                $requirements = $this->requirementModel
+                    ->getRequirementsByStandardId((int)$standard_id);
+
+            } else {
+
+                $singleRequirement = $this->requirementModel
+                    ->getRequirementByIdAndStandard((int)$requirement_id, (int)$standard_id);
+
+                if ($singleRequirement === null) {
+                    return $this->fail('Ungültige ESRS-Anforderung');
+                }
+
+                $requirements = [$singleRequirement];
             }
 
-            $requirementPayload = [
-                'id'          => $requirement['id'],
-                'code'        => $requirement['code'],
-                'title'          => $requirement['title'],
-                'data_type'          => $requirement['data_type'],
-            ];
+            if (empty($requirements)) {
+                return $this->fail('Keine ESRS-Anforderungen gefunden');
+            }
+
+
+            $requirementPayload = array_map(
+                static function (array $requirement): array {
+                    return [
+                        'id'        => $requirement['id'],
+                        'code'      => $requirement['code'],
+                        'title'     => $requirement['title'],
+                        'data_type' => $requirement['data_type'],
+                    ];
+                },
+                $requirements
+            );
+
 
             $api_config = session()->get('api_config');
 
-            if (empty($api_config) || !is_array($api_config)) {
-                return $this->fail('API-Konfiguration fehlt.');
+            if (
+                empty($api_config) ||
+                !is_array($api_config) ||
+                empty($api_config['provider_name']) ||
+                empty($api_config['model_name']) ||
+                empty($api_config['api_key'])
+            ) {
+                session()->setFlashdata(
+                    'error',
+                    'Bitte konfigurieren Sie zuerst Ihren API-Provider und API-Key.'
+                );
+
+                return redirect()->to('/config/api-key');
             }
+
+            // Wichtig: author_id ist NOT NULL in deiner DB.
+            $author_id = (int) (session()->get('user_id') ?? 1); // DUMMY: 1
+
+            // 4) Report SOFORT anlegen -> wir brauchen report_id für Redirect
+            $reportData = [
+                'company_id'      => $company_id,
+                'author_id'       => $author_id,
+                'reporting_year'  => $year,
+                'description'     => null,
+                'metadata'        => json_encode([
+                    'source_pdf' => $newName,
+                    'standard_id' => $standard_id,
+                    'requirement_id' => $requirement_id,
+                ]),
+            ];
+
+            $report_id = $this->reportModel->createReport($reportData);
 
             $payload = [
                 'document' => [
@@ -265,6 +274,8 @@ class ApiController extends ResourceController{
                     'filename' => $newName,
                     'type'     => 'pdf',
                 ],
+
+                'report_id' => $report_id,
 
                 'requirement' => $requirementPayload,
 
@@ -290,6 +301,7 @@ class ApiController extends ResourceController{
             log_message('error', 'PIPELINE STATUS: ' . $statusCode);
             log_message('error', 'PIPELINE BODY: ' . $body);
 
+            #report dann löschen damit kein trash entsteht
             if ($statusCode !== 200) {
                 return $this->respond([
                     'status' => 'error',
@@ -300,12 +312,30 @@ class ApiController extends ResourceController{
 
             $data = json_decode($res->getBody(), true);
 
+            /*
             return $this->respond([
                 'status'  => 'success',
                 'job_id'  => $data['job_id'],
                 'message' => $data['message'],
-                'result'  => $data['result']
+                //'result'  => $data['result']
             ]);
+            */
+
+            $job_id = $data['job_id'] ?? null;
+
+            $jobData = [
+                'job_id'        => $job_id,
+                'report_id'       => $report_id,
+                'standard_id'     => (int) $standard_id,
+                'requirements_all'=> $requirement_id === 'ALL' ? 1 : 0,
+                'status'          => 'running',
+                'created_at'      => date('Y-m-d H:i:s'),
+            ];
+
+            $this->jobModel->createJob($jobData);
+
+
+            return redirect()->to("/esg-reports/value/{$report_id}");
 
         }catch (\Throwable $e){
             return $this->failServerError($e->getMessage());
@@ -315,38 +345,24 @@ class ApiController extends ResourceController{
     public function pipelinestatus(string $job_id)
     {
         try {
-            $client = \Config\Services::curlrequest();
+            $client = \Config\Services::curlrequest([
+                'timeout' => 3,
+            ]);
 
-            $res = $client->get(
-                "http://localhost:8001/pipeline/status/$job_id",
-                [
-                    'headers' => ['Accept' => 'application/json'],
-                    'timeout' => 3,
-                    'http_errors' => false,
-                ]
+            $response = $client->get(
+                "http://pipeline-service/pipeline/status/{$job_id}"
             );
 
-            $statusCode = $res->getStatusCode();
-            $data = json_decode($res->getBody(), true);
-
-            if ($statusCode !== 200 || !is_array($data)) {
-                return $this->respond([
-                    'percent' => 0,
-                    'message' => 'Pipeline wird initialisiert'
-                ]);
-            }
-
-            return $this->respond([
-                'percent' => $data['percent'] ?? 0,
-                'message' => $data['message'] ?? 'Pipeline läuft'
-            ]);
+            return $this->respond(
+                json_decode($response->getBody(), true),
+                $response->getStatusCode()
+            );
 
         } catch (\Throwable $e) {
             return $this->respond([
                 'percent' => 0,
-                'message' => 'Status nicht verfügbar'
-            ]);
+                'message' => 'Pipeline nicht erreichbar'
+            ], 502);
         }
     }
-
 }

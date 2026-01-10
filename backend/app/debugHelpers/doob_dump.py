@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import List, Dict, Any
 import json
 from datetime import datetime
 import time
@@ -24,6 +25,25 @@ def dump_json_debug(
         output_dir=output_dir,
         filename=f"{job_id}_{name}.json"
     )
+
+
+def dump_requirements_debug(
+    requirements_json: List[Dict[str, Any]],
+    job_id: str,
+    name: str,
+    output_dir: str = "debug",
+):
+    output_path = Path(output_dir)
+    output_path.mkdir(parents=True, exist_ok=True)
+
+    write_output_json(
+        final_json=requirements_json,
+        output_dir=output_dir,
+        filename=f"{job_id}_{name}_requirements.json",
+    )
+
+
+
 
 def cleanup_debug_dir(ttl_hours: int = 24):
     cutoff = time.time() - ttl_hours * 3600

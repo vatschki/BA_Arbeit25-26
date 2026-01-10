@@ -1,7 +1,7 @@
 import json
 import re
 from typing import List
-from llm.base_client import BaseLLMClient
+from app.llm.base_client import BaseLLMClient
 from app.config import Config
 import logging
 

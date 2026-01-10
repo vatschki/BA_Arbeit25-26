@@ -6,13 +6,14 @@ from app.schemas.api_config import ApiConfig
 from app.schemas.requirement import Requirement
 from app.pdf_parsing.parser_manager import Parser 
 from app.pdf_parsing.schema.extensions import FileExtensionType
-from app.debugHelpers.doob_dump import dump_json_debug, cleanup_debug_dir
+from app.debugHelpers.doob_dump import dump_json_debug, cleanup_debug_dir, dump_requirements_debug, write_output_json
 from app.config import Config
 from app.llm.block_selector import BlockSelector
 from app.llm.llm_client_manager import LLMClientManager
-from app.services.doob_to_json import doob_to_json_blocklimit, doob_to_json
+from app.services.doob_to_json import doob_to_json_blocklimit, doob_to_json, requirements_to_json, make_flat_result_json
 from app.services.doob_filtering import filter_doob_by_category, filter_doob_by_pages
 from app.services.job_status import update_status
+from app.integrations.ci4_client import CI4Client
 
 
 logger = logging.getLogger(__name__)
@@ -44,21 +45,26 @@ def run_pipeline(
         api_key=api_key
     )
     
+    
     # 2. Parser initialisieren
     parser = Parser(
         company=context.company_name
     )
+    
 
     logger.info(f"[JOB {job_id}] Parser initialisiert für Firma: {context.company_name}")
 
+    
     # 3. PDF parsen
     doob_document = parser.toBlock(
         file_path=Path(pdf_path),
         file_extension=FileExtensionType.PDF
     )
+    
 
     update_status(job_id, "pdf_parsed", 20, "PDF analysiert")
 
+    
     if debug_mode:
         dump_json_debug(
             doob_document=doob_document,
@@ -95,9 +101,11 @@ def run_pipeline(
         search_term_start=SEARCH_TERM_START,
         search_term_end=SEARCH_TERM_END,
     )
+    
 
     update_status(job_id, "llm_block_selection_done", 40, "Relevante Seiten ausgewählt")
 
+    
     #5. Filtern der relevanten Blöcke
     filtered_json=None
 
@@ -113,9 +121,11 @@ def run_pipeline(
         job_id=job_id,
         company_name=context.company_name,
     )
+    
 
     update_status(job_id, "block_filtering", 60, "Relevante Blöcke gefiltert")
 
+    
     if debug_mode:
         dump_json_debug(
             doob_document=filtered_doob,
@@ -125,19 +135,26 @@ def run_pipeline(
         )
     
     # Zweiter LLM Call Extraction
-
+    
     # muss noch überprüft und gerichtet werden 
-    requirement_json = requirement
+    requirement_json = requirements_to_json(requirement)
 
+    if debug_mode:
+        dump_requirements_debug(
+            requirements_json=requirement_json,
+            job_id=job_id,
+            name="requirement_json"
+        )
+    
     extractor = BlockSelector(llm_client)
 
     extracted_result = extractor.extract_values(
         json=filtered_json,
         requirement=requirement_json
     )
-
+    
     update_status(job_id, "llm_block_extraction_done", 85, "Requirements extrahiert")
-
+    
     if debug_mode:
         dump_json_debug(
             doob_document=filtered_doob,
@@ -154,10 +171,39 @@ def run_pipeline(
 
     )
 
+    result_json = make_flat_result_json(
+        result_json=extracted_result,
+        job_id=job_id,
+        company_name=context.company_name
+    )
+
+    update_status(job_id, "result_ready", 95, "Ergebnis bereit")
+
+    if debug_mode:
+        write_output_json(
+            final_json=result_json,
+            output_dir=f"debug/{job_id}",
+            filename="final_result.json"
+        )
+        
+    
     update_status(job_id, "finished", 100, "Pipeline abgeschlossen")
 
+    ci4 = CI4Client(
+        base_url=Config().base_url,
+        secret=Config().secret
+    )
+
+    ci4.send_pipeline_result(
+        job_id=job_id,
+        status="finished",
+        progress=100,
+        message="Pipeline abgeschlossen",
+        result=extracted_result
+    )
+
     return {
-        "message": "Pipeline Dummy ausgeführt",
         "job_id": job_id,
-        "result": extracted_result
+        "status": "finished",
     }
+    

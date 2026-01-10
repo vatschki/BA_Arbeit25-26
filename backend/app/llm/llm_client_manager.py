@@ -1,5 +1,5 @@
-from llm.gemini_client import GeminiClient
-from llm.base_client import BaseLLMClient
+from app.llm.gemini_client import GeminiClient
+from app.llm.base_client import BaseLLMClient
 import logging
 
 logger = logging.getLogger(__name__)
