@@ -358,28 +358,6 @@
     </div>
 </div>
 
-<div class="modal fade" id="progressModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-sm modal-dialog-centered">
-        <div class="modal-content p-3">
-
-            <h6 class="mb-3">Bericht wird verarbeitet</h6>
-
-            <div class="progress">
-                <div id="pipelineProgressBar"
-                     class="progress-bar progress-bar-striped progress-bar-animated"
-                     style="width: 0%">
-                    0%
-                </div>
-            </div>
-
-            <small id="pipelineStatusText" class="text-muted mt-2 d-block">
-                Initialisierung …
-            </small>
-
-        </div>
-    </div>
-</div>
-
 <script>
     document.addEventListener("click", function (e) {
         const row = e.target.closest("#reportTable tbody tr[data-href]");

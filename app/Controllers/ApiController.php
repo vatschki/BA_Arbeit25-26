@@ -291,7 +291,7 @@ class ApiController extends ResourceController{
                     'Accept' => 'application/json',
                     'Content-Type' => 'application/json'
                 ],
-                'timeout' => 300,
+                'timeout' => 0,
                 'http_errors' => false,
             ]);
 
@@ -303,12 +303,16 @@ class ApiController extends ResourceController{
 
             #report dann löschen damit kein trash entsteht
             if ($statusCode !== 200) {
-                return $this->respond([
-                    'status' => 'error',
-                    'pipeline_status' => $statusCode,
-                    'pipeline_error' => json_decode($body, true) ?? $body
-                ], $statusCode);
+                log_message('error', 'Pipeline start failed: ' . $body);
+
+                session()->setFlashdata(
+                    'error',
+                    'Die Analyse konnte nicht gestartet werden. Bitte versuchen Sie es erneut.'
+                );
+
+                return redirect()->back();
             }
+
 
             $data = json_decode($res->getBody(), true);
 
@@ -322,6 +326,16 @@ class ApiController extends ResourceController{
             */
 
             $job_id = $data['job_id'] ?? null;
+
+            if (!$job_id) {
+                log_message('error', 'Pipeline start ohne job_id: ' . $body);
+
+                return $this->respond([
+                    'status' => 'error',
+                    'message' => 'Pipeline konnte nicht gestartet werden (keine Job-ID)'
+                ], 500);
+            }
+
 
             $jobData = [
                 'job_id'        => $job_id,
@@ -350,7 +364,8 @@ class ApiController extends ResourceController{
             ]);
 
             $response = $client->get(
-                "http://pipeline-service/pipeline/status/{$job_id}"
+                "http://localhost:8001/pipeline/status/{$job_id}"
+
             );
 
             return $this->respond(

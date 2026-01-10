@@ -270,21 +270,23 @@ class BlockExtractor:
 
     
     def _build_final_json_response(self, responses: List[str]) -> dict:
-            all_matches = []
+        all_matches = []
 
-            for idx, response in enumerate(responses):
-                try:
-                    parsed = self._extract_json_from_response(response)
-                except Exception as e:
-                    print(f"[ERROR] Failed to parse response {idx}: {e}")
-                    continue
+        for idx, response in enumerate(responses):
+            try:
+                parsed = self._extract_json_from_response(response)
+            except Exception as e:
+                print(f"[ERROR] Failed to parse response {idx}: {e}")
+                continue
 
-                matches = parsed.get("matches", [])
-                all_matches.extend(matches)
+            all_matches.extend(parsed.get("matches", []))
 
-            return {
-                "matches": self._deduplicate_matches(all_matches)
-            }
+        normalized = self._normalize_matches(all_matches)
+
+        return {
+            "matches": self._deduplicate_matches(normalized)
+        }
+
 
 
     def _extract_json_from_response(self, response: str) -> dict:
@@ -341,3 +343,38 @@ class BlockExtractor:
                 existing["associated_requirements"] = sorted(existing_ar | new_ar)
 
         return list(unique.values())
+    
+    def _normalize_matches(self, matches: list) -> list:
+        normalized = []
+
+        for m in matches:
+            if not isinstance(m, dict):
+                continue
+
+            # Pflichtfeld
+            req = m.get("report_requirement")
+            if not isinstance(req, str) or not req.strip():
+                continue
+
+            normalized.append({
+                "report_requirement": req,
+                "disclosure_requirement": m.get("disclosure_requirement"),
+                "paragraph": m.get("paragraph"),
+                "title": m.get("title"),
+                "associated_requirements": (
+                    m.get("associated_requirements")
+                    if isinstance(m.get("associated_requirements"), list)
+                    else []
+                ),
+                "matched_blocks": [
+                    {
+                        "block_id": b.get("block_id"),
+                        "page": b.get("page"),
+                        "text": b.get("text"),
+                    }
+                    for b in (m.get("matched_blocks") or [])
+                    if isinstance(b, dict) and "block_id" in b
+                ],
+            })
+
+        return normalized

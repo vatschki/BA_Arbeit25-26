@@ -9,8 +9,9 @@ logger = logging.getLogger(__name__)
 
 class BlockSelector:
 
-    def __init__(self, llm_client: BaseLLMClient):
+    def __init__(self, llm_client: BaseLLMClient, config: Config):
         self.llm = llm_client
+        self.config = config
 
     
     def select_blocks(
@@ -19,6 +20,8 @@ class BlockSelector:
     search_term_start: str,
     search_term_end: str,
     ):
+        
+
         prompt = self._build_prompt(
             analysis_json=analysis_json,
             search_term_start=search_term_start,
@@ -29,7 +32,7 @@ class BlockSelector:
 
         response = self.llm.generate(prompt)
 
-        if Config().debug_enabled:
+        if self.config.debug_enabled:
             logger.debug(f"LLM Response: {response}")
 
         return self._parse_response(response)
@@ -123,7 +126,7 @@ class BlockSelector:
             if part.isdigit():
                 pages.append(int(part))
 
-        if Config().debug_enabled:
+        if self.config.debug_enabled:
             logger.info(f"Selected pages: {pages}")
 
         return sorted(set(pages))

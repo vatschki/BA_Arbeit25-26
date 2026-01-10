@@ -15,6 +15,8 @@ $routes->get('/esg-reports/company/(:num)', 'EsgReportsController::byCompany/$1'
 $routes->get('/esg-reports/value/(:num)', 'ValueController::index/$1');
 
 $routes->post('/esg-reports/process', 'ApiController::process');
+$routes->get('/esg-reports/pipelinestatus/(:segment)','ApiController::pipelinestatus/$1');
+
 
 $routes->get('/help', 'HelpController::index');
 
@@ -26,5 +28,7 @@ $routes->get('/config/sector', 'ConfigController::sector');
 $routes->get('/config/industry', 'ConfigController::industry');
 $routes->get('/config/standard', 'ConfigController::standard');
 $routes->get('/config/requirement', 'ConfigController::requirement');
+
+$routes->post('api/results', 'ApiResultController::store');
 
 //$routes->get('/testDB', 'CompaniesController::testDb'); // Test database connection

@@ -214,8 +214,13 @@ $job_id = $job_id ?? null;
 
                     if (percent >= 100) {
                         pipelineModal.hide();
-                        document.getElementById('valuesContent').style.display = 'block';
-                    } else {
+
+                        if (data.step === 'error') {
+                            alert(data.message || 'Pipeline fehlgeschlagen');
+                        } else {
+                            document.getElementById('valuesContent').style.display = 'block';
+                        }
+                    }else {
                         setTimeout(pollStatus, 1500);
                     }
                 })
