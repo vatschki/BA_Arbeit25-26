@@ -12,7 +12,7 @@ class Config(BaseModel):
     store_doob: bool
     max_blocks: int
     ttl_hours: int
-    secret: str
+    pipeline_secret: str
     base_url: str
 
     @classmethod
@@ -25,7 +25,7 @@ class Config(BaseModel):
                 store_doob=env["STORE_DOOB"],
                 max_blocks=int(env["MAX_BLOCKS"]),
                 ttl_hours=int(env["TTL_HOURS"]),
-                secret=env["SECRET"],
+                pipeline_secret=env["PIPELINE_SECRET"],
                 base_url=env["BASE_URL"],
             )
         except KeyError as e:

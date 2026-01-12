@@ -70,9 +70,33 @@ class ReportValueModel extends BaseModel{
 
         $requirements = new RequirementModel();
 
+        $inserted = 0;
+        $skipped  = 0;
+
         foreach ($result as $entry) {
 
-            $requirement = $requirements->getRequirementBydisclosurerequirement($entry['disclosure_requirement'], $standard_id);
+            $code = $entry['report_requirement'] ?? null;
+
+            if (!$code) {
+                $skipped++;
+                log_message(
+                    'warning',
+                    'Result entry without report_requirement: ' . json_encode($entry)
+                );
+                continue;
+            }
+
+            $requirement = $requirements->getRequirementByCode($code, $standard_id);
+
+            if ($requirement === null) {
+                $skipped++;
+                log_message(
+                    'warning',
+                    'Requirement not found, skipping entry: code=' . $code .
+                    ', standard_id=' . $standard_id
+                );
+                continue;
+            }
 
             $this->insert([
                 'requirement_id' => $requirement['id'],
@@ -82,8 +106,14 @@ class ReportValueModel extends BaseModel{
                 'page'           => $entry['page'],
                 'text'           => $entry['text'],
             ]);
-        }
-    }
 
+            $inserted++;
+        }
+
+        log_message(
+            'info',
+            "Pipeline result persisted: inserted={$inserted}, skipped={$skipped}, job_id={$internaljobid}"
+        );
+    }
 }
 

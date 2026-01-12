@@ -71,4 +71,12 @@ class ValueController extends BaseController
         echo view('pages/page_EsgReportValues', $data);
         echo view('templates/footer');
     }
+
+    public function valuesPartial(int $report_id)
+    {
+        return view('pages/partials/report_values_table', [
+            'report_values' => $this->reportValueModel->getReportValues($report_id),
+        ]);
+    }
+
 }

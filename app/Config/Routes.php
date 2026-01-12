@@ -29,6 +29,8 @@ $routes->get('/config/industry', 'ConfigController::industry');
 $routes->get('/config/standard', 'ConfigController::standard');
 $routes->get('/config/requirement', 'ConfigController::requirement');
 
-$routes->post('api/results', 'ApiResultController::store');
+$routes->post('internal/pipeline/result', 'ApiResultController::store', ['filter' => 'forcehttps:off']);
+$routes->get('esg-reports/value/(:num)/values', 'ValueController::valuesPartial/$1');
+
 
 //$routes->get('/testDB', 'CompaniesController::testDb'); // Test database connection

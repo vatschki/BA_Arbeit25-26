@@ -46,7 +46,7 @@ def run_pipeline(
         provider = api_config.provider_name
         model_name = api_config.model_name
         api_key = api_config.api_key
-
+        
         # LLM Client
         llm_client = LLMClientManager.create(
             provider=provider,
@@ -99,7 +99,7 @@ def run_pipeline(
                 name="analysis"
             )
 
-
+        
         #4. Erster LLM Call Selection
         selector = BlockSelector(llm_client, config)
         SEARCH_TERM_START = f"{context.main_standard_code} , {context.main_standard_name} , {context.main_standard_description} , {context.main_standard_description_eng}"
@@ -110,7 +110,7 @@ def run_pipeline(
             search_term_start=SEARCH_TERM_START,
             search_term_end=SEARCH_TERM_END,
         )
-        
+       
 
         update_status(job_id, "llm_block_selection_done", 40, "Relevante Seiten ausgewählt")
 
@@ -185,7 +185,7 @@ def run_pipeline(
             job_id=job_id,
             company_name=context.company_name
         )
-
+        
         update_status(job_id, "result_ready", 95, "Ergebnis bereit")
 
         if debug_mode:
@@ -194,21 +194,21 @@ def run_pipeline(
                 output_dir=f"debug/{job_id}",
                 filename="final_result.json"
             )
-
+        
         update_status(job_id, "finished", 100, "Pipeline abgeschlossen")
 
         # ---------- SUCCESS CALLBACK ----------
         try:
             ci4 = CI4Client(
                 base_url=config.base_url,
-                secret=config.secret
+                pipeline_secret=config.pipeline_secret
             )
             ci4.send_pipeline_result(
                 job_id=job_id,
                 status="finished",
                 progress=100,
                 message="Pipeline abgeschlossen",
-                result=extracted_result
+                result=result_json['results']
             )
         except Exception:
             logger.exception(f"[JOB {job_id}] CI4 success callback fehlgeschlagen")
@@ -235,7 +235,7 @@ def run_pipeline(
         try:
             ci4 = CI4Client(
                 base_url=config.base_url,
-                secret=config.secret
+                pipeline_secret=config.pipeline_secret
             )
             ci4.send_pipeline_result(
                 job_id=job_id,
@@ -251,4 +251,4 @@ def run_pipeline(
             "job_id": job_id,
             "status": "error",
         }
-    
+

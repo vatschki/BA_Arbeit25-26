@@ -27,15 +27,22 @@ class ApiResultController extends ResourceController{
 
     public function store()
     {
+        log_message('error', 'STORE HIT');
+        log_message('error', 'Headers: ' . json_encode($this->request->getHeaders()));
+        log_message('error', 'Body: ' . $this->request->getBody());
 
-        if ($this->request->getHeaderLine('Authorization') !== 'Bearer ' . getenv('PIPELINE_SECRET')) {
+        $token = $this->request->getHeaderLine('X-PIPELINE-TOKEN');
+        log_message('debug', 'Auth header: ' . $this->request->getHeaderLine('X-PIPELINE-TOKEN'));
+        log_message('debug', 'Env secret: ' . var_export(getenv('PIPELINE_SECRET'), true));
+
+        if ($token !== env('PIPELINE_SECRET')) {
             return $this->failUnauthorized();
         }
 
         $data = $this->request->getJSON(true);
 
         if (empty($data['job_id']) || !isset($data['result'])) {
-            return $this->failValidationErrors();
+            return $this->failValidationErrors('JobId or result missing');
         }
 
         $job = $this->jobModel->findByjob_id($data['job_id']);

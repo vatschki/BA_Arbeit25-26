@@ -51,10 +51,10 @@ class RequirementModel extends BaseModel{
             ->findAll();
     }
 
-    public function getRequirementBydisclosurerequirement(string $disclosure_requirement, int $standard_id): ?array
+    public function getRequirementBycode(string $code, int $standard_id): ?array
     {
         return $this
-            ->where('disclosure_requirement', $disclosure_requirement)
+            ->where('code', $code)
             ->where('standard_id', $standard_id)
             ->first();
     }

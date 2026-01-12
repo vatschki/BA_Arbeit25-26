@@ -124,7 +124,7 @@ $job_id = $job_id ?? null;
                                     <th data-field="job_id" data-sortable="true">Job</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="reportValuesBody">
                                 <?php if (!empty($report_values)): ?>
                                     <?php foreach ($report_values as $value): ?>
                                         <tr>
@@ -218,9 +218,11 @@ $job_id = $job_id ?? null;
                         if (data.step === 'error') {
                             alert(data.message || 'Pipeline fehlgeschlagen');
                         } else {
-                            document.getElementById('valuesContent').style.display = 'block';
+                            loadReportValues();
                         }
-                    }else {
+                        return;
+                    }
+                    else {
                         setTimeout(pollStatus, 1500);
                     }
                 })
@@ -228,5 +230,18 @@ $job_id = $job_id ?? null;
                     setTimeout(pollStatus, 3000);
                 });
         }
+
+        function loadReportValues() {
+            fetch(`/esg-reports/value/<?= esc($currentReportId) ?>/values`)
+                .then(res => res.text())
+                .then(html => {
+                    document.getElementById('reportValuesBody').innerHTML = html;
+                    document.getElementById('valuesContent').style.display = 'block';
+                })
+                .catch(() => {
+                    alert('Fehler beim Laden der Report-Werte');
+                });
+        }
+
     </script>
 <?php endif; ?>
