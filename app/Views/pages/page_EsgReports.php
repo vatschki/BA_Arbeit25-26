@@ -129,17 +129,12 @@
                             </li>
                             <li>
                                 <label class="dropdown-item">
-                                    <input type="checkbox" class="column-toggle" data-column="2" data-table-id="reportTable" checked> Land
+                                    <input type="checkbox" class="column-toggle" data-column="2" data-table-id="reportTable" checked> Author
                                 </label>
                             </li>
                             <li>
                                 <label class="dropdown-item">
-                                    <input type="checkbox" class="column-toggle" data-column="3" data-table-id="reportTable" checked> Sektor
-                                </label>
-                            </li>
-                            <li>
-                                <label class="dropdown-item">
-                                    <input type="checkbox" class="column-toggle" data-column="4" checked> Industrie
+                                    <input type="checkbox" class="column-toggle" data-column="3" data-table-id="reportTable" checked> Jahr
                                 </label>
                             </li>
                         </ul>

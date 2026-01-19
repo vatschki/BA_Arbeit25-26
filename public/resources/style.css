@@ -506,6 +506,146 @@ table th{ background-color: var(--esr-accent) !important; color: var(--esr-card)
     min-width: 0;
 }
 
+/* Help seite suchfeld*/
+.help-search-wrapper {
+    max-width: 360px;
+}
+
+.help-flow-buttons {
+    row-gap: .75rem;
+}
+
+.help-flow-arrow {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--esr-blue-700);
+    user-select: none;
+}
+
+/* Help – API Key Beispiele (Provider / Model) */
+
+.help-step.card {
+    border: 1px solid var(--esr-border);
+    border-radius: .75rem;
+    box-shadow: 0 8px 24px rgba(0,0,0,.04);
+    min-width: 260px;
+    background: color-mix(in oklab, var(--esr-bg) 85%, #ffffff);
+}
+
+
+.help-step-badge {
+    display: inline-block;
+    padding: .25rem .6rem;
+    border-radius: .5rem;
+    background: var(--esr-accent);
+    color: #fff;
+    font-weight: 600;
+    font-size: .8rem;
+}
+
+.help-copy-text {
+    font-size: .75rem;
+    color: var(--esr-blue-700);
+    opacity: .8;
+    white-space: nowrap;
+}
+
+.help-copy-btn:hover .help-copy-text {
+    opacity: 1;
+}
+
+.help-copy-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: transparent;
+    border: none;
+    color: var(--esr-blue-700);
+    cursor: pointer;
+    padding: 4px;
+}
+
+.help-copy-btn:hover {
+    color: var(--esr-accent);
+}
+
+/* Help – Wichtiger Hinweis (z. B. Pflichtvoraussetzungen) */
+.help-important-note{
+    border-left: 4px solid var(--esr-accent);
+    background: color-mix(in oklab, var(--esr-accent) 8%, #ffffff);
+    border-radius: .35rem;
+    padding: .6rem .75rem;
+    color: var(--esr-black-205);
+}
+
+.help-important-note strong{
+    color: var(--esr-blue-700);
+}
+
+/* Help – Demo-Formfelder (rein erklärend, ohne Funktion) */
+.help-demo-select{
+    background-color: color-mix(in oklab, var(--esr-bg) 85%, #ffffff);
+    border: 1px dashed var(--esr-border);
+    color: var(--esr-blue-700);
+    opacity: 0.9;
+    cursor: not-allowed;
+}
+
+/* Keine Interaktion erlauben */
+.help-demo-select:disabled{
+    pointer-events: none;
+}
+
+/* Optional: Label für Demo-Felder */
+.help-demo-label{
+    font-size: .85rem;
+    color: #777;
+}
+
+/* Optional: kompaktere Darstellung in Help-Karten */
+#help-upload .help-demo-select{
+    max-width: 280px;
+}
+
+/* Vertikale Liste für Auswahlkarten */
+.help-choice-list {
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+}
+
+.help-choice-title::before {
+    content: "– ";
+    color: var(--esr-blue-700);
+    font-weight: 600;
+}
+
+.help-highlight {
+    outline: 3px solid #0d6efd;
+    outline-offset: 6px;
+    border-radius: 6px;
+    transition: outline 0.3s ease;
+}
+
+
+
+
+
+
+
+/* Mobile: Pfeile nach unten */
+@media (max-width: 768px) {
+    .help-flow-buttons {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .help-flow-arrow {
+        transform: rotate(90deg);
+        margin-left: .25rem;
+    }
+}
+
+
 /* Darkmode */
 body.dark-mode{
     background-color: #121212 !important; color: #ddd !important;

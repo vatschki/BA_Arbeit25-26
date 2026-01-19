@@ -30,6 +30,9 @@
 <?php if ($seg1 === 'esg-reports'): ?>
     <script src="<?= base_url('resources/js/esg_form.js') ?>"></script>
 <?php endif; ?>
+<?php if ($seg1 === 'help'): ?>
+    <script src="<?= base_url('resources/js/help_page.js') ?>"></script>
+<?php endif; ?>
 
 
 
