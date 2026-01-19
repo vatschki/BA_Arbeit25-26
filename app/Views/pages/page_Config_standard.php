@@ -56,7 +56,7 @@
                                         </li>
                                     </ul>
 
-                                    <input id="table-search" class="form-control w-75" type="search" placeholder="Standard" data-table-id="standardTable" aria-label="Search">
+                                    <input id="table-search" class="form-control w-75" type="search" placeholder="Standard" data-table-id="standardsTable" aria-label="Search">
 
                                 </div>
                             </div>
