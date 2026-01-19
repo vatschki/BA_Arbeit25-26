@@ -28,6 +28,7 @@ $routes->get('/config/sector', 'ConfigController::sector');
 $routes->get('/config/industry', 'ConfigController::industry');
 $routes->get('/config/standard', 'ConfigController::standard');
 $routes->get('/config/requirement', 'ConfigController::requirement');
+$routes->get('/config/country', 'ConfigController::country');
 
 $routes->post('internal/pipeline/result', 'ApiResultController::store', ['filter' => 'forcehttps:off']);
 $routes->get('esg-reports/value/(:num)/values', 'ValueController::valuesPartial/$1');

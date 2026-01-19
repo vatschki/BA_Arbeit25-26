@@ -9,6 +9,9 @@ $path = preg_replace('#^index\.php/#', '', $path);
     <a class="nav-link <?= $path === 'config/api-key' ? 'is-active' : '' ?>"
        href="<?= base_url('config/api-key') ?>">API-Key</a>
 
+    <a class="nav-link <?= $path === 'config/country' ? 'is-active' : '' ?>"
+       href="<?= base_url('config/country') ?>">Länder</a>
+
     <a class="nav-link <?= $path === 'config/sector' ? 'is-active' : '' ?>"
        href="<?= base_url('config/sector') ?>">Sektor</a>
 

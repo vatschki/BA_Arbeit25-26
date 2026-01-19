@@ -6,6 +6,7 @@ use App\Models\IndustryModel;
 use App\Models\RequirementModel;
 use App\Models\SectorModel;
 use App\Models\StandardModel;
+use App\Models\CountryModel;
 
 class ConfigController extends BaseController
 {
@@ -15,12 +16,14 @@ class ConfigController extends BaseController
         $sectorModel = new SectorModel();
         $standardModel = new StandardModel();
         $requirementModel = new RequirementModel();
+        $countryModel = new CountryModel();
 
         return [
             'industries' => $industryModel->getIndustries(),
             'sectors' => $sectorModel->getSectors(),
             'standards' => $standardModel->getStandards(),
             'requirements' => $requirementModel->getRequirements(),
+            'countries' => $countryModel->getCountries(),
         ];
     }
 
@@ -77,6 +80,16 @@ class ConfigController extends BaseController
         echo view('templates/header_home');
         echo view('templates/menu_home');
         echo view('pages/page_Config_requirement', $data);
+        echo view('templates/footer');
+    }
+
+    public function country()
+    {
+        $data = $this->loadConfigData();
+
+        echo view('templates/header_home');
+        echo view('templates/menu_home');
+        echo view('pages/page_Config_country', $data);
         echo view('templates/footer');
     }
 
