@@ -22,7 +22,6 @@ $routes->get('/help', 'HelpController::index');
 $routes->group('', ['filter' => 'permission:content.manage'], function($routes) {
     //Unternehmen
     $routes->post('/companies/create', 'CompaniesController::create');
-    $routes->get('/companies/edit/(:num)', 'CompaniesController::edit/$1');
     $routes->post('/companies/update/(:num)', 'CompaniesController::update/$1');
     $routes->post('/companies/delete/(:num)', 'CompaniesController::delete/$1');
 });

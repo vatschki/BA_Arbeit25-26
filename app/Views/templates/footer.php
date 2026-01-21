@@ -27,6 +27,9 @@
     $uri = service('uri');
     $seg1 = $uri->getSegment(1) ?? '';
 ?>
+<?php if ($seg1 === 'companies'): ?>
+    <script src="<?= base_url('resources/js/company_form.js') ?>"></script>
+<?php endif; ?>
 <?php if ($seg1 === 'esg-reports'): ?>
     <script src="<?= base_url('resources/js/esg_form.js') ?>"></script>
 <?php endif; ?>

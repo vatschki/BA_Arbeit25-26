@@ -21,6 +21,11 @@
         const modal = document.getElementById('createCompanyModal');
         const form  = document.getElementById('companyForm');
 
+        if (!modal || !form) {
+            console.error('Modal oder Formular nicht gefunden');
+            return;
+        }
+
         modal.addEventListener('show.bs.modal', function (event) {
 
             const button = event.relatedTarget;
@@ -29,29 +34,37 @@
             const updateUrl = form.dataset.updateUrl;
 
             // =========================
-            // CREATE-MODUS
+            // CREATE
             // =========================
             if (!button || !button.classList.contains('edit-company-btn')) {
+
                 form.action = createUrl;
                 form.reset();
 
-                document.getElementById('company_id').value = '';
-                document.getElementById('dynamicModalTitle').innerText = 'Unternehmen hinzufügen';
+                $('#dynamicModalTitle').text('Unternehmen hinzufügen');
+
+                $('.select2-country').val(null).trigger('change');
+                $('.select2-industry').val(null).trigger('change');
+
                 return;
             }
 
             // =========================
-            // EDIT-MODUS
+            // EDIT
             // =========================
-            document.getElementById('dynamicModalTitle').innerText = 'Unternehmen bearbeiten';
+            $('#dynamicModalTitle').text('Unternehmen bearbeiten');
 
-            document.querySelector('[name="company_name"]').value = button.dataset.name;
-            document.querySelector('[name="country_id"]').value = button.dataset.country;
-            document.querySelector('[name="industry_id"]').value = button.dataset.industry;
-            document.querySelector('[name="description"]').value = button.dataset.description;
+            $('[name="company_name"]').val(button.dataset.name);
+            $('[name="country_id"]').val(button.dataset.country).trigger('change');
 
-            document.getElementById('company_id').value = button.dataset.id;
+            const industrySelect = document.querySelector('[name="industry_id"]');
+            industrySelect.value = button.dataset.industry;
+            industrySelect.dispatchEvent(new Event('change'));
+
+            $('[name="description"]').val(button.dataset.description);
 
             form.action = updateUrl + '/' + button.dataset.id;
         });
     });
+
+

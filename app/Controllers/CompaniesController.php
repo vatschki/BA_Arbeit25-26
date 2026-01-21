@@ -67,10 +67,8 @@ class CompaniesController extends BaseController
             ->with('message', 'Unternehmen erfolgreich angelegt.');
     }
 
-    public function update()
+    public function update(int $companyId)
     {
-        $companyId = (int) $this->request->getPost('company_id');
-
         $data = [
             'name'        => $this->request->getPost('company_name'),
             'country_id'  => $this->request->getPost('country_id'),
@@ -91,6 +89,7 @@ class CompaniesController extends BaseController
             ->to('/companies')
             ->with('message', 'Unternehmen erfolgreich aktualisiert.');
     }
+
 
     public function delete(int $companyId)
     {

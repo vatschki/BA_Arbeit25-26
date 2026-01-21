@@ -189,7 +189,9 @@ $canManageContent = auth()->loggedIn() && auth()->user()->can('content.manage');
                                         <td><?= esc($company['industry_name']) ?></td>
                                         <?php if ($canManageContent): ?>
                                             <td class="text-end">
-                                                <a href="<?= base_url('companies/edit/' . $company['id']) ?>" class="text-secondary me-2" title="Bearbeiten"
+                                                <a href="#"
+                                                   class="text-secondary me-2 edit-company-btn"
+                                                   title="Bearbeiten"
                                                    data-bs-toggle="modal"
                                                    data-bs-target="#createCompanyModal"
 
@@ -202,9 +204,17 @@ $canManageContent = auth()->loggedIn() && auth()->user()->can('content.manage');
                                                     <i class="fa-solid fa-pen-to-square"></i>
                                                 </a>
 
-                                                <a href="<?= base_url('companies/delete/' . $company['id']) ?>" class="text-danger" title="Löschen" onclick="return confirm('Unternehmen wirklich löschen?');">
-                                                    <i class="fa-solid fa-trash"></i>
-                                                </a>
+                                                <form action="<?= base_url('companies/delete/' . $company['id']) ?>"
+                                                      method="post"
+                                                      class="d-inline">
+                                                    <?= csrf_field() ?>
+                                                    <button type="submit"
+                                                            class="btn btn-link text-danger p-0"
+                                                            onclick="return confirm('Unternehmen wirklich löschen?');"
+                                                            title="Löschen">
+                                                        <i class="fa-solid fa-trash"></i>
+                                                    </button>
+                                                </form>
                                             </td>
                                         <?php endif; ?>
                                     </tr>
