@@ -1,3 +1,6 @@
+<?php
+$canManageContent = auth()->loggedIn() && auth()->user()->can('content.manage');
+?>
 <div id="main-content" class="container-card">
     <div class="container">
         <div class="card">
@@ -5,9 +8,11 @@
                 <div class="d-flex justify-content-between mb-3">
                     <!-- Left: "Neu" Button -->
 
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createCompanyModal">
-                        <i class="fas fa-plus-circle"></i> Neu
-                    </button>
+                    <?php if (auth() -> loggedIn() && auth() -> user() -> can('content.manage')): ?>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createCompanyModal">
+                            <i class="fas fa-plus-circle"></i> Neu
+                        </button>
+                    <?php endif; ?>
 
                     <!-- Right: Button Group mit Search Field -->
                     <div class="d-flex align-items-center">
@@ -161,6 +166,9 @@
                             <th data-field="country" data-sortable="true">Land</th>
                             <th data-field="sector" data-sortable="true">Sektor</th>
                             <th data-field="industry" data-sortable="true">Industrie</th>
+                            <?php if ($canManageContent): ?>
+                                <th class="text-end">Aktionen</th>
+                            <?php endif; ?>
                         </tr>
                         </thead>
                         <tbody>
@@ -179,6 +187,26 @@
                                         <td><?= esc($company['country_name_de']) ?></td>
                                         <td><?= esc($company['sector_name']) ?></td>
                                         <td><?= esc($company['industry_name']) ?></td>
+                                        <?php if ($canManageContent): ?>
+                                            <td class="text-end">
+                                                <a href="<?= base_url('companies/edit/' . $company['id']) ?>" class="text-secondary me-2" title="Bearbeiten"
+                                                   data-bs-toggle="modal"
+                                                   data-bs-target="#createCompanyModal"
+
+                                                   data-id="<?= $company['id'] ?>"
+                                                   data-name="<?= esc($company['name']) ?>"
+                                                   data-country="<?= $company['country_id'] ?>"
+                                                   data-industry="<?= $company['industry_id'] ?>"
+                                                   data-description="<?= esc($company['description']) ?>"
+                                                >
+                                                    <i class="fa-solid fa-pen-to-square"></i>
+                                                </a>
+
+                                                <a href="<?= base_url('companies/delete/' . $company['id']) ?>" class="text-danger" title="Löschen" onclick="return confirm('Unternehmen wirklich löschen?');">
+                                                    <i class="fa-solid fa-trash"></i>
+                                                </a>
+                                            </td>
+                                        <?php endif; ?>
                                     </tr>
                                 <?php endforeach; ?>
                             <?php else: ?>
@@ -194,135 +222,141 @@
     </div>
 </div>
 
-<div class="modal fade" id="createCompanyModal" tabindex="-1" aria-labelledby="createCompanyModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
+<?php if (auth() -> loggedIn() && auth() -> user() -> can('content.manage')): ?>
+    <div class="modal fade" id="createCompanyModal" tabindex="-1" aria-labelledby="createCompanyModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
 
-            <div class="modal-header">
-                <h5 class="modal-title" id="dynamicModalTitle">Unternehmen hinzufügen</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="dynamicModalTitle">Unternehmen hinzufügen</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
 
-            <form action="<?= base_url('companies/create') ?>" method="post" >
-                <div class="modal-body p-0">
+                <form id="companyForm" action="<?= base_url('companies/create') ?>" method="post" data-create-url="<?= base_url('companies/create') ?>" data-update-url="<?= base_url('companies/update') ?>">
+                    <input type="hidden" name="company_id" id="company_id">
 
-                    <div class="d-flex" style="min-height: 350px;">
-                        <!-- Content Area -->
-                        <div class="flex-grow-1 p-4">
-                            <div class="tab-content" id="modalContent">
+                    <div class="modal-body p-0">
 
-                                <!-- Tab 1 -->
-                                <div class="tab-pane fade show active" id="tab-company" role="tabpanel">
+                        <div class="d-flex" style="min-height: 350px;">
+                            <!-- Content Area -->
+                            <div class="flex-grow-1 p-4">
+                                <div class="tab-content" id="modalContent">
 
-                                    <!-- FIRMA NAME -->
-                                    <div class="mb-3 row align-items-center">
-                                        <label class="col-sm-3 col-form-label d-flex align-items-center gap-2">
-                                            Firma
-                                            <i class="fa-regular fa-circle-question text-muted" title="Name des Unternehmens"></i>
-                                        </label>
-                                        <div class="col-sm-9">
-                                            <input type="text" class="form-control" name="company_name" placeholder="Firma eingeben">
+                                    <!-- Tab 1 -->
+                                    <div class="tab-pane fade show active" id="tab-company" role="tabpanel">
+
+                                        <!-- FIRMA NAME -->
+                                        <div class="mb-3 row align-items-center">
+                                            <label class="col-sm-3 col-form-label d-flex align-items-center gap-2">
+                                                Firma
+                                                <i class="fa-regular fa-circle-question text-muted" title="Name des Unternehmens"></i>
+                                            </label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control" name="company_name" placeholder="Firma eingeben">
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <!-- LAND -->
-                                    <div class="mb-3 row align-items-center">
-                                        <label class="col-sm-3 col-form-label d-flex align-items-center gap-2">
-                                            Land
-                                            <i class="fa-regular fa-circle-question text-muted" title="Wähle ein Land aus"></i>
-                                        </label>
+                                        <!-- LAND -->
+                                        <div class="mb-3 row align-items-center">
+                                            <label class="col-sm-3 col-form-label d-flex align-items-center gap-2">
+                                                Land
+                                                <i class="fa-regular fa-circle-question text-muted" title="Wähle ein Land aus"></i>
+                                            </label>
 
-                                        <div class="col-sm-9">
-                                            <select class="form-select select2-country" name="country_id">
-                                                <option value="" disabled <?= old('country_id') ? '' : 'selected' ?>>Land auswählen</option>
+                                            <div class="col-sm-9">
+                                                <select class="form-select select2-country" name="country_id">
+                                                    <option value="" disabled <?= old('country_id') ? '' : 'selected' ?>>Land auswählen</option>
 
-                                                <?php if (!empty($countries)): ?>
-                                                    <?php foreach ($countries as $country): ?>
-                                                        <option value="<?= esc($country['id']) ?>" <?= old('country_id') == $country['id'] ? 'selected' : '' ?>>
-                                                            <?= esc($country['name_de']) ?>
-                                                        </option>
-                                                    <?php endforeach; ?>
-                                                <?php else: ?>
-                                                    <option value="" disabled>Keine Länder Vorhanden</option>
-                                                <?php endif; ?>
-                                            </select>
+                                                    <?php if (!empty($countries)): ?>
+                                                        <?php foreach ($countries as $country): ?>
+                                                            <option value="<?= esc($country['id']) ?>" <?= old('country_id') == $country['id'] ? 'selected' : '' ?>>
+                                                                <?= esc($country['name_de']) ?>
+                                                            </option>
+                                                        <?php endforeach; ?>
+                                                    <?php else: ?>
+                                                        <option value="" disabled>Keine Länder Vorhanden</option>
+                                                    <?php endif; ?>
+                                                </select>
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <!-- INDUSTRIE -->
-                                    <div class="mb-3 row align-items-center">
-                                        <label class="col-sm-3 col-form-label d-flex align-items-center gap-2">
-                                            Industrie
-                                            <i class="fa-regular fa-circle-question text-muted" title="Industrie / Unternehmensbranche"></i>
-                                        </label>
+                                        <!-- INDUSTRIE -->
+                                        <div class="mb-3 row align-items-center">
+                                            <label class="col-sm-3 col-form-label d-flex align-items-center gap-2">
+                                                Industrie
+                                                <i class="fa-regular fa-circle-question text-muted" title="Industrie / Unternehmensbranche"></i>
+                                            </label>
 
-                                        <div class="col-sm-9">
-                                            <select class="form-select select2-industry" name="industry_id" id="industry_id">
-                                                <option value="" disabled <?= old('industry_id') ? '' : 'selected' ?>>Industrie auswählen</option>
+                                            <div class="col-sm-9">
+                                                <select class="form-select select2-industry" name="industry_id" id="industry_id">
+                                                    <option value="" disabled <?= old('industry_id') ? '' : 'selected' ?>>Industrie auswählen</option>
 
-                                                <?php if (!empty($industries)): ?>
-                                                    <?php foreach ($industries as $industry): ?>
-                                                        <option value="<?= esc($industry['id']) ?>" data-sector-name="<?= esc($industry['sector_name'] ?? '') ?>" <?= old('industry_id') == $industry['id'] ? 'selected' : '' ?>>
-                                                            <?= esc($industry['name']) ?>
-                                                            <?php if (! empty($industry['sector_name'])): ?>
-                                                                (<?= esc($industry['sector_name']) ?>)
-                                                            <?php endif; ?>
-                                                        </option>
-                                                    <?php endforeach; ?>
-                                                <?php else: ?>
-                                                    <option value="" disabled>Keine Industrien vorhanden</option>
-                                                <?php endif; ?>
-                                            </select>
+                                                    <?php if (!empty($industries)): ?>
+                                                        <?php foreach ($industries as $industry): ?>
+                                                            <option value="<?= esc($industry['id']) ?>" data-sector-name="<?= esc($industry['sector_name'] ?? '') ?>" <?= old('industry_id') == $industry['id'] ? 'selected' : '' ?>>
+                                                                <?= esc($industry['name']) ?>
+                                                                <?php if (! empty($industry['sector_name'])): ?>
+                                                                    (<?= esc($industry['sector_name']) ?>)
+                                                                <?php endif; ?>
+                                                            </option>
+                                                        <?php endforeach; ?>
+                                                    <?php else: ?>
+                                                        <option value="" disabled>Keine Industrien vorhanden</option>
+                                                    <?php endif; ?>
+                                                </select>
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <!-- SEKTOR -->
-                                    <div class="mb-3 row align-items-center">
-                                        <label class="col-sm-3 col-form-label d-flex align-items-center gap-2">
-                                            Sektor
-                                            <i class="fa-regular fa-circle-question text-muted" title="Branche/Sektor des Unternehmens"></i>
-                                        </label>
+                                        <!-- SEKTOR -->
+                                        <div class="mb-3 row align-items-center">
+                                            <label class="col-sm-3 col-form-label d-flex align-items-center gap-2">
+                                                Sektor
+                                                <i class="fa-regular fa-circle-question text-muted" title="Branche/Sektor des Unternehmens"></i>
+                                            </label>
 
-                                        <div class="col-sm-9">
-                                            <input
-                                                    type="text"
-                                                    class="form-control"
-                                                    id="sector_display"
-                                                    placeholder="Sektor wird automatisch anhand der Industrie gesetzt"
-                                                    value=""
-                                                    readonly
-                                            >
+                                            <div class="col-sm-9">
+                                                <input
+                                                        type="text"
+                                                        class="form-control"
+                                                        id="sector_display"
+                                                        placeholder="Sektor wird automatisch anhand der Industrie gesetzt"
+                                                        value=""
+                                                        readonly
+                                                >
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <!-- DESCRIPTION -->
-                                    <div class="mb-3 row align-items-center">
-                                        <label class="col-sm-3 col-form-label d-flex align-items-center gap-2">
-                                            Beschreibung
-                                            <i class="fa-regular fa-circle-question text-muted"
-                                               title="Beschreibung oder zusätzliche Informationen zum Unternehmen"></i>
-                                        </label>
-                                        <div class="col-sm-9">
-                                            <textarea class="form-control" name="description" rows="3" placeholder="Kurze Beschreibung des Unternehmens eingeben"><?= esc(old('description') ?? '') ?></textarea>
+                                        <!-- DESCRIPTION -->
+                                        <div class="mb-3 row align-items-center">
+                                            <label class="col-sm-3 col-form-label d-flex align-items-center gap-2">
+                                                Beschreibung
+                                                <i class="fa-regular fa-circle-question text-muted"
+                                                   title="Beschreibung oder zusätzliche Informationen zum Unternehmen"></i>
+                                            </label>
+                                            <div class="col-sm-9">
+                                                <textarea class="form-control" name="description" rows="3" placeholder="Kurze Beschreibung des Unternehmens eingeben"><?= esc(old('description') ?? '') ?></textarea>
 
+                                            </div>
                                         </div>
+
                                     </div>
 
                                 </div>
-
                             </div>
+
                         </div>
 
                     </div>
 
-                </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn abbrechen_button" data-bs-dismiss="modal">Abbrechen</button>
+                        <button type="submit" id="createSaveBtn" class="btn btn-success">Speichern</button>
+                    </div>
+                </form>
 
-                <div class="modal-footer">
-                    <button type="button" class="btn abbrechen_button" data-bs-dismiss="modal">Abbrechen</button>
-                    <button type="submit" id="createSaveBtn" class="btn btn-success">Speichern</button>
-                </div>
-            </form>
-
+            </div>
         </div>
     </div>
-</div>
+<?php endif; ?>
+
+

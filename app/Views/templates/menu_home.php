@@ -34,10 +34,23 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link <?= ($seg1 === 'config/general') ? 'active' : '' ?>" href="<?= base_url('config/general') ?>">
+                                <a class="nav-link <?= ($seg1 === 'config/general') ? 'active' : '' ?>" href="<?= base_url('config/api-key') ?>">
                                     <i class="fa-solid fa-gear"></i>
                                 </a>
                             </li>
+                            <?php if (! auth()->loggedIn()): ?>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="<?= base_url('login') ?>" title="Login">
+                                        <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                                    </a>
+                                </li>
+                            <?php else: ?>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="<?= base_url('logout') ?>" title="Logout">
+                                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                                    </a>
+                                </li>
+                            <?php endif; ?>
                         </ul>
                     </div>
                 </div>

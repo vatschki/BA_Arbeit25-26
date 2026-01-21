@@ -67,6 +67,53 @@ class CompaniesController extends BaseController
             ->with('message', 'Unternehmen erfolgreich angelegt.');
     }
 
+    public function update()
+    {
+        $companyId = (int) $this->request->getPost('company_id');
+
+        $data = [
+            'name'        => $this->request->getPost('company_name'),
+            'country_id'  => $this->request->getPost('country_id'),
+            'industry_id' => $this->request->getPost('industry_id'),
+            'description' => $this->request->getPost('description'),
+        ];
+
+        try {
+            $this->companyModel->updateCompany($companyId, $data);
+        } catch (RuntimeException $exception) {
+            return redirect()->back()
+                ->withInput()
+                ->with('errors', $this->companyModel->errors())
+                ->with('message', $exception->getMessage());
+        }
+
+        return redirect()
+            ->to('/companies')
+            ->with('message', 'Unternehmen erfolgreich aktualisiert.');
+    }
+
+    public function delete(int $companyId)
+    {
+        if (! auth()->loggedIn() || ! auth()->user()->can('content.manage')) {
+            throw new \CodeIgniter\Exceptions\PageForbiddenException();
+        }
+
+        try {
+            $this->companyModel->deleteCompany($companyId);
+        } catch (RuntimeException $exception) {
+            return redirect()
+                ->to('/companies')
+                ->with('message', $exception->getMessage());
+        }
+
+        return redirect()
+            ->to('/companies')
+            ->with('message', 'Unternehmen erfolgreich gelöscht.');
+    }
+
+
+
+
 
 
 

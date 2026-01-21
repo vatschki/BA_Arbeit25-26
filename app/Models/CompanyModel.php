@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\BaseModel;
+use App\Models\ReportModel;
 
 use RuntimeException;
 
@@ -62,4 +63,38 @@ class CompanyModel extends BaseModel{
             ->where("id", $company_id)
             ->first();
     }
+
+    public function updateCompany(int $companyId, array $data): bool
+    {
+        if (! $this->update($companyId, $data)) {
+            $errors = $this->errors() ?? [];
+
+            throw new RuntimeException(
+                'Validation of Company failed: ' . implode(' | ', $errors)
+            );
+        }
+
+        return true;
+    }
+
+    public function deleteCompany(int $companyId): bool
+    {
+        $company = $this->find($companyId);
+
+        if (! $company) {
+            throw new RuntimeException('Unternehmen nicht gefunden.');
+        }
+
+        $reportModel = new ReportModel();
+
+        if ($reportModel->hasReportsForCompany($companyId)) {
+            throw new RuntimeException(
+                'Unternehmen kann nicht gelöscht werden, da noch Reports existieren.'
+            );
+        }
+
+        return (bool) parent::delete($companyId);
+    }
+
+
 }

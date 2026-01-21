@@ -92,4 +92,14 @@ class ReportModel extends BaseModel{
 
         return (int) $this->getInsertID();
     }
+
+
+    public function hasReportsForCompany(int $companyId): bool
+    {
+        return $this->where('company_id', $companyId)
+                ->countAllResults(false) > 0;
+    }
+
+
+
 }
