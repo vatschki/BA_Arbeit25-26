@@ -258,10 +258,18 @@ $errors = session('errors') ?? [];
 
                                         <!-- FIRMA NAME -->
                                         <div class="mb-3 row align-items-center">
-                                            <label class="col-sm-3 col-form-label d-flex align-items-center gap-2">
-                                                Firma
-                                                <span class="text-danger">*</span>
-                                                <i class="fa-regular fa-circle-question text-muted" title="Name des Unternehmens"></i>
+                                            <label class="col-sm-3 col-form-label d-flex align-items-center">
+                                                Firma<span class="text-danger">*</span>
+                                                <a
+                                                        href="<?= site_url('help') ?>#help-company"
+                                                        class="ms-2 text-muted"
+                                                        data-bs-toggle="tooltip"
+                                                        data-bs-placement="top"
+                                                        title="Hier gibst du den offiziellen Namen deines Unternehmens an."
+                                                        aria-label="Hilfe zum Feld Firma"
+                                                >
+                                                    <i class="fa-regular fa-circle-question"></i>
+                                                </a>
                                             </label>
                                             <div class="col-sm-9">
                                                 <input
@@ -280,10 +288,18 @@ $errors = session('errors') ?? [];
 
                                         <!-- LAND -->
                                         <div class="mb-3 row align-items-center">
-                                            <label class="col-sm-3 col-form-label d-flex align-items-center gap-2">
-                                                Land
-                                                <span class="text-danger">*</span>
-                                                <i class="fa-regular fa-circle-question text-muted" title="Wähle ein Land aus"></i>
+                                            <label class="col-sm-3 col-form-label d-flex align-items-center ">
+                                                Land<span class="text-danger">*</span>
+                                                <a
+                                                        href="<?= site_url('help') ?>#help-company"
+                                                        class="ms-2 text-muted"
+                                                        data-bs-toggle="tooltip"
+                                                        data-bs-placement="top"
+                                                        title="Hier wählst du das Land aus."
+                                                        aria-label="Hilfe zum Feld Land"
+                                                >
+                                                    <i class="fa-regular fa-circle-question"></i>
+                                                </a>
                                             </label>
 
                                             <div class="col-sm-9">
@@ -310,10 +326,18 @@ $errors = session('errors') ?? [];
 
                                         <!-- INDUSTRIE -->
                                         <div class="mb-3 row align-items-center">
-                                            <label class="col-sm-3 col-form-label d-flex align-items-center gap-2">
-                                                Industrie
-                                                <span class="text-danger">*</span>
-                                                <i class="fa-regular fa-circle-question text-muted" title="Industrie / Unternehmensbranche"></i>
+                                            <label class="col-sm-3 col-form-label d-flex align-items-center">
+                                                Industrie<span class="text-danger">*</span>
+                                                <a
+                                                        href="<?= site_url('help') ?>#help-company"
+                                                        class="ms-2 text-muted"
+                                                        data-bs-toggle="tooltip"
+                                                        data-bs-placement="top"
+                                                        title="Hier wählst du die zugehörige Industrie aus."
+                                                        aria-label="Hilfe zum Feld Industrie"
+                                                >
+                                                    <i class="fa-regular fa-circle-question"></i>
+                                                </a>
                                             </label>
 
                                             <div class="col-sm-9">
@@ -345,8 +369,16 @@ $errors = session('errors') ?? [];
                                         <div class="mb-3 row align-items-center">
                                             <label class="col-sm-3 col-form-label d-flex align-items-center gap-2">
                                                 Beschreibung
-                                                <i class="fa-regular fa-circle-question text-muted"
-                                                   title="Beschreibung oder zusätzliche Informationen zum Unternehmen"></i>
+                                                <a
+                                                        href="<?= site_url('help') ?>#help-company"
+                                                        class="ms-2 text-muted"
+                                                        data-bs-toggle="tooltip"
+                                                        data-bs-placement="top"
+                                                        title="Hier kann das Unternehmen kurz beschrieben werden."
+                                                        aria-label="Hilfe zum Feld Beschreibung"
+                                                >
+                                                    <i class="fa-regular fa-circle-question"></i>
+                                                </a>
                                             </label>
                                             <div class="col-sm-9">
                                                 <textarea class="form-control" name="description" rows="3" placeholder="Kurze Beschreibung des Unternehmens eingeben"><?= esc(old('description') ?? '') ?></textarea>
