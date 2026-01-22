@@ -1,5 +1,6 @@
 <?php
 $canManageContent = auth()->loggedIn() && auth()->user()->can('content.manage');
+$errors = session('errors') ?? [];
 ?>
 <div id="main-content" class="container-card">
     <div class="container">
@@ -259,10 +260,21 @@ $canManageContent = auth()->loggedIn() && auth()->user()->can('content.manage');
                                         <div class="mb-3 row align-items-center">
                                             <label class="col-sm-3 col-form-label d-flex align-items-center gap-2">
                                                 Firma
+                                                <span class="text-danger">*</span>
                                                 <i class="fa-regular fa-circle-question text-muted" title="Name des Unternehmens"></i>
                                             </label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control" name="company_name" placeholder="Firma eingeben">
+                                                <input
+                                                        type="text"
+                                                        class="form-control <?= isset($errors['company_name']) ? 'is-invalid' : '' ?>"
+                                                        name="company_name"
+                                                        value="<?= esc(old('company_name') ?? '') ?>"
+                                                        placeholder="Firma eingeben"
+                                                >
+
+                                                <div class="invalid-feedback">
+                                                    <?= $errors['company_name'] ?? '' ?>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -270,12 +282,15 @@ $canManageContent = auth()->loggedIn() && auth()->user()->can('content.manage');
                                         <div class="mb-3 row align-items-center">
                                             <label class="col-sm-3 col-form-label d-flex align-items-center gap-2">
                                                 Land
+                                                <span class="text-danger">*</span>
                                                 <i class="fa-regular fa-circle-question text-muted" title="Wähle ein Land aus"></i>
                                             </label>
 
                                             <div class="col-sm-9">
-                                                <select class="form-select select2-country" name="country_id">
-                                                    <option value="" disabled <?= old('country_id') ? '' : 'selected' ?>>Land auswählen</option>
+                                                <select class="form-select select2-country <?= isset($errors['country_id']) ? 'is-invalid' : '' ?>" name="country_id">
+                                                    <option value="" disabled <?= old('country_id') ? '' : 'selected' ?>>
+                                                        Land auswählen
+                                                    </option>
 
                                                     <?php if (!empty($countries)): ?>
                                                         <?php foreach ($countries as $country): ?>
@@ -287,6 +302,9 @@ $canManageContent = auth()->loggedIn() && auth()->user()->can('content.manage');
                                                         <option value="" disabled>Keine Länder Vorhanden</option>
                                                     <?php endif; ?>
                                                 </select>
+                                                <div class="invalid-feedback">
+                                                    <?= $errors['country_id'] ?? '' ?>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -294,12 +312,15 @@ $canManageContent = auth()->loggedIn() && auth()->user()->can('content.manage');
                                         <div class="mb-3 row align-items-center">
                                             <label class="col-sm-3 col-form-label d-flex align-items-center gap-2">
                                                 Industrie
+                                                <span class="text-danger">*</span>
                                                 <i class="fa-regular fa-circle-question text-muted" title="Industrie / Unternehmensbranche"></i>
                                             </label>
 
                                             <div class="col-sm-9">
-                                                <select class="form-select select2-industry" name="industry_id" id="industry_id">
-                                                    <option value="" disabled <?= old('industry_id') ? '' : 'selected' ?>>Industrie auswählen</option>
+                                                <select class="form-select select2-industry <?= isset($errors['industry_id']) ? 'is-invalid' : '' ?>" name="industry_id" id="industry_id">
+                                                    <option value="" disabled <?= old('industry_id') ? '' : 'selected' ?>>
+                                                        Industrie auswählen
+                                                    </option>
 
                                                     <?php if (!empty($industries)): ?>
                                                         <?php foreach ($industries as $industry): ?>
@@ -314,25 +335,9 @@ $canManageContent = auth()->loggedIn() && auth()->user()->can('content.manage');
                                                         <option value="" disabled>Keine Industrien vorhanden</option>
                                                     <?php endif; ?>
                                                 </select>
-                                            </div>
-                                        </div>
-
-                                        <!-- SEKTOR -->
-                                        <div class="mb-3 row align-items-center">
-                                            <label class="col-sm-3 col-form-label d-flex align-items-center gap-2">
-                                                Sektor
-                                                <i class="fa-regular fa-circle-question text-muted" title="Branche/Sektor des Unternehmens"></i>
-                                            </label>
-
-                                            <div class="col-sm-9">
-                                                <input
-                                                        type="text"
-                                                        class="form-control"
-                                                        id="sector_display"
-                                                        placeholder="Sektor wird automatisch anhand der Industrie gesetzt"
-                                                        value=""
-                                                        readonly
-                                                >
+                                                <div class="invalid-feedback">
+                                                    <?= $errors['industry_id'] ?? '' ?>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -367,6 +372,11 @@ $canManageContent = auth()->loggedIn() && auth()->user()->can('content.manage');
             </div>
         </div>
     </div>
+    <div
+            id="company-modal-trigger"
+            data-open="<?= session('openCompanyModal') ? '1' : '0' ?>"
+    ></div>
+
 <?php endif; ?>
 
 

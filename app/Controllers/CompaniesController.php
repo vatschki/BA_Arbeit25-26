@@ -41,24 +41,28 @@ class CompaniesController extends BaseController
 
     public function create(){
 
-        $company_name = $this->request->getPost('company_name');
-        $country_id = $this->request->getPost('country_id');
-        $industry_id = $this->request->getPost('industry_id');
-        $description = $this->request->getPost('description');
+        if (! $this->validate('company')) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('errors', $this->validator->getErrors())
+                ->with('openCompanyModal', true);
+        }
 
         $data = [
-            'name' => $company_name,
-            'country_id' => $country_id,
-            'industry_id' => $industry_id,
-            'description' => $description
+            'name'        => $this->request->getPost('company_name'),
+            'country_id'  => $this->request->getPost('country_id'),
+            'industry_id' => $this->request->getPost('industry_id'),
+            'description' => $this->request->getPost('description'),
         ];
 
-        try{
+        try {
             $this->companyModel->createCompany($data);
-        }catch (RuntimeException $exception){
-            return redirect()->back()
+        } catch (RuntimeException $exception) {
+            return redirect()
+                ->back()
                 ->withInput()
-                ->with('errors', $this->companyModel->errors())
+                ->with('openCompanyModal', true)
                 ->with('message', $exception->getMessage());
         }
 
@@ -69,6 +73,13 @@ class CompaniesController extends BaseController
 
     public function update(int $companyId)
     {
+        if (! $this->validate('company')) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('openCompanyModal', true);
+        }
+
         $data = [
             'name'        => $this->request->getPost('company_name'),
             'country_id'  => $this->request->getPost('country_id'),
@@ -79,9 +90,10 @@ class CompaniesController extends BaseController
         try {
             $this->companyModel->updateCompany($companyId, $data);
         } catch (RuntimeException $exception) {
-            return redirect()->back()
+            return redirect()
+                ->back()
                 ->withInput()
-                ->with('errors', $this->companyModel->errors())
+                ->with('openCompanyModal', true)
                 ->with('message', $exception->getMessage());
         }
 
@@ -108,39 +120,5 @@ class CompaniesController extends BaseController
         return redirect()
             ->to('/companies')
             ->with('message', 'Unternehmen erfolgreich gelöscht.');
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    public function testDb()
-    {
-        $db = \Config\Database::connect();
-        $query = $db->query("SHOW TABLES");
-        $result = $query->getResult();
-
-        return print_r($result);
     }
 }

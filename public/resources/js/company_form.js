@@ -1,21 +1,3 @@
-    // Industrie zu Sektor automatisch setzen
-    $(document).ready(function () {
-        const $industrySelect = $('#industry_id');
-        const $sectorInput = $('#sector_display');
-
-        function updateSector() {
-            const selectedOption = $industrySelect.find('option:selected');
-            const sectorName = selectedOption.data('sector-name') || '';
-            $sectorInput.val(sectorName);
-        }
-
-        // Select2 feuert ebenfalls ein 'change'-Event, daher reicht das
-        $industrySelect.on('change', updateSector);
-
-        // Initial setzen (falls ein Wert vorausgewählt ist)
-        updateSector();
-    });
-
     document.addEventListener('DOMContentLoaded', function () {
 
         const modal = document.getElementById('createCompanyModal');
@@ -33,18 +15,22 @@
             const createUrl = form.dataset.createUrl;
             const updateUrl = form.dataset.updateUrl;
 
+            if (!button) {
+                return;
+            }
+
             // =========================
             // CREATE
             // =========================
-            if (!button || !button.classList.contains('edit-company-btn')) {
+            if (!button.classList.contains('edit-company-btn')) {
 
                 form.action = createUrl;
-                form.reset();
+                form.reset()
 
                 $('#dynamicModalTitle').text('Unternehmen hinzufügen');
 
-                $('.select2-country').val(null).trigger('change');
-                $('.select2-industry').val(null).trigger('change');
+                $('.select2-country').val(null).trigger('change.select2');
+                $('.select2-industry').val(null).trigger('change.select2');
 
                 return;
             }
@@ -57,14 +43,36 @@
             $('[name="company_name"]').val(button.dataset.name);
             $('[name="country_id"]').val(button.dataset.country).trigger('change');
 
-            const industrySelect = document.querySelector('[name="industry_id"]');
-            industrySelect.value = button.dataset.industry;
-            industrySelect.dispatchEvent(new Event('change'));
+            $('#industry_id')
+                .val(button.dataset.industry)
+                .trigger('change.select2');
+
 
             $('[name="description"]').val(button.dataset.description);
 
             form.action = updateUrl + '/' + button.dataset.id;
         });
     });
+
+    $(window).on('load', function () {
+
+        const trigger = document.getElementById('company-modal-trigger');
+        if (!trigger || trigger.dataset.open !== '1') return;
+
+        const modalEl = document.getElementById('createCompanyModal');
+        if (!modalEl) return;
+
+        const modal = new bootstrap.Modal(modalEl, {
+            backdrop: 'static',
+            keyboard: true
+        });
+
+        modal.show();
+    });
+
+
+
+
+
 
 

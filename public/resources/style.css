@@ -295,6 +295,18 @@ body > div:first-of-type{
     box-shadow: none !important;
 }
 
+/* form foolproof */
+.is-invalid {
+    border-color: #dc3545;
+}
+.invalid-feedback {
+    display: none;
+}
+.is-invalid + .invalid-feedback {
+    display: block;
+}
+
+
 /* Pdf Dropzone */
 .pdf-drop-zone{
     border: 2px dashed var(--esr-border);

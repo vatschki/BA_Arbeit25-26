@@ -41,4 +41,26 @@ class Validation extends BaseConfig
     // --------------------------------------------------------------------
     // Rules
     // --------------------------------------------------------------------
+    public array $company = [
+        'company_name' => [
+            'rules'  => 'required|min_length[2]|max_length[255]',
+            'errors' => [
+                'required' => 'Pflichtfeld bitte ausfüllen',
+            ],
+        ],
+
+        'country_id' => [
+            'rules'  => 'required|is_natural_no_zero',
+            'errors' => [
+                'required' => 'Pflichtfeld bitte ausfüllen',
+            ],
+        ],
+
+        'industry_id' => [
+            'rules'  => 'required|is_natural_no_zero',
+            'errors' => [
+                'required' => 'Pflichtfeld bitte ausfüllen',
+            ],
+        ],
+    ];
 }
