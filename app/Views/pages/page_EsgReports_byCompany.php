@@ -1,14 +1,22 @@
+<?php
+$canManageContent = auth()->loggedIn() && auth()->user()->can('content.manage');
+$errors = session('errors') ?? [];
+?>
 <!-- Darstellung des ausgewählten Menüs style="background-color: aliceblue !important; -->
 <div id="main-content" class="container-card">
     <div class="container">
         <div class="card">
             <div class="card-body container-fluid">
                 <div class="d-flex justify-content-between mb-3">
-                    <!-- Left: "Neu" Button -->
 
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createReportModal">
-                        <i class="fas fa-plus-circle"></i> Neu
-                    </button>
+                    <div>
+                        <h4 class="mb-0">
+                            Berichte von: <?= esc($company['name']) ?>
+                        </h4>
+                        <small class="text-muted">
+                            ESRS-Reports
+                        </small>
+                    </div>
 
                     <!-- Right: Button Group mit Search Field -->
                     <div class="d-flex align-items-center">

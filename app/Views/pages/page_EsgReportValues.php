@@ -9,7 +9,6 @@ $job_id = $job_id ?? null;
         <div class="card">
             <div class="card-body container-fluid">
                 <div class="d-flex justify-content-between mb-3">
-                    <!-- Left: "Neu" Button -->
 
                     <div>
                         <?php

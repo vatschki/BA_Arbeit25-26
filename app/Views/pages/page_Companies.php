@@ -8,13 +8,13 @@ $errors = session('errors') ?? [];
             <div class="card-body">
                 <div class="d-flex justify-content-between mb-3">
                     <!-- Left: "Neu" Button -->
-
-                    <?php if (auth() -> loggedIn() && auth() -> user() -> can('content.manage')): ?>
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createCompanyModal">
-                            <i class="fas fa-plus-circle"></i> Neu
-                        </button>
-                    <?php endif; ?>
-
+                    <div>
+                        <?php if (auth() -> loggedIn() && auth() -> user() -> can('content.manage')): ?>
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createCompanyModal">
+                                <i class="fas fa-plus-circle"></i> Neu
+                            </button>
+                        <?php endif; ?>
+                    </div>
                     <!-- Right: Button Group mit Search Field -->
                     <div class="d-flex align-items-center">
 

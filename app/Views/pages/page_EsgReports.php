@@ -1,3 +1,8 @@
+<?php
+$canManageContent = auth()->loggedIn() && auth()->user()->can('content.manage');
+$errors = session('errors') ?? [];
+?>
+
 <!-- Darstellung des ausgewählten Menüs style="background-color: aliceblue !important; -->
 <div id="main-content" class="container-card">
     <div class="container">
@@ -5,10 +10,13 @@
             <div class="card-body container-fluid">
                 <div class="d-flex justify-content-between mb-3">
                     <!-- Left: "Neu" Button -->
-
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createReportModal">
-                        <i class="fas fa-plus-circle"></i> Neu
-                    </button>
+                    <div>
+                        <?php if (auth() -> loggedIn() && auth() -> user() -> can('content.manage')): ?>
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createReportModal">
+                                <i class="fas fa-plus-circle"></i> Neu
+                            </button>
+                        <?php endif; ?>
+                    </div>
 
                     <!-- Right: Button Group mit Search Field -->
                     <div class="d-flex align-items-center">
@@ -156,6 +164,9 @@
                                 <th data-field="company_name" data-sortable="true">Unternehmen</th>
                                 <th data-field="author_name" data-sortable="true">Author</th>
                                 <th data-field="reporting_year" data-sortable="true">Jahr</th>
+                                <?php if ($canManageContent): ?>
+                                    <th class="text-end">Aktionen</th>
+                                <?php endif; ?>
                             </tr>
                         </thead>
                         <tbody>
@@ -187,171 +198,174 @@
     </div>
 </div>
 
-<div class="modal fade" id="createReportModal" tabindex="-1" aria-labelledby="dynamicModalTitle" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
+<?php if (auth() -> loggedIn() && auth() -> user() -> can('content.manage')): ?>
+    <div class="modal fade" id="createReportModal" tabindex="-1" aria-labelledby="dynamicModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
 
-            <div class="modal-header">
-                <h5 class="modal-title" id="dynamicModalTitle">Bericht hinzufügen</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="dynamicModalTitle">Bericht hinzufügen</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
 
-            <form action="<?= site_url('/esg-reports/process') ?>"
-                  method="post"
-                  enctype="multipart/form-data"
-                  id="createReportForm"
-            >
+                <form action="<?= site_url('/esg-reports/process') ?>"
+                      method="post"
+                      enctype="multipart/form-data"
+                      id="createReportForm"
+                >
 
-                <div class="modal-body p-0">
+                    <div class="modal-body p-0">
 
-                    <div class="d-flex" style="min-height: 350px;">
+                        <div class="d-flex" style="min-height: 350px;">
 
-                        <!-- Content Area -->
-                        <div class="flex-grow-1 p-4">
-                            <div class="tab-content" id="modalContent">
-                                <!-- Tab 2: Bericht mit Drag & Drop -->
-                                <div class="tab-pane fade show active" id="tab-report" role="tabpanel">
+                            <!-- Content Area -->
+                            <div class="flex-grow-1 p-4">
+                                <div class="tab-content" id="modalContent">
+                                    <!-- Tab 2: Bericht mit Drag & Drop -->
+                                    <div class="tab-pane fade show active" id="tab-report" role="tabpanel">
 
-                                    <!-- Unternehmen -->
-                                    <div class="mb-3 row align-items-center">
-                                        <label class="col-sm-3 col-form-label d-flex align-items-center gap-2">
-                                            Unternhemen
-                                            <i class="fa-regular fa-circle-question text-muted" title="Wähle ein unternehmen"></i>
-                                        </label>
+                                        <!-- Unternehmen -->
+                                        <div class="mb-3 row align-items-center">
+                                            <label class="col-sm-3 col-form-label d-flex align-items-center gap-2">
+                                                Unternhemen
+                                                <i class="fa-regular fa-circle-question text-muted" title="Wähle ein unternehmen"></i>
+                                            </label>
 
-                                        <div class="col-sm-9">
-                                            <select class="form-select select2-company" name="company_id">
-                                                <option value="" disabled <?= old('company_id') ? '' : 'selected' ?>>Unternehmen auswählen</option>
+                                            <div class="col-sm-9">
+                                                <select class="form-select select2-company" name="company_id">
+                                                    <option value="" disabled <?= old('company_id') ? '' : 'selected' ?>>Unternehmen auswählen</option>
 
-                                                <?php if (!empty($companies)): ?>
-                                                    <?php foreach ($companies as $company): ?>
-                                                        <option value="<?= esc($company['id']) ?>" <?= old('company_id') == $company['id'] ? 'selected' : '' ?>>
-                                                            <?= esc($company['name']) ?>
-                                                        </option>
-                                                    <?php endforeach; ?>
-                                                <?php else: ?>
-                                                    <option value="" disabled>Keine Unternehmen Vorhanden</option>
-                                                <?php endif; ?>
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <!-- JAHR -->
-                                    <div class="mb-3 row align-items-center">
-                                        <label class="col-sm-3 col-form-label d-flex align-items-center gap-2">
-                                            Jahr
-                                            <i class="fa-regular fa-circle-question text-muted" title="Wähle ein Jahr aus"></i>
-                                        </label>
-
-                                        <div class="col-sm-9">
-                                            <select class="form-select" name="year">
-                                                <option value="" disabled <?= old('year') ? '' : 'selected' ?>>
-                                                    Jahr auswählen
-                                                </option>
-
-                                                <?php
-                                                    $currentYear = (int) date('Y');
-                                                    $startYear   = $currentYear - 10;
-
-                                                    for ($year = $currentYear; $year >= $startYear; $year--):
-                                                        ?>
-                                                        <option value="<?= $year ?>" <?= old('year') == $year ? 'selected' : '' ?>>
-                                                            <?= $year ?>
-                                                        </option>
-                                                <?php endfor; ?>
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <!-- ESRS-Standard -->
-                                    <div class="mb-3 row align-items-center">
-                                        <label class="col-sm-3 col-form-label d-flex align-items-center gap-2">
-                                            ESRS-Standard
-                                            <i class="fa-regular fa-circle-question text-muted" title="Wähle ein ESRS-Standard"></i>
-                                        </label>
-
-                                        <div class="col-sm-9">
-                                            <select class="form-select select2-standard" name="standard_id" id="standardSelect">
-                                                <option value="" disabled <?= old('standard_id') ? '' : 'selected' ?>>ESRS-Standard auswählen</option>
-
-                                                <?php if (!empty($standards)): ?>
-                                                    <?php foreach ($standards as $standard): ?>
-                                                        <option value="<?= esc($standard['id']) ?>" <?= old('standard_id') == $standard['id'] ? 'selected' : '' ?>>
-                                                            <?= esc($standard['name']) ?>
-                                                        </option>
-                                                    <?php endforeach; ?>
-                                                <?php else: ?>
-                                                    <option value="" disabled>Keine ESRS-Standard Vorhanden</option>
-                                                <?php endif; ?>
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <!-- ESRS-Requirement -->
-                                    <div class="mb-3 row align-items-center">
-                                        <label class="col-sm-3 col-form-label d-flex align-items-center gap-2">
-                                            ESRS-Anforderung
-                                            <i class="fa-regular fa-circle-question text-muted" title="Wähle eine ESRS-Anforderung"></i>
-                                        </label>
-
-                                        <div class="col-sm-9">
-                                            <select class="form-select select2-requirement" name="requirement_id" id="requirementSelect">
-                                                <option value="" disabled <?= old('requirement_id') ? '' : 'selected' ?>>ESRS-Anforderung auswählen</option>
-
-                                                <option value="ALL">
-                                                    Alle Anforderungen des gewählten Standards
-                                                </option>
-
-                                                <?php if (!empty($requirements)): ?>
-                                                    <?php foreach ($requirements as $requirement): ?>
-                                                        <option value="<?= esc($requirement['id']) ?>" data-standard-id = "<?= esc($requirement['standard_id']) ?>" <?= old('requirement_id') == $requirement['id'] ? 'selected' : '' ?>>
-                                                            <?= esc($requirement['code']) ?>
-                                                        </option>
-                                                    <?php endforeach; ?>
-                                                <?php else: ?>
-                                                    <option value="" disabled>Keine ESRS-Anforderung Vorhanden</option>
-                                                <?php endif; ?>
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <!-- Drag and Drop Zone -->
-                                    <div id="pdf-drop-zone" class="pdf-drop-zone">
-                                        <!-- verstecktes File-Input -->
-                                        <input id="pdf-input" type="file" name="report"
-                                               accept="application/pdf,.pdf"
-                                               hidden>
-
-                                        <button type="button" class="btn btn-primary" id="pdf-browse-btn">
-                                            PDF auswählen
-                                        </button>
-
-                                        <div class="mt-2 text-grey">
-                                            oder<br>
-                                            <strong>drag a PDF</strong>
+                                                    <?php if (!empty($companies)): ?>
+                                                        <?php foreach ($companies as $company): ?>
+                                                            <option value="<?= esc($company['id']) ?>" <?= old('company_id') == $company['id'] ? 'selected' : '' ?>>
+                                                                <?= esc($company['name']) ?>
+                                                            </option>
+                                                        <?php endforeach; ?>
+                                                    <?php else: ?>
+                                                        <option value="" disabled>Keine Unternehmen Vorhanden</option>
+                                                    <?php endif; ?>
+                                                </select>
+                                            </div>
                                         </div>
 
-                                        <div id="pdf-file-list" class="mt-3 text-grey" style="font-size:.9rem;"></div>
+                                        <!-- JAHR -->
+                                        <div class="mb-3 row align-items-center">
+                                            <label class="col-sm-3 col-form-label d-flex align-items-center gap-2">
+                                                Jahr
+                                                <i class="fa-regular fa-circle-question text-muted" title="Wähle ein Jahr aus"></i>
+                                            </label>
+
+                                            <div class="col-sm-9">
+                                                <select class="form-select" name="year">
+                                                    <option value="" disabled <?= old('year') ? '' : 'selected' ?>>
+                                                        Jahr auswählen
+                                                    </option>
+
+                                                    <?php
+                                                        $currentYear = (int) date('Y');
+                                                        $startYear   = $currentYear - 10;
+
+                                                        for ($year = $currentYear; $year >= $startYear; $year--):
+                                                            ?>
+                                                            <option value="<?= $year ?>" <?= old('year') == $year ? 'selected' : '' ?>>
+                                                                <?= $year ?>
+                                                            </option>
+                                                    <?php endfor; ?>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <!-- ESRS-Standard -->
+                                        <div class="mb-3 row align-items-center">
+                                            <label class="col-sm-3 col-form-label d-flex align-items-center gap-2">
+                                                ESRS-Standard
+                                                <i class="fa-regular fa-circle-question text-muted" title="Wähle ein ESRS-Standard"></i>
+                                            </label>
+
+                                            <div class="col-sm-9">
+                                                <select class="form-select select2-standard" name="standard_id" id="standardSelect">
+                                                    <option value="" disabled <?= old('standard_id') ? '' : 'selected' ?>>ESRS-Standard auswählen</option>
+
+                                                    <?php if (!empty($standards)): ?>
+                                                        <?php foreach ($standards as $standard): ?>
+                                                            <option value="<?= esc($standard['id']) ?>" <?= old('standard_id') == $standard['id'] ? 'selected' : '' ?>>
+                                                                <?= esc($standard['name']) ?>
+                                                            </option>
+                                                        <?php endforeach; ?>
+                                                    <?php else: ?>
+                                                        <option value="" disabled>Keine ESRS-Standard Vorhanden</option>
+                                                    <?php endif; ?>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <!-- ESRS-Requirement -->
+                                        <div class="mb-3 row align-items-center">
+                                            <label class="col-sm-3 col-form-label d-flex align-items-center gap-2">
+                                                ESRS-Anforderung
+                                                <i class="fa-regular fa-circle-question text-muted" title="Wähle eine ESRS-Anforderung"></i>
+                                            </label>
+
+                                            <div class="col-sm-9">
+                                                <select class="form-select select2-requirement" name="requirement_id" id="requirementSelect">
+                                                    <option value="" disabled <?= old('requirement_id') ? '' : 'selected' ?>>ESRS-Anforderung auswählen</option>
+
+                                                    <option value="ALL">
+                                                        Alle Anforderungen des gewählten Standards
+                                                    </option>
+
+                                                    <?php if (!empty($requirements)): ?>
+                                                        <?php foreach ($requirements as $requirement): ?>
+                                                            <option value="<?= esc($requirement['id']) ?>" data-standard-id = "<?= esc($requirement['standard_id']) ?>" <?= old('requirement_id') == $requirement['id'] ? 'selected' : '' ?>>
+                                                                <?= esc($requirement['code']) ?>
+                                                            </option>
+                                                        <?php endforeach; ?>
+                                                    <?php else: ?>
+                                                        <option value="" disabled>Keine ESRS-Anforderung Vorhanden</option>
+                                                    <?php endif; ?>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <!-- Drag and Drop Zone -->
+                                        <div id="pdf-drop-zone" class="pdf-drop-zone">
+                                            <!-- verstecktes File-Input -->
+                                            <input id="pdf-input" type="file" name="report"
+                                                   accept="application/pdf,.pdf"
+                                                   hidden>
+
+                                            <button type="button" class="btn btn-primary" id="pdf-browse-btn">
+                                                PDF auswählen
+                                            </button>
+
+                                            <div class="mt-2 text-grey">
+                                                oder<br>
+                                                <strong>drag a PDF</strong>
+                                            </div>
+
+                                            <div id="pdf-file-list" class="mt-3 text-grey" style="font-size:.9rem;"></div>
+                                        </div>
+
                                     </div>
 
                                 </div>
-
                             </div>
+
                         </div>
 
                     </div>
 
-                </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn abbrechen_button" data-bs-dismiss="modal">Abbrechen</button>
+                        <button type="submit" id="createSaveBtn" class="btn btn-success">Speichern</button>
+                    </div>
+                </form>
 
-                <div class="modal-footer">
-                    <button type="button" class="btn abbrechen_button" data-bs-dismiss="modal">Abbrechen</button>
-                    <button type="submit" id="createSaveBtn" class="btn btn-success">Speichern</button>
-                </div>
-            </form>
-
+            </div>
         </div>
     </div>
-</div>
+<?php endif; ?>
+
 
 <script>
     document.addEventListener("click", function (e) {
