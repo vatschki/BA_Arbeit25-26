@@ -52,4 +52,12 @@ class IndustryModel extends BaseModel{
 
         return (int) $this->getInsertID();
     }
+
+    public function hasIndustryForSector(int $sector_id): bool
+    {
+        $count = $this->where('sector_id', $sector_id)
+            ->countAllResults();
+
+        return $count > 0;
+    }
 }

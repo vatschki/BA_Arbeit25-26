@@ -64,9 +64,9 @@ class CompanyModel extends BaseModel{
             ->first();
     }
 
-    public function updateCompany(int $companyId, array $data): bool
+    public function updateCompany(int $company_id, array $data): bool
     {
-        if (! $this->update($companyId, $data)) {
+        if (! $this->update($company_id, $data)) {
             $errors = $this->errors() ?? [];
 
             throw new RuntimeException(
@@ -77,9 +77,9 @@ class CompanyModel extends BaseModel{
         return true;
     }
 
-    public function deleteCompany(int $companyId): bool
+    public function deleteCompany(int $company_id): bool
     {
-        $company = $this->find($companyId);
+        $company = $this->find($company_id);
 
         if (! $company) {
             throw new RuntimeException('Unternehmen nicht gefunden.');
@@ -87,14 +87,12 @@ class CompanyModel extends BaseModel{
 
         $reportModel = new ReportModel();
 
-        if ($reportModel->hasReportsForCompany($companyId)) {
+        if ($reportModel->hasReportsForCompany($company_id)) {
             throw new RuntimeException(
                 'Unternehmen kann nicht gelöscht werden, da noch Reports existieren.'
             );
         }
 
-        return (bool) parent::delete($companyId);
+        return (bool) parent::delete($company_id);
     }
-
-
 }

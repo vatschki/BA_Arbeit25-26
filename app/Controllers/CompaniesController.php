@@ -39,7 +39,7 @@ class CompaniesController extends BaseController
         echo view('templates/footer');
     }
 
-    public function create(){
+    public function createCompany(){
 
         if (! $this->validate('company')) {
             return redirect()
@@ -71,7 +71,7 @@ class CompaniesController extends BaseController
             ->with('message', 'Unternehmen erfolgreich angelegt.');
     }
 
-    public function update(int $companyId)
+    public function updateCompany(int $companyId)
     {
         if (! $this->validate('company')) {
             return redirect()
@@ -103,7 +103,7 @@ class CompaniesController extends BaseController
     }
 
 
-    public function delete(int $companyId)
+    public function deleteCompany(int $companyId)
     {
         if (! auth()->loggedIn() || ! auth()->user()->can('content.manage')) {
             throw new \CodeIgniter\Exceptions\PageForbiddenException();

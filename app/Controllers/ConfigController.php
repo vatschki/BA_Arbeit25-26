@@ -10,29 +10,44 @@ use App\Models\CountryModel;
 
 class ConfigController extends BaseController
 {
+    protected CountryModel $countryModel;
+    protected IndustryModel $industryModel;
+    protected SectorModel $sectorModel;
+    protected StandardModel $standardModel;
+    protected RequirementModel $requirementModel;
 
-    private function loadConfigData(){
-        $industryModel = new IndustryModel();
-        $sectorModel = new SectorModel();
-        $standardModel = new StandardModel();
-        $requirementModel = new RequirementModel();
-        $countryModel = new CountryModel();
+    public function __construct()
+    {
+        $this->countryModel = new CountryModel();
+        $this->industryModel = new IndustryModel();
+        $this->sectorModel = new SectorModel();
+        $this->standardModel = new StandardModel();
+        $this->requirementModel = new RequirementModel();
+    }
+
+    private function loadConfigData()
+    {
+
 
         return [
-            'industries' => $industryModel->getIndustries(),
-            'sectors' => $sectorModel->getSectors(),
-            'standards' => $standardModel->getStandards(),
-            'requirements' => $requirementModel->getRequirements(),
-            'countries' => $countryModel->getCountries(),
+            'industries' => $this->industryModel->getIndustries(),
+            'sectors' => $this->sectorModel->getSectors(),
+            'standards' => $this->standardModel->getStandards(),
+            'requirements' => $this->requirementModel->getRequirements(),
+            'countries' => $this->countryModel->getCountries(),
         ];
     }
 
-    public function general()
+    public function personen()
     {
         echo view('templates/header_home');
         echo view('templates/menu_home');
         echo view('pages/page_Config_general');
         echo view('templates/footer');
+    }
+
+    public function createPersonen(){
+
     }
 
     public function apikey()
@@ -53,6 +68,89 @@ class ConfigController extends BaseController
         echo view('templates/footer');
     }
 
+    public function createSector()
+    {
+
+        if (! auth()->loggedIn() || ! auth()->user()->can('content.manage')) {
+            return redirect()->back()->with('message', 'Keine Berechtigung.');
+        }
+
+        if (! $this->validate('sector')) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('errors', $this->validator->getErrors())
+                ->with('openSectorModal', true);
+        }
+
+        $data = [
+            'name'        => $this->request->getPost('sector_name'),
+            'description' => $this->request->getPost('description'),
+        ];
+
+        try {
+            $this->sectorModel->createSector($data);
+        } catch (\RuntimeException $exception) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('openSectorModal', true)
+                ->with('message', $exception->getMessage());
+        }
+
+        return redirect()
+            ->to('/config/sector')
+            ->with('message', 'Sektor erfolgreich angelegt.');
+    }
+
+    public function updateSector($sector_id)
+    {
+        if (! $this->validate('sector')) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('openSectorModal', true);
+        }
+
+        $data = [
+            'name'        => $this->request->getPost('sector_name'),
+            'description' => $this->request->getPost('description'),
+        ];
+
+        try {
+            $this->sectorModel->updateSector($sector_id, $data);
+        } catch (RuntimeException $exception) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('openSectorModal', true)
+                ->with('message', $exception->getMessage());
+        }
+
+        return redirect()
+            ->to('/config/sector')
+            ->with('message', 'Sektor erfolgreich aktualisiert.');
+    }
+
+    public function deleteSector($sector_id)
+    {
+        if (! auth()->loggedIn() || ! auth()->user()->can('content.manage')) {
+            throw new \CodeIgniter\Exceptions\PageForbiddenException();
+        }
+
+        try {
+            $this->sectorModel->deleteSector($sector_id);
+        } catch (RuntimeException $exception) {
+            return redirect()
+                ->to('/config/sector')
+                ->with('message', $exception->getMessage());
+        }
+
+        return redirect()
+            ->to('/config/sector')
+            ->with('message', 'Sektor erfolgreich gelöscht.');
+    }
+
     public function industry()
     {
         $data = $this->loadConfigData();
@@ -63,6 +161,41 @@ class ConfigController extends BaseController
         echo view('templates/footer');
     }
 
+    public function createIndustry()
+    {
+        if (! auth()->loggedIn() || ! auth()->user()->can('content.manage')) {
+            return redirect()->back()->with('message', 'Keine Berechtigung.');
+        }
+
+        if (! $this->validate('industry')) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('errors', $this->validator->getErrors())
+                ->with('openIndustryModal', true);
+        }
+
+        $data = [
+            'sector_id'  => $this->request->getPost('sector_id'),
+            'name'        => $this->request->getPost('sector_name'),
+            'description' => $this->request->getPost('description'),
+        ];
+
+        try {
+            $this->sectorModel->createIndustry($data);
+        } catch (\RuntimeException $exception) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('openIndustryModal', true)
+                ->with('message', $exception->getMessage());
+        }
+
+        return redirect()
+            ->to('/config/industry')
+            ->with('message', 'Industrie erfolgreich angelegt.');
+    }
+
     public function standard()
     {
         $data = $this->loadConfigData();
@@ -71,6 +204,42 @@ class ConfigController extends BaseController
         echo view('templates/menu_home');
         echo view('pages/page_Config_standard', $data);
         echo view('templates/footer');
+    }
+
+    public function createStandard()
+    {
+        if (! auth()->loggedIn() || ! auth()->user()->can('content.manage')) {
+            return redirect()->back()->with('message', 'Keine Berechtigung.');
+        }
+
+        if (! $this->validate('standard')) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('errors', $this->validator->getErrors())
+                ->with('openStandardModal', true);
+        }
+
+        $data = [
+            'code'       => $this->request->getPost('code'),
+            'name'        => $this->request->getPost('sector_name'),
+            'description' => $this->request->getPost('description'),
+            'description_eng' => $this->request->getPost('description_eng'),
+        ];
+
+        try {
+            $this->standardModel->createStandard($data);
+        } catch (\RuntimeException $exception) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('openSectorModal', true)
+                ->with('message', $exception->getMessage());
+        }
+
+        return redirect()
+            ->to('/config/sector')
+            ->with('message', 'Standard erfolgreich angelegt.');
     }
 
     public function requirement()

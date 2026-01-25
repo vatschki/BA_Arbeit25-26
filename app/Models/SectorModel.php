@@ -37,4 +37,36 @@ class SectorModel extends BaseModel{
 
         return (int) $this->getInsertID();
     }
+
+    public function updateSector(int $sector_id, array $data): bool
+    {
+        if (! $this->update($sector_id, $data)) {
+            $errors = $this->errors() ?? [];
+
+            throw new RuntimeException(
+                'Validation of Company failed: ' . implode(' | ', $errors)
+            );
+        }
+
+        return true;
+    }
+
+    public function deleteSector(int $sector_id): bool
+    {
+        $sector = $this->find($sector_id);
+
+        if (! $sector) {
+            throw new RuntimeException('Unternehmen nicht gefunden.');
+        }
+
+        $industryModel = new industryModel();
+
+        if ($industryModel->hasIndustryForSector($sector_id)) {
+            throw new RuntimeException(
+                'Unternehmen kann nicht gelöscht werden, da noch Reports existieren.'
+            );
+        }
+
+        return (bool) parent::delete($sector_id);
+    }
 }

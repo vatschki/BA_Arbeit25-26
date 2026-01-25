@@ -19,9 +19,9 @@ $routes->get('/help', 'HelpController::index');
 #permission manage content Seiten
 $routes->group('', ['filter' => 'permission:content.manage'], function($routes) {
     //Unternehmen
-    $routes->post('/companies/create', 'CompaniesController::create');
-    $routes->post('/companies/update/(:num)', 'CompaniesController::update/$1');
-    $routes->post('/companies/delete/(:num)', 'CompaniesController::delete/$1');
+    $routes->post('/companies/create', 'CompaniesController::createCompany');
+    $routes->post('/companies/update/(:num)', 'CompaniesController::updateCompany/$1');
+    $routes->post('/companies/delete/(:num)', 'CompaniesController::deleteCompany/$1');
 
     //API Key speichern
     $routes->get('/config/api-key', 'ConfigController::apikey');
@@ -34,6 +34,9 @@ $routes->group('', ['filter' => 'permission:content.manage'], function($routes) 
 
     //Config Sektor
     $routes->get('/config/sector', 'ConfigController::sector');
+    $routes->post('/config/sector/create', 'ConfigController::createSector');
+    $routes->post('/config/sector/update/(:num)', 'ConfigController::updateSector/$1');
+    $routes->post('/config/sector/delete/(:num)', 'ConfigController::deleteSector/$1');
 
     //Config Industrie
     $routes->get('/config/industry', 'ConfigController::industry');
@@ -51,7 +54,7 @@ $routes->group('', ['filter' => 'permission:content.manage'], function($routes) 
 
 $routes->group('', ['filter' => 'permission:users.manage'], function($routes) {
     #muss in personen geändert werden
-    $routes->get('/config/general', 'ConfigController::general');
+    $routes->get('/config/personen', 'ConfigController::personen');
 });
 
 service('auth')->routes($routes);

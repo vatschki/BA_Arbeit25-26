@@ -42,6 +42,7 @@ class Validation extends BaseConfig
     // Rules
     // --------------------------------------------------------------------
     public array $company = [
+
         'company_name' => [
             'rules'  => 'required|min_length[2]|max_length[255]',
             'errors' => [
@@ -63,4 +64,128 @@ class Validation extends BaseConfig
             ],
         ],
     ];
+
+    public array $sector = [
+
+        'sector_name' => [
+            'rules'  => 'required|min_length[2]|max_length[255]',
+            'errors' => [
+                'required'   => 'Pflichtfeld bitte ausfüllen',
+                'min_length' => 'Der Name ist zu kurz',
+                'max_length' => 'Der Name ist zu lang',
+            ],
+        ],
+    ];
+
+    public array $industry = [
+
+        'sector_id' => [
+            'rules'  => 'required|is_natural_no_zero',
+            'errors' => [
+                'required' => 'Pflichtfeld bitte ausfüllen',
+            ],
+        ],
+
+        'name' => [
+            'rules'  => 'required|min_length[2]|max_length[255]',
+            'errors' => [
+                'required'   => 'Pflichtfeld bitte ausfüllen',
+                'min_length' => 'Der Name ist zu kurz',
+                'max_length' => 'Der Name ist zu lang',
+            ],
+        ],
+    ];
+
+    public array $standard = [
+
+        'code' => [
+            'rules'  => 'required|min_length[2]|max_length[100]',
+            'errors' => [
+                'required'   => 'Pflichtfeld bitte ausfüllen',
+                'min_length' => 'Der Code ist zu kurz',
+                'max_length' => 'Der Code ist zu lang',
+            ],
+        ],
+
+        'name' => [
+            'rules'  => 'required|min_length[2]|max_length[500]',
+            'errors' => [
+                'required'   => 'Pflichtfeld bitte ausfüllen',
+                'min_length' => 'Der Name ist zu kurz',
+                'max_length' => 'Der Name ist zu lang',
+            ],
+        ],
+
+        'description' => [
+            'rules'  => 'permit_empty|max_length[500]',
+            'errors' => [
+                'max_length' => 'Die Beschreibung ist zu lang',
+            ],
+        ],
+
+        'description_eng' => [
+            'rules'  => 'permit_empty|max_length[500]',
+            'errors' => [
+                'max_length' => 'Die englische Beschreibung ist zu lang',
+            ],
+        ],
+    ];
+
+    public array $requirement = [
+
+        'standard_id' => [
+            'rules'  => 'required|is_natural_no_zero',
+            'errors' => [
+                'required' => 'Pflichtfeld bitte ausfüllen',
+            ],
+        ],
+
+        'code' => [
+            'rules'  => 'required|min_length[2]|max_length[100]',
+            'errors' => [
+                'required'   => 'Pflichtfeld bitte ausfüllen',
+                'min_length' => 'Der Code ist zu kurz',
+                'max_length' => 'Der Code ist zu lang',
+            ],
+        ],
+
+        'disclosure_requirement' => [
+            'rules'  => 'required|min_length[2]|max_length[50]',
+            'errors' => [
+                'required'   => 'Pflichtfeld bitte ausfüllen',
+                'min_length' => 'Die Anforderung ist zu kurz',
+                'max_length' => 'Die Anforderung ist zu lang',
+            ],
+        ],
+
+        'paragraph' => [
+            'rules'  => 'required|max_length[50]',
+            'errors' => [
+                'max_length' => 'Der Paragraph ist zu lang',
+            ],
+        ],
+
+        'title' => [
+            'rules'  => 'required|max_length[255]',
+            'errors' => [
+                'max_length' => 'Der Titel ist zu lang',
+            ],
+        ],
+
+        'data_type' => [
+            'rules'  => 'permit_empty|max_length[200]',
+            'errors' => [
+                'max_length' => 'Der Datentyp ist zu lang',
+            ],
+        ],
+
+        'conditional_alternative_disclosure_requirement' => [
+            'rules'  => 'permit_empty|max_length[50]',
+            'errors' => [
+                'max_length' => 'Die alternative Anforderung ist zu lang',
+            ],
+        ],
+
+    ];
+
 }

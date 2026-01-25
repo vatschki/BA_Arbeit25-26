@@ -35,10 +35,7 @@ class RequirementModel extends BaseModel{
         return $this->findAll();
     }
 
-    public function getRequirementByIdAndStandard(
-        int $requirementId,
-        int $standardId
-    ): array
+    public function getRequirementByIdAndStandard(int $requirementId, int $standardId): array
     {
         return $this->where('id', $requirementId)
             ->where('standard_id', $standardId)
@@ -57,5 +54,11 @@ class RequirementModel extends BaseModel{
             ->where('code', $code)
             ->where('standard_id', $standard_id)
             ->first();
+    }
+
+    public function hasRequirementsForStandard(int $standard_id): bool
+    {
+        return $this->where('standard_id', $standard_id)
+                ->countAllResults(false) > 0;
     }
 }
