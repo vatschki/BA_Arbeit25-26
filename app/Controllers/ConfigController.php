@@ -177,12 +177,12 @@ class ConfigController extends BaseController
 
         $data = [
             'sector_id'  => $this->request->getPost('sector_id'),
-            'name'        => $this->request->getPost('sector_name'),
+            'name'        => $this->request->getPost('industry_name'),
             'description' => $this->request->getPost('description'),
         ];
 
         try {
-            $this->sectorModel->createIndustry($data);
+            $this->industryModel->createIndustry($data);
         } catch (\RuntimeException $exception) {
             return redirect()
                 ->back()
@@ -194,6 +194,55 @@ class ConfigController extends BaseController
         return redirect()
             ->to('/config/industry')
             ->with('message', 'Industrie erfolgreich angelegt.');
+    }
+
+    public function updateIndustry($industry_id)
+    {
+        if (! $this->validate('industry')) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('openSectorModal', true);
+        }
+
+        $data = [
+            'sector_id'  => $this->request->getPost('sector_id'),
+            'name'        => $this->request->getPost('industry_name'),
+            'description' => $this->request->getPost('description'),
+        ];
+
+        try {
+            $this->industryModel->updateIndustry($industry_id, $data);
+        } catch (RuntimeException $exception) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('openSectorModal', true)
+                ->with('message', $exception->getMessage());
+        }
+
+        return redirect()
+            ->to('/config/indsutry')
+            ->with('message', 'Sektor erfolgreich aktualisiert.');
+    }
+
+    public function deleteIndustry($industry_id)
+    {
+        if (! auth()->loggedIn() || ! auth()->user()->can('content.manage')) {
+            throw new \CodeIgniter\Exceptions\PageForbiddenException();
+        }
+
+        try {
+            $this->industryModel->deleteIndustry($industry_id);
+        } catch (RuntimeException $exception) {
+            return redirect()
+                ->to('/config/industry')
+                ->with('message', $exception->getMessage());
+        }
+
+        return redirect()
+            ->to('/config/industry')
+            ->with('message', 'Sektor erfolgreich gelöscht.');
     }
 
     public function standard()

@@ -40,6 +40,9 @@ $routes->group('', ['filter' => 'permission:content.manage'], function($routes) 
 
     //Config Industrie
     $routes->get('/config/industry', 'ConfigController::industry');
+    $routes->post('/config/industry/create', 'ConfigController::createIndustry');
+    $routes->post('/config/industry/update/(:num)', 'ConfigController::updateIndustry/$1');
+    $routes->post('/config/industry/delete/(:num)', 'ConfigController::deleteIndustry/$1');
 
     //Config Standard
     $routes->get('/config/standard', 'ConfigController::standard');

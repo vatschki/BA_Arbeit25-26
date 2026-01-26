@@ -86,7 +86,7 @@ class Validation extends BaseConfig
             ],
         ],
 
-        'requirement_name' => [
+        'industry_name' => [
             'rules'  => 'required|min_length[2]|max_length[255]',
             'errors' => [
                 'required'   => 'Pflichtfeld bitte ausfüllen',

@@ -44,7 +44,7 @@ class SectorModel extends BaseModel{
             $errors = $this->errors() ?? [];
 
             throw new RuntimeException(
-                'Validation of Company failed: ' . implode(' | ', $errors)
+                'Validation of Sector failed: ' . implode(' | ', $errors)
             );
         }
 
@@ -56,14 +56,14 @@ class SectorModel extends BaseModel{
         $sector = $this->find($sector_id);
 
         if (! $sector) {
-            throw new RuntimeException('Unternehmen nicht gefunden.');
+            throw new RuntimeException('Sektor nicht gefunden.');
         }
 
         $industryModel = new industryModel();
 
         if ($industryModel->hasIndustryForSector($sector_id)) {
             throw new RuntimeException(
-                'Unternehmen kann nicht gelöscht werden, da noch Reports existieren.'
+                'Sektor kann nicht gelöscht werden, da noch Industrien existieren.'
             );
         }
 

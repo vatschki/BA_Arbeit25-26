@@ -6,7 +6,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const button = event.relatedTarget;
             const form   = modal.querySelector('.config-form');
-
             if (!form) return;
 
             const createUrl = form.dataset.createUrl;
@@ -22,9 +21,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 modal.querySelector('.modal-title').innerText = 'Neu anlegen';
 
-                // Select2 reset
                 modal.querySelectorAll('select').forEach(sel => {
-                    $(sel).val(null).trigger('change.select2');
+                    if (window.jQuery && $(sel).data('select2')) {
+                        $(sel).val(null).trigger('change');
+                    } else {
+                        sel.value = '';
+                    }
                 });
 
                 return;
@@ -35,23 +37,32 @@ document.addEventListener('DOMContentLoaded', function () {
             // ======================
             modal.querySelector('.modal-title').innerText = 'Bearbeiten';
 
-            // Alle data-* Attribute übernehmen
-            Object.keys(button.dataset).forEach(function (key) {
+            Array.from(button.attributes).forEach(attr => {
 
-                if (key === 'bsTarget' || key === 'bsToggle') return;
+                if (!attr.name.startsWith('data-')) return;
+                if (attr.name === 'data-bs-target' || attr.name === 'data-bs-toggle') return;
+
+                const key = attr.name.replace('data-', '');
 
                 const field = form.querySelector(`[name="${key}"]`);
-
                 if (!field) return;
 
                 if (field.tagName === 'SELECT') {
-                    $(field).val(button.dataset[key]).trigger('change.select2');
+                    if (window.jQuery && $(field).data('select2')) {
+                        $(field).val(attr.value).trigger('change');
+                    } else {
+                        field.value = attr.value;
+                    }
                 } else {
-                    field.value = button.dataset[key];
+                    field.value = attr.value;
                 }
             });
 
-            form.action = updateUrl + '/' + button.dataset.id;
+            // Action setzen
+            const id = button.getAttribute('data-id');
+            if (id) {
+                form.action = updateUrl + '/' + id;
+            }
         });
     });
 });

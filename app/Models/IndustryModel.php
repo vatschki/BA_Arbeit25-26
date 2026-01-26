@@ -40,7 +40,7 @@ class IndustryModel extends BaseModel{
         return $this->findAll();
     }
 
-    public function createSector(array $data): int
+    public function createIndustry(array $data): int
     {
         if (! $this->insert($data)) {
             $errors = $this->errors() ?? [];
@@ -51,6 +51,30 @@ class IndustryModel extends BaseModel{
         }
 
         return (int) $this->getInsertID();
+    }
+
+    public function updateIndustry(int $industry_id, array $data): bool
+    {
+        if (! $this->update($industry_id, $data)) {
+            $errors = $this->errors() ?? [];
+
+            throw new RuntimeException(
+                'Validation of Industry failed: ' . implode(' | ', $errors)
+            );
+        }
+
+        return true;
+    }
+
+    public function deleteIndustry(int $industry_id): bool
+    {
+        $industry = $this->find($industry_id);
+
+        if (! $industry) {
+            throw new RuntimeException('Industry nicht gefunden.');
+        }
+
+        return (bool) parent::delete($industry_id);
     }
 
     public function hasIndustryForSector(int $sector_id): bool
