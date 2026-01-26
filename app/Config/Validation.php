@@ -86,7 +86,7 @@ class Validation extends BaseConfig
             ],
         ],
 
-        'name' => [
+        'requirement_name' => [
             'rules'  => 'required|min_length[2]|max_length[255]',
             'errors' => [
                 'required'   => 'Pflichtfeld bitte ausfüllen',
@@ -98,7 +98,7 @@ class Validation extends BaseConfig
 
     public array $standard = [
 
-        'code' => [
+        'requirement_code' => [
             'rules'  => 'required|min_length[2]|max_length[100]',
             'errors' => [
                 'required'   => 'Pflichtfeld bitte ausfüllen',
@@ -107,7 +107,7 @@ class Validation extends BaseConfig
             ],
         ],
 
-        'name' => [
+        'requirement_name' => [
             'rules'  => 'required|min_length[2]|max_length[500]',
             'errors' => [
                 'required'   => 'Pflichtfeld bitte ausfüllen',
@@ -140,7 +140,7 @@ class Validation extends BaseConfig
             ],
         ],
 
-        'code' => [
+        'requirement_code' => [
             'rules'  => 'required|min_length[2]|max_length[100]',
             'errors' => [
                 'required'   => 'Pflichtfeld bitte ausfüllen',
@@ -158,14 +158,14 @@ class Validation extends BaseConfig
             ],
         ],
 
-        'paragraph' => [
+        'requirement_paragraph' => [
             'rules'  => 'required|max_length[50]',
             'errors' => [
                 'max_length' => 'Der Paragraph ist zu lang',
             ],
         ],
 
-        'title' => [
+        'requirement_title' => [
             'rules'  => 'required|max_length[255]',
             'errors' => [
                 'max_length' => 'Der Titel ist zu lang',
@@ -185,7 +185,5 @@ class Validation extends BaseConfig
                 'max_length' => 'Die alternative Anforderung ist zu lang',
             ],
         ],
-
     ];
-
 }

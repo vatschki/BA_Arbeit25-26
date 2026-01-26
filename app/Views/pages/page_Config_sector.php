@@ -87,13 +87,13 @@ $errors = session('errors') ?? [];
 
                                                     <!-- EDIT -->
                                                     <a href="#"
-                                                       class="text-secondary me-2 edit-sector-btn"
+                                                       class="text-secondary me-2 edit-btn"
                                                        title="Bearbeiten"
                                                        data-bs-toggle="modal"
                                                        data-bs-target="#createSectorModal"
 
                                                        data-id="<?= $sector['id'] ?>"
-                                                       data-name="<?= esc($sector['name']) ?>"
+                                                       data-sector_name="<?= esc($sector['name']) ?>"
                                                        data-description="<?= esc($sector['description']) ?>"
                                                     >
                                                         <i class="fa-solid fa-pen-to-square"></i>
@@ -139,7 +139,7 @@ $errors = session('errors') ?? [];
 
 <!-- Modal: Create Sector -->
 <?php if (auth() -> loggedIn() && auth() -> user() -> can('content.manage')): ?>
-    <div class="modal fade" id="createSectorModal" tabindex="-1" aria-labelledby="createSektorModalLabel" aria-hidden="true">
+    <div class="modal fade config-modal" id="createSectorModal" tabindex="-1" aria-labelledby="createSektorModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
 
@@ -148,7 +148,7 @@ $errors = session('errors') ?? [];
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
-                <form id="sectorForm" action="<?= base_url('config/sector/create') ?>" method="post" data-create-url="<?= base_url('config/sector/create') ?>" data-update-url="<?= base_url('config/sector/update') ?>">
+                <form class="config-form" id="sectorForm" method="post" action="<?= base_url('config/sector/create') ?>" data-create-url="<?= base_url('config/sector/create') ?>" data-update-url="<?= base_url('config/sector/update') ?>">
                     <input type="hidden" name="sector_id" id="sector_id">
 
                     <div class="modal-body p-0">
