@@ -33,25 +33,34 @@ $routes->group('', ['filter' => 'permission:content.manage'], function($routes) 
     $routes->post('internal/pipeline/result', 'ApiResultController::store', ['filter' => 'forcehttps:off']);
 
     //Config Sektor
-    $routes->get('/config/sector', 'ConfigController::sector');
-    $routes->post('/config/sector/create', 'ConfigController::createSector');
-    $routes->post('/config/sector/update/(:num)', 'ConfigController::updateSector/$1');
-    $routes->post('/config/sector/delete/(:num)', 'ConfigController::deleteSector/$1');
+    $routes->get('/config/sector', 'ConfigSectorController::sector');
+    $routes->post('/config/sector/create', 'ConfigSectorController::createSector');
+    $routes->post('/config/sector/update/(:num)', 'ConfigSectorController::updateSector/$1');
+    $routes->post('/config/sector/delete/(:num)', 'ConfigSectorController::deleteSector/$1');
 
     //Config Industrie
-    $routes->get('/config/industry', 'ConfigController::industry');
-    $routes->post('/config/industry/create', 'ConfigController::createIndustry');
-    $routes->post('/config/industry/update/(:num)', 'ConfigController::updateIndustry/$1');
-    $routes->post('/config/industry/delete/(:num)', 'ConfigController::deleteIndustry/$1');
+    $routes->get('/config/industry', 'ConfigIndustryController::industry');
+    $routes->post('/config/industry/create', 'ConfigIndustryController::createIndustry');
+    $routes->post('/config/industry/update/(:num)', 'ConfigIndustryController::updateIndustry/$1');
+    $routes->post('/config/industry/delete/(:num)', 'ConfigIndustryController::deleteIndustry/$1');
 
     //Config Standard
-    $routes->get('/config/standard', 'ConfigController::standard');
+    $routes->get('/config/standard', 'ConfigStandardController::standard');
+    $routes->post('/config/standard/create', 'ConfigStandardController::createStandard');
+    $routes->post('/config/standard/update/(:num)', 'ConfigStandardController::updateStandard/$1');
+    $routes->post('/config/standard/delete/(:num)', 'ConfigStandardController::deleteStandard/$1');
 
     //Config Requirement
-    $routes->get('/config/requirement', 'ConfigController::requirement');
+    $routes->get('/config/requirement', 'ConfigRequirementController::requirement');
+    $routes->post('/config/requirement/create', 'ConfigRequirementController::createRequirement');
+    $routes->post('/config/requirement/update/(:num)', 'ConfigRequirementController::updateRequirement/$1');
+    $routes->post('/config/requirement/delete/(:num)', 'ConfigRequirementController::deleteRequirement/$1');
 
     //Config Country
-    $routes->get('/config/country', 'ConfigController::country');
+    $routes->get('/config/country', 'ConfigCountryController::country');
+    $routes->post('/config/country/create', 'ConfigCountryController::createCountry');
+    $routes->post('/config/country/update/(:num)', 'ConfigCountryController::updateCountry/$1');
+    $routes->post('/config/country/delete/(:num)', 'ConfigCountryController::deleteCountry/$1');
 
 });
 

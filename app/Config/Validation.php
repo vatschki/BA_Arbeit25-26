@@ -43,7 +43,7 @@ class Validation extends BaseConfig
     // --------------------------------------------------------------------
     public array $company = [
 
-        'company_name' => [
+        'name' => [
             'rules'  => 'required|min_length[2]|max_length[255]',
             'errors' => [
                 'required' => 'Pflichtfeld bitte ausfüllen',
@@ -67,7 +67,7 @@ class Validation extends BaseConfig
 
     public array $sector = [
 
-        'sector_name' => [
+        'name' => [
             'rules'  => 'required|min_length[2]|max_length[255]',
             'errors' => [
                 'required'   => 'Pflichtfeld bitte ausfüllen',
@@ -86,7 +86,7 @@ class Validation extends BaseConfig
             ],
         ],
 
-        'industry_name' => [
+        'name' => [
             'rules'  => 'required|min_length[2]|max_length[255]',
             'errors' => [
                 'required'   => 'Pflichtfeld bitte ausfüllen',
@@ -98,7 +98,7 @@ class Validation extends BaseConfig
 
     public array $standard = [
 
-        'requirement_code' => [
+        'code' => [
             'rules'  => 'required|min_length[2]|max_length[100]',
             'errors' => [
                 'required'   => 'Pflichtfeld bitte ausfüllen',
@@ -107,7 +107,7 @@ class Validation extends BaseConfig
             ],
         ],
 
-        'requirement_name' => [
+        'name' => [
             'rules'  => 'required|min_length[2]|max_length[500]',
             'errors' => [
                 'required'   => 'Pflichtfeld bitte ausfüllen',
@@ -117,14 +117,14 @@ class Validation extends BaseConfig
         ],
 
         'description' => [
-            'rules'  => 'permit_empty|max_length[500]',
+            'rules'  => 'required|max_length[500]',
             'errors' => [
                 'max_length' => 'Die Beschreibung ist zu lang',
             ],
         ],
 
         'description_eng' => [
-            'rules'  => 'permit_empty|max_length[500]',
+            'rules'  => 'required|max_length[500]',
             'errors' => [
                 'max_length' => 'Die englische Beschreibung ist zu lang',
             ],
@@ -140,7 +140,7 @@ class Validation extends BaseConfig
             ],
         ],
 
-        'requirement_code' => [
+        'code' => [
             'rules'  => 'required|min_length[2]|max_length[100]',
             'errors' => [
                 'required'   => 'Pflichtfeld bitte ausfüllen',
@@ -158,14 +158,14 @@ class Validation extends BaseConfig
             ],
         ],
 
-        'requirement_paragraph' => [
+        'paragraph' => [
             'rules'  => 'required|max_length[50]',
             'errors' => [
                 'max_length' => 'Der Paragraph ist zu lang',
             ],
         ],
 
-        'requirement_title' => [
+        'title' => [
             'rules'  => 'required|max_length[255]',
             'errors' => [
                 'max_length' => 'Der Titel ist zu lang',
@@ -184,6 +184,49 @@ class Validation extends BaseConfig
             'errors' => [
                 'max_length' => 'Die alternative Anforderung ist zu lang',
             ],
+        ],
+    ];
+
+    public array $country = [
+
+        'code' => [
+            'rules'  => 'required|min_length[3]|max_length[100]',
+            'errors' => [
+                'required'   => 'Pflichtfeld bitte ausfüllen',
+                'min_length' => 'Der Code ist zu kurz',
+                'max_length' => 'Der Code ist zu lang',
+            ],
+        ],
+
+        'name_de' => [
+            'rules'  => 'required|min_length[3]|max_length[200]',
+            'errors' => [
+                'required'   => 'Pflichtfeld bitte ausfüllen',
+                'min_length' => 'Der Name ist zu kurz',
+                'max_length' => 'Der Name ist zu lang',
+            ],
+        ],
+
+        'name_eng' => [
+            'rules'  => 'required|min_length[3]|max_length[200]',
+            'errors' => [
+                'required'   => 'Pflichtfeld bitte ausfüllen',
+                'min_length' => 'Der Name ist zu kurz',
+                'max_length' => 'Der Name ist zu lang',
+            ],
+        ],
+
+        'region' => [
+            'rules'  => 'required|min_length[3]|max_length[200]',
+            'errors' => [
+                'required'   => 'Pflichtfeld bitte ausfüllen',
+                'min_length' => 'Die Region ist zu kurz',
+                'max_length' => 'Die Region ist zu lang',
+            ],
+        ],
+
+        'eu_member' => [
+            'rules' => 'required|in_list[0,1]',
         ],
     ];
 }

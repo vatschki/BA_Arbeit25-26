@@ -14,6 +14,21 @@ $errors = session('errors') ?? [];
 
             <main class="config-content">
                 <div class="container">
+
+                    <?php if (session()->getFlashdata('success')): ?>
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <?= esc(session()->getFlashdata('success')) ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if (session()->getFlashdata('error')): ?>
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <?= esc(session()->getFlashdata('error')) ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    <?php endif; ?>
+
                     <div class="card">
                         <div class="card-body container-fluid">
                             <div class="d-flex justify-content-between mb-3">
@@ -93,7 +108,7 @@ $errors = session('errors') ?? [];
                                                        data-bs-target="#createSectorModal"
 
                                                        data-id="<?= $sector['id'] ?>"
-                                                       data-sector_name="<?= esc($sector['name']) ?>"
+                                                       data-name="<?= esc($sector['name']) ?>"
                                                        data-description="<?= esc($sector['description']) ?>"
                                                     >
                                                         <i class="fa-solid fa-pen-to-square"></i>
@@ -118,7 +133,7 @@ $errors = session('errors') ?? [];
                                         <?php endforeach; ?>
                                     <?php else: ?>
                                         <tr class="no-data-row">
-                                            <td colspan="4">Keine Daten verfügbar.</td>
+                                            <td colspan="5">Keine Daten verfügbar.</td>
                                         </tr>
                                     <?php endif; ?>
                                     </tbody>
@@ -148,7 +163,16 @@ $errors = session('errors') ?? [];
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
-                <form class="config-form" id="sectorForm" method="post" action="<?= base_url('config/sector/create') ?>" data-create-url="<?= base_url('config/sector/create') ?>" data-update-url="<?= base_url('config/sector/update') ?>">
+                <form class="config-form"
+                      id="sectorForm"
+                      method="post"
+                      action="<?= base_url('config/sector/create') ?>"
+                      data-create-url="<?= base_url('config/sector/create') ?>"
+                      data-update-url="<?= base_url('config/sector/update') ?>"
+                >
+
+                    <?= csrf_field() ?>
+
                     <input type="hidden" name="sector_id" id="sector_id">
 
                     <div class="modal-body p-0">
@@ -179,14 +203,14 @@ $errors = session('errors') ?? [];
                                             <div class="col-sm-9">
                                                 <input
                                                         type="text"
-                                                        class="form-control <?= isset($errors['sector_name']) ? 'is-invalid' : '' ?>"
-                                                        name="sector_name"
-                                                        value="<?= esc(old('sector_name') ?? '') ?>"
+                                                        class="form-control <?= isset($errors['name']) ? 'is-invalid' : '' ?>"
+                                                        name="name"
+                                                        value="<?= esc(old('name') ?? '') ?>"
                                                         placeholder="Sector Namen eingeben"
                                                 >
 
                                                 <div class="invalid-feedback">
-                                                    <?= $errors['sector_name'] ?? '' ?>
+                                                    <?= $errors['name'] ?? '' ?>
                                                 </div>
                                             </div>
                                         </div>
