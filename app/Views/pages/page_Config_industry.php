@@ -10,6 +10,21 @@
 
             <main class="config-content">
                 <div class="container">
+
+                    <?php if (session()->getFlashdata('success')): ?>
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <?= esc(session()->getFlashdata('success')) ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if (session()->getFlashdata('error')): ?>
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <?= esc(session()->getFlashdata('error')) ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    <?php endif; ?>
+
                     <div class="card">
                         <div class="card-body container-fluid">
                             <div class="d-flex justify-content-between mb-3">
@@ -73,7 +88,7 @@
                                         <th data-field="sector_id" data-sortable="true">SeKtor_ID</th>
                                         <th data-field="name" data-sortable="true">Name</th>
                                         <th data-field="description" data-sortable="true">Beschreibung</th>
-                                        <th data-field="timestamp" data-sortable="true">Zeitstempel</th>
+                                        <th data-field="timestamp" data-sortable="true">Timestamp</th>
                                         <th class="text-end">Aktionen</th>
                                     </tr>
                                     </thead>
@@ -97,7 +112,7 @@
 
                                                        data-id="<?= $industry['id'] ?>"
                                                        data-sector_id="<?= $industry['sector_id'] ?>"
-                                                       data-industry_name="<?= esc($industry['name']) ?>"
+                                                       data-name="<?= esc($industry['name']) ?>"
                                                        data-description="<?= esc($industry['description']) ?>"
                                                     >
                                                         <i class="fa-solid fa-pen-to-square"></i>
@@ -147,11 +162,19 @@
             <div class="modal-content">
 
                 <div class="modal-header">
-                    <h5 class="modal-title" id="dynamicModalTitle">Sektor hinzufügen</h5>
+                    <h5 class="modal-title" id="dynamicModalTitle">Industrie hinzufügen</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
-                <form class="config-form" id="industryForm" method="post" action="<?= base_url('config/industry/create') ?>" data-create-url="<?= base_url('config/industry/create') ?>" data-update-url="<?= base_url('config/industry/update') ?>">
+                <form class="config-form"
+                      id="industryForm"
+                      method="post"
+                      action="<?= base_url('config/industry/create') ?>"
+                      data-create-url="<?= base_url('config/industry/create') ?>"
+                      data-update-url="<?= base_url('config/industry/update') ?>"
+                >
+                    <?= csrf_field() ?>
+
                     <input type="hidden" name="industry_id" id="industry_id">
 
                     <div class="modal-body p-0">
@@ -223,14 +246,15 @@
                                             <div class="col-sm-9">
                                                 <input
                                                         type="text"
-                                                        class="form-control <?= isset($errors['industry_name']) ? 'is-invalid' : '' ?>"
-                                                        name="industry_name"
-                                                        value="<?= esc(old('industry_name') ?? '') ?>"
+                                                        class="form-control <?= isset($errors['name']) ? 'is-invalid' : '' ?>"
+                                                        name="name"
+                                                        id="industry_name"
+                                                        value="<?= esc(old('name') ?? '') ?>"
                                                         placeholder="Industrie Namen eingeben"
                                                 >
 
                                                 <div class="invalid-feedback">
-                                                    <?= $errors['industry_name'] ?? '' ?>
+                                                    <?= $errors['name'] ?? '' ?>
                                                 </div>
                                             </div>
                                         </div>
