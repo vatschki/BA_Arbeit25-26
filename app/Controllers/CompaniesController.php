@@ -50,7 +50,7 @@ class CompaniesController extends BaseController
         }
 
         $data = [
-            'name'        => $this->request->getPost('company_name'),
+            'name'        => $this->request->getPost('name'),
             'country_id'  => $this->request->getPost('country_id'),
             'industry_id' => $this->request->getPost('industry_id'),
             'description' => $this->request->getPost('description'),
@@ -81,7 +81,7 @@ class CompaniesController extends BaseController
         }
 
         $data = [
-            'name'        => $this->request->getPost('company_name'),
+            'name'        => $this->request->getPost('name'),
             'country_id'  => $this->request->getPost('country_id'),
             'industry_id' => $this->request->getPost('industry_id'),
             'description' => $this->request->getPost('description'),
