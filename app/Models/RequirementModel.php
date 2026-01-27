@@ -61,4 +61,42 @@ class RequirementModel extends BaseModel{
         return $this->where('standard_id', $standard_id)
                 ->countAllResults(false) > 0;
     }
+
+    public function createRequirement(array $data): int
+    {
+        if (! $this->insert($data)) {
+            $errors = $this->errors() ?? [];
+
+            throw new \RuntimeException(
+                'Validation of Requirement failed: ' . implode(' | ', $errors)
+            );
+        }
+
+        return (int) $this->getInsertID();
+    }
+
+    public function updateRequirement(int $requirement_id, array $data): bool
+    {
+        if (! $this->update($requirement_id, $data)) {
+            $errors = $this->errors() ?? [];
+
+            throw new RuntimeException(
+                'Validation of Requirement failed: ' . implode(' | ', $errors)
+            );
+        }
+
+        return true;
+    }
+
+    public function deleteRequirement(int $requirement_id): bool
+    {
+        $requirement = $this->find($requirement_id);
+
+        if (! $requirement) {
+            throw new RuntimeException('Standard nicht gefunden.');
+        }
+
+        return (bool) parent::delete($requirement_id);
+    }
+
 }

@@ -24,7 +24,7 @@ class CountryModel extends BaseModel
         'name_de' => 'required|min_length[3]|max_length[200]',
         'name_eng' => 'required|min_length[3]|max_length[200]',
         'region' => 'required|min_length[3]|max_length[200]',
-        'eu_member' => 'required|boolean'
+        'eu_member' => 'required|in_list[0,1]',
     ];
 
     public function getCountries(): array
@@ -43,5 +43,29 @@ class CountryModel extends BaseModel
         }
 
         return (int)$this->getInsertID();
+    }
+
+    public function updateCountry(int $country_id, array $data): bool
+    {
+        if (! $this->update($country_id, $data)) {
+            $errors = $this->errors() ?? [];
+
+            throw new RuntimeException(
+                'Validation of Country failed: ' . implode(' | ', $errors)
+            );
+        }
+
+        return true;
+    }
+
+    public function deleteCountry(int $country_id): bool
+    {
+        $country = $this->find($country_id);
+
+        if (! $country) {
+            throw new RuntimeException('Land nicht gefunden.');
+        }
+
+        return (bool) parent::delete($country_id);
     }
 }
