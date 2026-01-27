@@ -36,9 +36,6 @@
 <?php if ($seg1 === 'help'): ?>
     <script src="<?= base_url('resources/js/help_page.js') ?>"></script>
 <?php endif; ?>
-<?php if ($seg1 === 'config'): ?>
-    <script src="<?= base_url('resources/js/config_forms.js') ?>"></script>
-<?php endif; ?>
 
 
 
