@@ -21,6 +21,8 @@ $path = preg_replace('#^index\.php/#', '', $path);
     <a class="nav-link <?= $path === 'config/requirement' ? 'is-active' : '' ?>"
        href="<?= base_url('config/requirement') ?>">ESRS-Anforderung</a>
 
-    <a class="nav-link <?= $path === 'config/personen' ? 'is-active' : '' ?>"
-       href="<?= base_url('config/personen') ?>">User</a>
+    <?php if (auth()->loggedIn() && auth()->user()->inGroup('admin')): ?>
+        <a class="nav-link <?= $path === 'config/user' ? 'is-active' : '' ?>"
+           href="<?= base_url('config/user') ?>">User</a>
+    <?php endif; ?>
 </aside>

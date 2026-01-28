@@ -66,7 +66,10 @@ $routes->group('', ['filter' => 'permission:content.manage'], function($routes) 
 
 $routes->group('', ['filter' => 'permission:users.manage'], function($routes) {
     #muss in personen geändert werden
-    $routes->get('/config/personen', 'ConfigController::personen');
+    $routes->get('/config/user', 'ConfigUserController::user');
+    $routes->post('config/user/create', 'ConfigUserController::createUser');
+    $routes->post('config/user/reset/(:num)', 'ConfigUserController::resetPassword/$1');
+    $routes->post('config/user/delete/(:num)', 'ConfigUserController::deleteUser/$1');
 });
 
 service('auth')->routes($routes);
