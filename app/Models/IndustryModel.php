@@ -84,4 +84,10 @@ class IndustryModel extends BaseModel{
 
         return $count > 0;
     }
+
+    public function exists(int $id): bool
+    {
+        return $this->where('id', $id)->countAllResults() > 0;
+    }
+
 }

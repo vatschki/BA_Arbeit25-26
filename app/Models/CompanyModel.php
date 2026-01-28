@@ -95,4 +95,22 @@ class CompanyModel extends BaseModel{
 
         return (bool) parent::delete($company_id);
     }
+
+
+    public function exists(int $id): bool
+    {
+        return $this->where('id', $id)->countAllResults() > 0;
+    }
+
+    public function existsByNameAndCountry(string $name, int $countryId, ?int $ignoreId = null): bool
+    {
+        $builder = $this->where('name', $name)
+            ->where('country_id', $countryId);
+
+        if ($ignoreId !== null) {
+            $builder->where('id !=', $ignoreId);
+        }
+
+        return $builder->countAllResults() > 0;
+    }
 }

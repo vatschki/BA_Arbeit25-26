@@ -41,11 +41,45 @@ class CompaniesController extends BaseController
 
     public function createCompany(){
 
+        if (! auth()->loggedIn() || ! auth()->user()->can('content.manage')) {
+            throw new \CodeIgniter\Exceptions\PageForbiddenException();
+        }
+
         if (! $this->validate('company')) {
             return redirect()
                 ->back()
                 ->withInput()
                 ->with('errors', $this->validator->getErrors())
+                ->with('openCompanyModal', true);
+        }
+
+        $name      = trim($this->request->getPost('name'));
+        $countryId  = (int) $this->request->getPost('country_id');
+        $industryId = (int) $this->request->getPost('industry_id');
+
+        if (! $this->countryModel->exists($countryId)) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('errors', ['country_id' => 'Dieses Land existiert nicht.'])
+                ->with('openCompanyModal', true);
+        }
+
+        if (! $this->industryModel->exists($industryId)) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('errors', ['industry_id' => 'Diese Branche existiert nicht.'])
+                ->with('openCompanyModal', true);
+        }
+
+        if ($this->companyModel->existsByNameAndCountry($name, $countryId)) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('errors', [
+                    'name' => 'Dieses Unternehmen existiert in diesem Land bereits.'
+                ])
                 ->with('openCompanyModal', true);
         }
 
@@ -63,20 +97,38 @@ class CompaniesController extends BaseController
                 ->back()
                 ->withInput()
                 ->with('openCompanyModal', true)
-                ->with('message', $exception->getMessage());
+                ->with('error', $exception->getMessage());
         }
 
         return redirect()
             ->to('/companies')
-            ->with('message', 'Unternehmen erfolgreich angelegt.');
+            ->with('success', 'Unternehmen erfolgreich angelegt.');
     }
 
     public function updateCompany(int $companyId)
     {
+        if (! auth()->loggedIn() || ! auth()->user()->can('content.manage')) {
+            throw new \CodeIgniter\Exceptions\PageForbiddenException();
+        }
+
         if (! $this->validate('company')) {
             return redirect()
                 ->back()
                 ->withInput()
+                ->with('errors', $this->validator->getErrors())
+                ->with('openCompanyModal', true);
+        }
+
+        $name      = trim($this->request->getPost('name'));
+        $countryId = (int) $this->request->getPost('country_id');
+
+        if ($this->companyModel->existsByNameAndCountry($name, $countryId, $companyId)) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('errors', [
+                    'name' => 'Dieses Unternehmen existiert in diesem Land bereits.'
+                ])
                 ->with('openCompanyModal', true);
         }
 
@@ -93,13 +145,13 @@ class CompaniesController extends BaseController
             return redirect()
                 ->back()
                 ->withInput()
-                ->with('openCompanyModal', true)
-                ->with('message', $exception->getMessage());
+                ->with('errors', $this->validator->getErrors())
+                ->with('openCompanyModal', true);
         }
 
         return redirect()
             ->to('/companies')
-            ->with('message', 'Unternehmen erfolgreich aktualisiert.');
+            ->with('success', 'Unternehmen erfolgreich aktualisiert.');
     }
 
 
@@ -111,14 +163,13 @@ class CompaniesController extends BaseController
 
         try {
             $this->companyModel->deleteCompany($companyId);
+            return redirect()
+                ->to('/companies')
+                ->with('success', 'Unternehmen erfolgreich gelöscht.');
         } catch (RuntimeException $exception) {
             return redirect()
                 ->to('/companies')
-                ->with('message', $exception->getMessage());
+                ->with('error', $exception->getMessage());
         }
-
-        return redirect()
-            ->to('/companies')
-            ->with('message', 'Unternehmen erfolgreich gelöscht.');
     }
 }

@@ -155,10 +155,24 @@ $errors = session('errors') ?? [];
                 </div>
             </div>
 
-
             <!-- Tabellenansicht -->
             <div class="card-body" id="table-view">
                 <div class="table-responsive">
+
+                    <?php if (session()->getFlashdata('success')): ?>
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <?= esc(session()->getFlashdata('success')) ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if (session()->getFlashdata('error')): ?>
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <?= esc(session()->getFlashdata('error')) ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    <?php endif; ?>
+
                     <table class="table table-hover table-border table-striped" id="companiesTable" data-toggle="table">
                         <thead>
                         <tr>
@@ -274,14 +288,14 @@ $errors = session('errors') ?? [];
                                             <div class="col-sm-9">
                                                 <input
                                                         type="text"
-                                                        class="form-control <?= isset($errors['company_name']) ? 'is-invalid' : '' ?>"
-                                                        name="company_name"
-                                                        value="<?= esc(old('company_name') ?? '') ?>"
+                                                        class="form-control <?= isset($errors['name'])  ? 'is-invalid' : '' ?>"
+                                                        name="name"
+                                                        value="<?= esc(old('name') ?? '') ?>"
                                                         placeholder="Firma eingeben"
                                                 >
 
                                                 <div class="invalid-feedback">
-                                                    <?= $errors['company_name'] ?? '' ?>
+                                                    <?= $errors['name'] ?? '' ?>
                                                 </div>
                                             </div>
                                         </div>

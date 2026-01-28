@@ -68,4 +68,10 @@ class CountryModel extends BaseModel
 
         return (bool) parent::delete($country_id);
     }
+
+    public function exists(int $id): bool
+    {
+        return $this->where('id', $id)->countAllResults() > 0;
+    }
+
 }

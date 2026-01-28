@@ -12,12 +12,19 @@
 
             const button = event.relatedTarget;
 
+            const hasErrors = document.querySelector('.is-invalid') !== null;
+
             const createUrl = form.dataset.createUrl;
             const updateUrl = form.dataset.updateUrl;
 
-            if (!button) {
+            // =========================
+            // FALL: Validation Fehler → NICHT überschreiben
+            // =========================
+            if (hasErrors) {
                 return;
             }
+
+            if (!button) return;
 
             // =========================
             // CREATE
@@ -25,13 +32,11 @@
             if (!button.classList.contains('edit-company-btn')) {
 
                 form.action = createUrl;
-                form.reset()
+                form.reset();
 
                 $('#dynamicModalTitle').text('Unternehmen hinzufügen');
-
                 $('.select2-country').val(null).trigger('change.select2');
                 $('.select2-industry').val(null).trigger('change.select2');
-
                 return;
             }
 
@@ -40,14 +45,9 @@
             // =========================
             $('#dynamicModalTitle').text('Unternehmen bearbeiten');
 
-            $('[name="company_name"]').val(button.dataset.name);
+            $('[name="name"]').val(button.dataset.name);
             $('[name="country_id"]').val(button.dataset.country).trigger('change');
-
-            $('#industry_id')
-                .val(button.dataset.industry)
-                .trigger('change.select2');
-
-
+            $('#industry_id').val(button.dataset.industry).trigger('change.select2');
             $('[name="description"]').val(button.dataset.description);
 
             form.action = updateUrl + '/' + button.dataset.id;
