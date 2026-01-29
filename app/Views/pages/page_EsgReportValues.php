@@ -1,6 +1,8 @@
 <?php
 $pipelineActive = $pipelineActive ?? false;
 $job_id = $job_id ?? null;
+$canManageContent = auth()->loggedIn() && auth()->user()->can('content.manage');
+$errors = session('errors') ?? [];
 ?>
 
 <!-- Darstellung des ausgewählten Menüs style="background-color: aliceblue !important; -->
@@ -25,6 +27,12 @@ $job_id = $job_id ?? null;
 
                     <!-- Right: Button Group mit Search Field -->
                     <div class="d-flex align-items-center">
+
+                        <?php if (auth() -> loggedIn() && auth() -> user() -> can('content.manage')): ?>
+                            <a href="/export/values/<?= $currentReportId ?>" class="btn btn-success">
+                                <i class="fas fa-file-excel"></i>
+                            </a>
+                        <?php endif; ?>
 
                         <!-- Spaltenfilter Dropdown (Direkt in der Gruppe) -->
                         <button class="btn btn-secondary dropdown-toggle rounded-end" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">

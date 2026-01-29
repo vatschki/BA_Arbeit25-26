@@ -62,6 +62,8 @@ $routes->group('', ['filter' => 'permission:content.manage'], function($routes) 
     $routes->post('/config/country/update/(:num)', 'ConfigCountryController::updateCountry/$1');
     $routes->post('/config/country/delete/(:num)', 'ConfigCountryController::deleteCountry/$1');
 
+    $routes->get('export/values/(:num)', 'ExportController::values/$1');
+
 });
 
 $routes->group('', ['filter' => 'permission:users.manage'], function($routes) {
