@@ -232,6 +232,77 @@ class Validation extends BaseConfig
 
         'eu_member' => [
             'rules' => 'required|in_list[0,1]',
+            'errors' => [
+                'required' => 'Pflichtfeld bitte EU-Mitgliedschaft angeben',
+            ],
+        ],
+    ];
+
+    public array $user = [
+
+        'username' => [
+            'rules'  => 'required|min_length[3]|max_length[50]',
+            'errors' => [
+                'required'   => 'Pflichtfeld bitte Benutzernamen ausfüllen',
+                'min_length' => 'Der Benutzername ist zu kurz',
+                'max_length' => 'Der Benutzername ist zu lang',
+            ],
+        ],
+
+        'email' => [
+            'rules'  => 'required|valid_email|max_length[100]',
+            'errors' => [
+                'required'    => 'Pflichtfeld bitte E-Mail ausfüllen',
+                'valid_email' => 'Bitte eine gültige E-Mail-Adresse eingeben',
+                'max_length'  => 'Die E-Mail-Adresse ist zu lang',
+            ],
+        ],
+    ];
+
+    public array $report = [
+
+        'company_id' => [
+            'rules'  => 'required|is_natural_no_zero',
+            'errors' => [
+                'required' => 'Pflichtfeld bitte Unternehmen auswählen',
+            ],
+        ],
+
+        'author_id' => [
+            'rules'  => 'required|is_natural_no_zero',
+            'errors' => [
+                'required' => 'Pflichtfeld bitte Autor auswählen',
+            ],
+        ],
+
+        'year' => [
+            'rules'  => 'required|is_natural_no_zero|exact_length[4]',
+            'errors' => [
+                'required'   => 'Pflichtfeld bitte Jahr angeben',
+                'exact_length' => 'Bitte ein gültiges Jahr angeben',
+            ],
+        ],
+
+        'standard_id' => [
+            'rules'  => 'required|is_natural_no_zero',
+            'errors' => [
+                'required' => 'Pflichtfeld bitte Standard auswählen',
+            ],
+        ],
+
+        'requirement_id' => [
+            'rules'  => 'required|is_natural_no_zero',
+            'errors' => [
+                'required' => 'Pflichtfeld bitte Anforderung auswählen',
+            ],
+        ],
+
+        'report' => [
+            'rules'  => 'uploaded[report]|ext_in[report,pdf]',
+            'errors' => [
+                'uploaded' => 'Bitte eine Datei hochladen',
+                'ext_in'   => 'Nur PDF-Dateien sind erlaubt',
+            ],
         ],
     ];
 }

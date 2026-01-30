@@ -168,12 +168,14 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
-                <form class="config-form"
+                <form class="config-form needs-validation"
                       id="standardForm"
                       method="post"
                       action="<?= base_url('config/standard/create') ?>"
                       data-create-url="<?= base_url('config/standard/create') ?>"
-                      data-update-url="<?= base_url('config/standard/update') ?>">
+                      data-update-url="<?= base_url('config/standard/update') ?>"
+                      novalidate
+                >
 
                     <?= csrf_field() ?>
 
@@ -192,7 +194,9 @@
                                                name="code"
                                                id="code"
                                                value="<?= esc(old('code') ?? '') ?>"
-                                               placeholder="z.B. ISO-123">
+                                               placeholder="z.B. ISO-123"
+                                               required
+                                        >
                                         <div class="invalid-feedback"><?= $errors['code'] ?? '' ?></div>
                                     </div>
                                 </div>
@@ -206,7 +210,9 @@
                                                name="name"
                                                id="standard_name"
                                                value="<?= esc(old('name') ?? '') ?>"
-                                               placeholder="Standardname">
+                                               placeholder="Standardname"
+                                               required
+                                        >
                                         <div class="invalid-feedback"><?= $errors['name'] ?? '' ?></div>
                                     </div>
                                 </div>
@@ -215,7 +221,14 @@
                                 <div class="mb-3 row align-items-center">
                                     <label class="col-sm-3 col-form-label">Beschreibung<span class="text-danger">*</span></label>
                                     <div class="col-sm-9">
-                                    <textarea class="form-control" name="description" id="description" rows="3" placeholder="Kurze Beschreibung des Standards auf Deutsch eingeben"><?= esc(old('description') ?? '') ?></textarea>
+                                    <textarea class="form-control"
+                                              name="description"
+                                              id="description"
+                                              rows="3"
+                                              placeholder="Kurze Beschreibung des Standards auf Deutsch eingeben"
+                                              required
+                                    ><?= esc(old('description') ?? '') ?></textarea>
+                                        <div class="invalid-feedback"><?= $errors['description'] ?? '' ?></div>
                                     </div>
                                 </div>
 
@@ -223,7 +236,8 @@
                                 <div class="mb-3 row align-items-center">
                                     <label class="col-sm-3 col-form-label">Beschreibung Englisch<span class="text-danger">*</span></label>
                                     <div class="col-sm-9">
-                                    <textarea class="form-control" name="description_eng" id="description_eng" rows="3" placeholder="Kurze Beschreibung des Standards auf Englisch eingeben"><?= esc(old('description_eng') ?? '') ?></textarea>
+                                        <textarea class="form-control" name="description_eng" id="description_eng" rows="3" placeholder="Kurze Beschreibung des Standards auf Englisch eingeben" required><?= esc(old('description_eng') ?? '') ?></textarea>
+                                        <div class="invalid-feedback"><?= $errors['description'] ?? '' ?></div>
                                     </div>
                                 </div>
 

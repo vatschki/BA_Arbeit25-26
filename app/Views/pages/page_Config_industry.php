@@ -166,12 +166,13 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
-                <form class="config-form"
+                <form class="config-form needs-validation"
                       id="industryForm"
                       method="post"
                       action="<?= base_url('config/industry/create') ?>"
                       data-create-url="<?= base_url('config/industry/create') ?>"
                       data-update-url="<?= base_url('config/industry/update') ?>"
+                      novalidate
                 >
                     <?= csrf_field() ?>
 
@@ -251,6 +252,7 @@
                                                         id="industry_name"
                                                         value="<?= esc(old('name') ?? '') ?>"
                                                         placeholder="Industrie Namen eingeben"
+                                                        required
                                                 >
 
                                                 <div class="invalid-feedback">
@@ -303,5 +305,3 @@
     ></div>
 
 <?php endif; ?>
-
-

@@ -154,7 +154,7 @@ $errors = session('errors') ?? [];
 
 <!-- Modal: Create Sector -->
 <?php if (auth() -> loggedIn() && auth() -> user() -> can('content.manage')): ?>
-    <div class="modal fade config-modal" id="createSectorModal" tabindex="-1" aria-labelledby="createSektorModalLabel" aria-hidden="true">
+    <div class="modal fade config-modal" id="createSectorModal" data-crud-modal tabindex="-1" aria-labelledby="createSektorModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
 
@@ -163,12 +163,13 @@ $errors = session('errors') ?? [];
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
-                <form class="config-form"
+                <form class="config-form needs-validation"
                       id="sectorForm"
                       method="post"
                       action="<?= base_url('config/sector/create') ?>"
                       data-create-url="<?= base_url('config/sector/create') ?>"
                       data-update-url="<?= base_url('config/sector/update') ?>"
+                      novalidate
                 >
 
                     <?= csrf_field() ?>
@@ -207,6 +208,7 @@ $errors = session('errors') ?? [];
                                                         name="name"
                                                         value="<?= esc(old('name') ?? '') ?>"
                                                         placeholder="Sector Namen eingeben"
+                                                        required
                                                 >
 
                                                 <div class="invalid-feedback">

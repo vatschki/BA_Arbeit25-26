@@ -193,12 +193,13 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
-                <form class="config-form"
+                <form class="config-form needs-validation"
                       id="standardForm"
                       method="post"
                       action="<?= base_url('config/requirement/create') ?>"
                       data-create-url="<?= base_url('config/requirement/create') ?>"
                       data-update-url="<?= base_url('config/requirement/update') ?>"
+                      novalidate
                 >
 
                     <?= csrf_field() ?>

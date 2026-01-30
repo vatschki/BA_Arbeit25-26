@@ -183,12 +183,14 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
-                <form class="config-form"
+                <form class="config-form needs-validation"
                       id="countryForm"
                       method="post"
                       action="<?= base_url('config/country/create') ?>"
                       data-create-url="<?= base_url('config/country/create') ?>"
-                      data-update-url="<?= base_url('config/country/update') ?>">
+                      data-update-url="<?= base_url('config/country/update') ?>"
+                      novalidate
+                >
 
                     <?= csrf_field() ?>
 
@@ -207,7 +209,9 @@
                                                name="code"
                                                id="country_code"
                                                value="<?= esc(old('code') ?? '') ?>"
-                                               placeholder="z.B. DE">
+                                               placeholder="z.B. DE"
+                                               required
+                                        >
                                         <div class="invalid-feedback"><?= $errors['code'] ?? '' ?></div>
                                     </div>
                                 </div>
@@ -221,7 +225,9 @@
                                                name="name_de"
                                                id="country_name_de"
                                                value="<?= esc(old('name_de') ?? '') ?>"
-                                               placeholder="Deutschland">
+                                               placeholder="Deutschland"
+                                               required
+                                        >
                                         <div class="invalid-feedback"><?= $errors['name_de'] ?? '' ?></div>
                                     </div>
                                 </div>
@@ -235,7 +241,9 @@
                                                name="name_eng"
                                                id="country_name_eng"
                                                value="<?= esc(old('name_eng') ?? '') ?>"
-                                               placeholder="Germany">
+                                               placeholder="Germany"
+                                               required
+                                        >
                                         <div class="invalid-feedback"><?= $errors['name_eng'] ?? '' ?></div>
                                     </div>
                                 </div>
@@ -249,7 +257,9 @@
                                                name="region"
                                                id="country_region"
                                                value="<?= esc(old('region') ?? '') ?>"
-                                               placeholder="Europa">
+                                               placeholder="Europa"
+                                               required
+                                        >
                                         <div class="invalid-feedback"><?= $errors['region'] ?? '' ?></div>
                                     </div>
                                 </div>
@@ -262,10 +272,12 @@
                                                 name="eu_member"
                                                 id="country_eu_member"
                                                 title="EU-Mitglied Ja/Nein"
+                                                required
                                         >
                                             <option value="1">Ja</option>
                                             <option value="0">Nein</option>
                                         </select>
+                                        <div class="invalid-feedback"><?= $errors['eu_member'] ?? '' ?></div>
                                     </div>
                                 </div>
 
@@ -275,7 +287,7 @@
 
                     <div class="modal-footer">
                         <button type="button" class="btn abbrechen_button" data-bs-dismiss="modal">Abbrechen</button>
-                        <button type="submit" id="countrySaveBtn" class="btn btn-success">Speichern</button>
+                        <button type="submit" id="countrySaveBtn" class="btn btn-success SaveBtn">Speichern</button>
                     </div>
 
                 </form>
