@@ -110,6 +110,38 @@ def run_pipeline(
             search_term_start=SEARCH_TERM_START,
             search_term_end=SEARCH_TERM_END,
         )
+
+        if not relevant_pages:
+            logger.warning(f"[JOB {job_id}] No relevant pages found for selection")
+
+            update_status(
+                job_id,
+                step="no_match",
+                percent=100,
+                message="In dem Dokument konnten keine passenden Textstellen zu den gewählten Standards gefunden werden."
+            )
+
+            # ---------- ERROR / NO-MATCH CALLBACK ----------
+            try:
+                ci4 = CI4Client(
+                    base_url=config.base_url,
+                    pipeline_secret=config.pipeline_secret
+                )
+                ci4.send_pipeline_result(
+                    job_id=job_id,
+                    status="no_match",
+                    progress=100,
+                    message="In dem Dokument konnten keine passenden Textstellen zu den gewählten Standards gefunden werden.",
+                    result=[]
+                )
+            except Exception:
+                logger.exception(f"[JOB {job_id}] CI4 no-match callback fehlgeschlagen")
+
+            return {
+                "job_id": job_id,
+                "status": "no_match",
+            }
+
        
 
         update_status(job_id, "llm_block_selection_done", 40, "Relevante Seiten ausgewählt")

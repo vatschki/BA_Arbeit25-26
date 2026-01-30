@@ -15,13 +15,15 @@ class ReportModel extends BaseModel{
         'author_id',
         'reporting_year',
         'description',
+        'status',
     ];
 
     protected $validationRules = [
         'company_id' => 'required|integer',
         'author_id' => 'required|integer',
         'reporting_year' => 'required|integer',
-        'description' => 'permit_empty|max_length[500]'
+        'description' => 'permit_empty|max_length[500]',
+        'status' => 'required|in_list[draft,published,archived]',
     ];
 
     public function getReports(): array
@@ -100,6 +102,24 @@ class ReportModel extends BaseModel{
                 ->countAllResults(false) > 0;
     }
 
+    public function deleteReport(int $report_id): bool
+    {
+        $report = $this->find($report_id);
 
+        if (! $report) {
+            throw new RuntimeException('Report nicht gefunden.');
+        }
+
+        // Prüfen ob noch Values existieren (FK-Schutz)
+        $hasValues = $this->db->table('esrs_reportvalue')
+            ->where('report_id', $report_id)
+            ->countAllResults();
+
+        if ($hasValues > 0) {
+            throw new RuntimeException('Report kann nicht gelöscht werden, da noch Werte existieren.');
+        }
+
+        return (bool) parent::delete($report_id);
+    }
 
 }

@@ -35,14 +35,14 @@ class RequirementModel extends BaseModel{
         return $this->findAll();
     }
 
-    public function getRequirementByIdAndStandard(int $requirementId, int $standardId): array
+    public function getRequirementByIdAndStandard(int $requirementId, int $standardId): ?array
     {
         return $this->where('id', $requirementId)
             ->where('standard_id', $standardId)
             ->first();
     }
 
-    public function getRequirementsByStandardId(int $standardId): array
+    public function getRequirementsByStandardId(int $standardId): ?array
     {
         return $this->where('standard_id', $standardId)
             ->findAll();

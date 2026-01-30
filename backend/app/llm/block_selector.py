@@ -9,17 +9,59 @@ logger = logging.getLogger(__name__)
 
 class BlockSelector:
 
-    def __init__(self, llm_client: BaseLLMClient, config: Config):
+    def __init__(self, llm_client: BaseLLMClient, config: Config, window_size: int = 90):
         self.llm = llm_client
         self.config = config
+        self.window_size = window_size
+
+    def select_blocks_iterative(
+        self,
+        analysis_json: dict,
+        search_term_start: str,
+        search_term_end: str,
+    ) -> List[int]:
+
+        blocks = analysis_json.get("blocks", [])
+        total_blocks = len(blocks)
+
+        max_windows = 5
+        max_blocks = self.window_size * max_windows
+        limit = min(total_blocks, max_blocks)
+
+        for offset in range(0, limit, self.window_size):
+            window_blocks = blocks[offset : offset + self.window_size]
+
+            logger.info(
+                f"[SELECTOR] Trying blocks {offset}–{offset + len(window_blocks) - 1}"
+            )
+
+            window_json = {
+                **analysis_json,
+                "blocks": window_blocks,
+            }
+
+            pages = self._run_single_call(
+                window_json,
+                search_term_start,
+                search_term_end,
+            )
+
+            if pages:
+                logger.info("[SELECTOR] Valid pages found – stopping iteration")
+                return pages
+
+            logger.info("[SELECTOR] No result found – continuing with next window")
+
+        logger.info("[SELECTOR] Exhausted all blocks – no pages found")
+        return []
 
     
-    def select_blocks(
+    def _run_single_call(
     self,
     analysis_json: dict,
     search_term_start: str,
     search_term_end: str,
-    ):
+    ) -> List[int]:
         
 
         prompt = self._build_prompt(

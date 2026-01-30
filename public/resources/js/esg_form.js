@@ -98,3 +98,25 @@
             setFile(e.dataTransfer.files?.[0]);
         });
     });
+
+    (() => {
+        'use strict';
+
+        const form = document.getElementById('createReportForm');
+
+        form.addEventListener('submit', event => {
+            const fileInput = document.getElementById("pdf-input");
+
+            if (!form.checkValidity() || fileInput.files.length === 0) {
+                event.preventDefault();
+                event.stopPropagation();
+
+                if (fileInput.files.length === 0) {
+                    document.getElementById("pdf-error").style.display = "block";
+                    document.getElementById("pdf-drop-zone").classList.add("is-invalid");
+                }
+            }
+
+            form.classList.add('was-validated');
+        }, false);
+    })();

@@ -65,8 +65,18 @@ class ApiResultController extends ResourceController{
             // Fehlerfall
             if ($status === 'error') {
                 $this->jobModel->updateStatus($job['job_id'], 'error');
+
+                $this->reportModel->update($job['report_id'], ['status' => 'failed']);
+
                 return $this->respond(['ok' => true]);
             }
+
+            if ($status === 'no_match') {
+                $this->jobModel->updateStatus($job['job_id'], 'no_match');
+                $this->reportModel->delete($job['report_id']);
+                return $this->respond(['ok' => true]);
+            }
+
 
             // Erfolgfall
             if ($status === 'finished') {

@@ -157,6 +157,13 @@ $errors = session('errors') ?? [];
             <!-- Tabellenansicht -->
             <div class="card-body container-fluid" id="table-view">
                 <div class="table-responsive">
+
+                    <?php if (session()->getFlashdata('error')): ?>
+                        <div class="alert alert-danger alert-dismissible fade show">
+                            <?= esc(session()->getFlashdata('error')) ?>
+                        </div>
+                    <?php endif; ?>
+
                     <table class="table table-hover table-border table-striped" id="reportTable" data-toggle="table">
                         <thead>
                             <tr>
@@ -183,6 +190,21 @@ $errors = session('errors') ?? [];
                                     <td><?= esc($report['company_name']) ?></td>
                                     <td><?= esc($report['author_name']) ?></td>
                                     <td><?= esc($report['reporting_year']) ?></td>
+                                    <?php if ($canManageContent): ?>
+                                        <td>
+                                            <form action="<?= base_url('esg-reports/delete/' . $report['report_id']) ?>"
+                                                  method="post"
+                                                  class="d-inline">
+                                                <?= csrf_field() ?>
+                                                <button type="submit"
+                                                        class="btn btn-link text-danger p-0"
+                                                        onclick="return confirm('Report wirklich löschen?');"
+                                                        title="Löschen">
+                                                    <i class="fa-solid fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        </td>
+                                    <?php endif; ?>
                                 </tr>
                             <?php endforeach; ?>
                         <?php else: ?>
@@ -212,7 +234,10 @@ $errors = session('errors') ?? [];
                       method="post"
                       enctype="multipart/form-data"
                       id="createReportForm"
+                      class="needs-validation"
+                      novalidate
                 >
+                    <?= csrf_field() ?>
 
                     <div class="modal-body p-0">
 
@@ -232,7 +257,7 @@ $errors = session('errors') ?? [];
                                             </label>
 
                                             <div class="col-sm-9">
-                                                <select class="form-select select2-company" name="company_id">
+                                                <select class="form-select select2-company" name="company_id" required>
                                                     <option value="" disabled <?= old('company_id') ? '' : 'selected' ?>>Unternehmen auswählen</option>
 
                                                     <?php if (!empty($companies)): ?>
@@ -248,6 +273,30 @@ $errors = session('errors') ?? [];
                                             </div>
                                         </div>
 
+                                        <!-- Author -->
+                                        <div class="mb-3 row align-items-center">
+                                            <label class="col-sm-3 col-form-label d-flex align-items-center gap-2">
+                                                Author
+                                                <i class="fa-regular fa-circle-question text-muted" title="Wähle ein Author"></i>
+                                            </label>
+
+                                            <div class="col-sm-9">
+                                                <select class="form-select select2-author" name="author_id" required>
+                                                    <option value="" disabled <?= old('author_id') ? '' : 'selected' ?>>Author auswählen</option>
+
+                                                    <?php if (!empty($authors)): ?>
+                                                        <?php foreach ($authors as $author): ?>
+                                                            <option value="<?= esc($author['id']) ?>" <?= old('author_id') == $author['id'] ? 'selected' : '' ?>>
+                                                                <?= esc($author['name']) ?>
+                                                            </option>
+                                                        <?php endforeach; ?>
+                                                    <?php else: ?>
+                                                        <option value="" disabled>Keine Autoren vorhanden</option>
+                                                    <?php endif; ?>
+                                                </select>
+                                            </div>
+                                        </div>
+
                                         <!-- JAHR -->
                                         <div class="mb-3 row align-items-center">
                                             <label class="col-sm-3 col-form-label d-flex align-items-center gap-2">
@@ -256,7 +305,7 @@ $errors = session('errors') ?? [];
                                             </label>
 
                                             <div class="col-sm-9">
-                                                <select class="form-select" name="year">
+                                                <select class="form-select" name="year" required>
                                                     <option value="" disabled <?= old('year') ? '' : 'selected' ?>>
                                                         Jahr auswählen
                                                     </option>
@@ -283,7 +332,7 @@ $errors = session('errors') ?? [];
                                             </label>
 
                                             <div class="col-sm-9">
-                                                <select class="form-select select2-standard" name="standard_id" id="standardSelect">
+                                                <select class="form-select select2-standard" name="standard_id" id="standardSelect" required>
                                                     <option value="" disabled <?= old('standard_id') ? '' : 'selected' ?>>ESRS-Standard auswählen</option>
 
                                                     <?php if (!empty($standards)): ?>
@@ -307,7 +356,7 @@ $errors = session('errors') ?? [];
                                             </label>
 
                                             <div class="col-sm-9">
-                                                <select class="form-select select2-requirement" name="requirement_id" id="requirementSelect">
+                                                <select class="form-select select2-requirement" name="requirement_id" id="requirementSelect" required>
                                                     <option value="" disabled <?= old('requirement_id') ? '' : 'selected' ?>>ESRS-Anforderung auswählen</option>
 
                                                     <option value="ALL">
@@ -327,12 +376,16 @@ $errors = session('errors') ?? [];
                                             </div>
                                         </div>
 
+                                        <!-- hier ein feld wo man einen hacken setzeten kann, dass wenn es aktiviert ein textfeld öffnet, wo man seitenzahelne eingeben kan, die den start und das ende des relevanten bereichs speichern. der string soll known pages heißen. -->
+
                                         <!-- Drag and Drop Zone -->
                                         <div id="pdf-drop-zone" class="pdf-drop-zone">
                                             <!-- verstecktes File-Input -->
                                             <input id="pdf-input" type="file" name="report"
                                                    accept="application/pdf,.pdf"
-                                                   hidden>
+                                                   hidden
+                                                   required
+                                            >
 
                                             <button type="button" class="btn btn-primary" id="pdf-browse-btn">
                                                 PDF auswählen
@@ -344,6 +397,10 @@ $errors = session('errors') ?? [];
                                             </div>
 
                                             <div id="pdf-file-list" class="mt-3 text-grey" style="font-size:.9rem;"></div>
+                                        </div>
+
+                                        <div class="invalid-feedback d-block" id="pdf-error">
+                                            Bitte eine PDF-Datei auswählen.
                                         </div>
 
                                     </div>
@@ -368,10 +425,17 @@ $errors = session('errors') ?? [];
 
 
 <script>
-    document.addEventListener("click", function (e) {
-        const row = e.target.closest("#reportTable tbody tr[data-href]");
-        if (!row) return;
+    document.querySelector("#reportTable tbody")
+        .addEventListener("click", function (e) {
 
-        window.location.href = row.dataset.href;
-    });
+            if (e.target.closest("button, a, input, select, textarea, label, form")) {
+                return;
+            }
+
+            const row = e.target.closest("tr[data-href]");
+            if (!row) return;
+
+            window.location.href = row.dataset.href;
+        });
+
 </script>

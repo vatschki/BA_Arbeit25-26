@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Models\AuthorModel;
 use App\Models\CompanyModel;
 use App\Models\ReportModel;
 use App\Models\StandardModel;
@@ -22,6 +23,7 @@ class EsgReportsController extends BaseController
     protected ReportModel $reportModel;
     protected RequirementModel $requirementModel;
     //protected reportvalueModel $reportvalueModel;
+    protected AuthorModel $authorModel;
 
     public function __construct()
     {
@@ -32,6 +34,7 @@ class EsgReportsController extends BaseController
         $this->reportModel = new ReportModel();
         $this->sectorModel = new SectorModel();
         $this->requirementModel = new RequirementModel();
+        $this->authorModel = new AuthorModel();
     }
 
 
@@ -45,6 +48,7 @@ class EsgReportsController extends BaseController
             'reports' => $this->reportModel->getReports(),
             'standards' => $this->standardModel->getStandards(),
             'requirements' => $this->requirementModel->getRequirements(),
+            'authors' => $this->authorModel->getAuthors(),
         ];
 
         echo view('templates/header_home');
@@ -73,4 +77,25 @@ class EsgReportsController extends BaseController
         echo view('pages/page_EsgReports_byCompany', $data);
         echo view('templates/footer');
     }
+
+    public function deleteReport($report_id)
+    {
+        if (! auth()->loggedIn() || ! auth()->user()->can('content.manage')) {
+            throw new \CodeIgniter\Exceptions\PageForbiddenException();
+        }
+
+        try {
+            $this->reportModel->deleteReport($report_id);
+
+            return redirect()
+                ->to('/esg-reports/')
+                ->with('success', 'Report erfolgreich gelöscht.');
+        } catch (RuntimeException $exception) {
+            return redirect()
+                ->to('/esg-reports/')
+                ->with('error', $exception->getMessage());
+        }
+    }
+
+
 }

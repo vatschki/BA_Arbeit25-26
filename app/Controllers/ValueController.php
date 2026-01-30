@@ -42,6 +42,23 @@ class ValueController extends BaseController
     {
         $pipelineJob = session()->get('pipeline_job');
 
+        $job = $this->jobModel->findByReportId($report_id);
+
+        if ($job && in_array($job['status'], ['error', 'no_match'], true)) {
+
+            $msg = $job['status'] === 'no_match'
+                ? 'In dem Dokument konnten keine passenden Textstellen gefunden werden.'
+                : 'Die Analyse ist fehlgeschlagen.';
+
+            // Job optional löschen
+            $this->jobModel->delete($job['id']);
+
+            return redirect()
+                ->to('/esg-reports')
+                ->with('error', $msg);
+        }
+
+
         $job = $this->jobModel->findRunningByReportId($report_id);
 
         $pipelineActive = false;
@@ -63,6 +80,8 @@ class ValueController extends BaseController
             'job_id'          => $job_id,
             'currentReportId'=> $report_id,
         ];
+
+
 
         //dd($data);
 

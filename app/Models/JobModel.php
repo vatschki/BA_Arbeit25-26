@@ -70,5 +70,9 @@ class JobModel extends BaseModel{
             ->update();
     }
 
+    public function findByReportId(int $reportId): ?array
+    {
+        return $this->where('report_id', $reportId)->first();
+    }
 
 }

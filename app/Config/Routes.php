@@ -31,6 +31,7 @@ $routes->group('', ['filter' => 'permission:content.manage'], function($routes) 
     $routes->post('/esg-reports/process', 'ApiController::process');
     $routes->get('/esg-reports/pipelinestatus/(:segment)','ApiController::pipelinestatus/$1');
     $routes->post('internal/pipeline/result', 'ApiResultController::store', ['filter' => 'forcehttps:off']);
+    $routes->post('/esg-reports/delete/(:num)', 'EsgReportsController::deleteReport/$1');
 
     //Config Sektor
     $routes->get('/config/sector', 'ConfigSectorController::sector');

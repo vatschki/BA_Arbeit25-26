@@ -132,91 +132,123 @@ class ApiController extends ResourceController{
 
     public function process()
     {
+        log_message('error', 'PROCESS START');
+
+        $report_id  = null;
+        $jobCreated = false;
+        $absolutePath = null;
+
         try {
 
+            // -------- Request --------
             $request = $this->request;
+            log_message('info', 'REQUEST OK');
 
-            $pdf = $request->getFile('report');
-
-            if (!$pdf || !$pdf->isValid()) {
-                return $this->fail('Kein gültiges PDF vorhanden');
-            }
-
-            $uploadPath = realpath(FCPATH . '../storage/uploads') . DIRECTORY_SEPARATOR;
-
-            if (!is_dir($uploadPath)) {
-                return $this->failServerError('Upload-Verzeichnis existiert nicht.');
-            }
-
-            $newName = $pdf->getRandomName();
-            $pdf->move($uploadPath, $newName);
-
-            $absolutePath = $uploadPath . $newName;
-
+            //-------- Formdaten --------
             $company_id = $request->getPost('company_id');
+            $author_id = (int) $request->getPost('author_id');
             $year = $request->getPost('year');
             $standard_id = $request->getPost('standard_id');
             $requirement_id = $request->getPost('requirement_id');
+            #$knownpages = $request->getPost('knownpages');
 
+            if (! $company_id || ! $author_id || ! $year || ! $standard_id) {
+                throw new \RuntimeException('Pflichtfelder ausfüllen.');
+            }
+
+            log_message('info', 'FORM DATA OK');
+
+            //-------- Company --------
             $company = $this->companyModel->getCompanyNameById($company_id);
 
-
             if (!$company || empty($company['name'])) {
-                return $this->fail('Ungültige Firmen-ID');
+                throw new \RuntimeException('Ungültige Firma ausgewählt.');
             }
 
-            $company_name = $company['name'];
+            log_message('info', 'COMPANY OK');
 
+            //-------- PDF File --------
+            $pdf = $request->getFile('report');
+            log_message('info', 'FILE OBJECT: ' . print_r($pdf, true));
+
+            if (!$pdf || !$pdf->isValid()) {
+                throw new \RuntimeException('Kein gültiges PDF vorhanden');
+            }
+            log_message('info', 'FILE VALID');
+
+            $uploadPath = realpath(FCPATH . '../storage/uploads') . DIRECTORY_SEPARATOR;
+            log_message('info', 'UPLOAD PATH: ' . $uploadPath);
+
+            if (!is_dir($uploadPath)) {
+                throw new \RuntimeException('Upload-Verzeichnis existiert nicht.');
+            }
+            log_message('info', 'UPLOAD DIR OK');
+
+            $randomName = $pdf->getRandomName();
+            $cleanCompany = preg_replace('/[^a-zA-Z0-9_-]/', '_', $company['name']);
+            $cleanYear    = preg_replace('/[^0-9]/', '', $year);
+
+            $newName = $cleanCompany . '_' . $cleanYear . '_' . $randomName;
+
+            log_message('info', 'NEW NAME: ' . $newName);
+
+            $pdf->move($uploadPath, $newName);
+            log_message('info', 'FILE MOVED');
+
+            $absolutePath = $uploadPath . $newName;
+            log_message('info', 'ABSOLUTE PATH: ' . $absolutePath);
+
+            //-------- Standards --------
             $main_standard = $this->standardModel->getStandardById($standard_id);
-            #das ist temporär nur funktional - DB pointer via ID auf nächsten standard muss in Zukunft geändert werden
-            $second_standard = $this->standardModel->getStandardById($standard_id + 1);
+
+
+            $second_standard = $this->standardModel->getStandardById($standard_id + 1);  #das ist temporär nur funktional - DB pointer via ID auf nächsten standard muss in Zukunft geändert werden
 
             if (!$main_standard || empty($main_standard['code'])) {
-                return $this->fail('Ungültige Standard-ID');
+                throw new \RuntimeException('Ungültige Standard-ID');
             }
 
-            $main_standard_code = $main_standard['code'];
-            $main_standard_name = $main_standard['name'];
-            $main_standard_description = $main_standard['description'];
-            $main_standard_description_eng = $main_standard['description_eng'];
-            $second_standard_code = $second_standard['code'];
-            $second_standard_name = $second_standard['name'];
-            $second_standard_description = $second_standard['description'];
-            $second_standard_description_eng = $second_standard['description_eng'];
+            log_message('info', 'STANDARDS OK');
 
+            //-------- Context --------
             $context_payload = [
-                'company_name' => $company_name,
+                'company_name' => $company['name'],
                 'year' => $year,
-                'main_standard_code' => $main_standard_code,
-                'main_standard_name' => $main_standard_name,
-                'main_standard_description' => $main_standard_description,
-                'main_standard_description_eng' => $main_standard_description_eng,
-                'second_standard_code' => $second_standard_code,
-                'second_standard_name' => $second_standard_name,
-                'second_standard_description' => $second_standard_description,
-                'second_standard_description_eng' => $second_standard_description_eng,
+                'main_standard_code' => $main_standard['code'],
+                'main_standard_name' => $main_standard['name'],
+                'main_standard_description' => $main_standard['description'],
+                'main_standard_description_eng' => $main_standard['description_eng'],
+                'second_standard_code' => $second_standard['code'] ?? null,
+                'second_standard_name' => $second_standard['name'] ?? null,
+                'second_standard_description' => $second_standard['description'] ?? null,
+                'second_standard_description_eng' => $second_standard['description_eng'] ?? null,
             ];
 
+            log_message('info', 'CONTEXT OK');
+
+            //-------- Requirements --------
+
+            if ($requirement_id === null || $requirement_id === '') {
+                throw new \RuntimeException('Bitte wählen Sie eine ESRS-Anforderung aus.');
+            }
 
             if ($requirement_id === 'ALL') {
 
-                $requirements = $this->requirementModel
-                    ->getRequirementsByStandardId((int)$standard_id);
+                $requirements = $this->requirementModel->getRequirementsByStandardId((int)$standard_id);
 
             } else {
 
-                $singleRequirement = $this->requirementModel
-                    ->getRequirementByIdAndStandard((int)$requirement_id, (int)$standard_id);
+                $singleRequirement = $this->requirementModel->getRequirementByIdAndStandard((int)$requirement_id, (int)$standard_id);
 
                 if ($singleRequirement === null) {
-                    return $this->fail('Ungültige ESRS-Anforderung');
+                    throw new \RuntimeException('Ungültige ESRS-Anforderung');
                 }
 
                 $requirements = [$singleRequirement];
             }
 
             if (empty($requirements)) {
-                return $this->fail('Keine ESRS-Anforderungen gefunden');
+                throw new \RuntimeException('Keine ESRS-Anforderungen gefunden');
             }
 
 
@@ -232,7 +264,9 @@ class ApiController extends ResourceController{
                 $requirements
             );
 
+            log_message('info', 'REQUIREMENTS OK');
 
+            //-------- API Config --------
             $api_config = session()->get('api_config');
 
             if (
@@ -250,24 +284,22 @@ class ApiController extends ResourceController{
                 return redirect()->to('/config/api-key');
             }
 
-            // Wichtig: author_id ist NOT NULL in deiner DB.
-            $author_id = (int) (session()->get('user_id') ?? 1); // DUMMY: 1
+            log_message('info', 'API CONFIG OK');
 
-            // 4) Report SOFORT anlegen -> wir brauchen report_id für Redirect
+            //-------- Report --------
             $reportData = [
                 'company_id'      => $company_id,
                 'author_id'       => $author_id,
                 'reporting_year'  => $year,
                 'description'     => null,
-                'metadata'        => json_encode([
-                    'source_pdf' => $newName,
-                    'standard_id' => $standard_id,
-                    'requirement_id' => $requirement_id,
-                ]),
+                'status' => 'draft',
             ];
 
             $report_id = $this->reportModel->createReport($reportData);
 
+            log_message('info', 'REPORT CREATED: ' . $report_id);
+
+            //-------- Payload --------
             $payload = [
                 'document' => [
                     'path'     => $absolutePath,
@@ -284,16 +316,24 @@ class ApiController extends ResourceController{
                 'api_config' => $api_config,
             ];
 
+            log_message('info', 'PAYLOAD READY');
+
+            //-------- Pipeline --------
             $client = \Config\Services::curlrequest();
-            $res = $client->post('http://localhost:8001/pipeline/start', [
-                'json' => $payload,
-                'headers' => [
-                    'Accept' => 'application/json',
-                    'Content-Type' => 'application/json'
-                ],
-                'timeout' => 0,
-                'http_errors' => false,
-            ]);
+
+            try {
+                $res = $client->post('http://localhost:8001/pipeline/start', [
+                    'json' => $payload,
+                    'headers' => [
+                        'Accept' => 'application/json',
+                        'Content-Type' => 'application/json'
+                    ],
+                    'timeout' => 0,
+                    'http_errors' => false,
+                ]);
+            }catch (\Throwable $e){
+                throw new \RuntimeException('Pipeline-Fehler: Pipeline nicht erreichbar');
+            }
 
             $statusCode = $res->getStatusCode();
             $body       = $res->getBody();
@@ -301,39 +341,25 @@ class ApiController extends ResourceController{
             log_message('error', 'PIPELINE STATUS: ' . $statusCode);
             log_message('error', 'PIPELINE BODY: ' . $body);
 
-            #report dann löschen damit kein trash entsteht
             if ($statusCode !== 200) {
-                log_message('error', 'Pipeline start failed: ' . $body);
+                /*log_message('error', 'Pipeline start failed: ' . $body);
 
                 session()->setFlashdata(
                     'error',
                     'Die Analyse konnte nicht gestartet werden. Bitte versuchen Sie es erneut.'
                 );
 
-                return redirect()->back();
+                return redirect()->back();*/
+                throw new \RuntimeException('Pipeline-Fehler (' . $statusCode . '): ' . $body);
             }
 
 
             $data = json_decode($res->getBody(), true);
 
-            /*
-            return $this->respond([
-                'status'  => 'success',
-                'job_id'  => $data['job_id'],
-                'message' => $data['message'],
-                //'result'  => $data['result']
-            ]);
-            */
-
             $job_id = $data['job_id'] ?? null;
 
             if (!$job_id) {
-                log_message('error', 'Pipeline start ohne job_id: ' . $body);
-
-                return $this->respond([
-                    'status' => 'error',
-                    'message' => 'Pipeline konnte nicht gestartet werden (keine Job-ID)'
-                ], 500);
+                throw new \RuntimeException('Analyse konnte nicht gestartet werden (keine Job-ID).');
             }
 
 
@@ -347,12 +373,26 @@ class ApiController extends ResourceController{
             ];
 
             $this->jobModel->createJob($jobData);
-
+            $jobCreated = true;
+            log_message('info', 'JOB CREATED: ' . $job_id);
 
             return redirect()->to("/esg-reports/value/{$report_id}");
 
         }catch (\Throwable $e){
-            return $this->failServerError($e->getMessage());
+            log_message('error', (string)$e);
+
+            if ($report_id !== null && $jobCreated === false) {
+                $this->reportModel->delete($report_id);
+
+                if ($absolutePath && file_exists($absolutePath)) {
+                    unlink($absolutePath);
+                }
+            }
+
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', $e ->getMessage());
         }
     }
 
