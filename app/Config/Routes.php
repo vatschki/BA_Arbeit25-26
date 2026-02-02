@@ -15,6 +15,7 @@ $routes->get('esg-reports/value/(:num)/values', 'ValueController::valuesPartial/
 
 $routes->get('/help', 'HelpController::index');
 
+$routes->post('internal/pipeline/result', 'ApiResultController::store', ['filter' => 'forcehttps:off']);
 
 #permission manage content Seiten
 $routes->group('', ['filter' => 'permission:content.manage'], function($routes) {
@@ -30,7 +31,6 @@ $routes->group('', ['filter' => 'permission:content.manage'], function($routes) 
     //ESG Reports
     $routes->post('/esg-reports/process', 'ApiController::process');
     $routes->get('/esg-reports/pipelinestatus/(:segment)','ApiController::pipelinestatus/$1');
-    $routes->post('internal/pipeline/result', 'ApiResultController::store', ['filter' => 'forcehttps:off']);
     $routes->post('/esg-reports/delete/(:num)', 'EsgReportsController::deleteReport/$1');
 
     //Config Sektor
@@ -64,6 +64,12 @@ $routes->group('', ['filter' => 'permission:content.manage'], function($routes) 
     $routes->post('/config/country/delete/(:num)', 'ConfigCountryController::deleteCountry/$1');
 
     $routes->get('export/values/(:num)', 'ExportController::values/$1');
+
+    //Config Author
+    $routes->get('/config/author', 'ConfigAuthorController::author');
+    $routes->post('/config/author/create', 'ConfigAuthorController::createAuthor');
+    $routes->post('/config/author/update/(:num)', 'ConfigAuthorController::updateAuthor/$1');
+    $routes->post('/config/author/delete/(:num)', 'ConfigAuthorController::deleteAuthor/$1');
 
 });
 

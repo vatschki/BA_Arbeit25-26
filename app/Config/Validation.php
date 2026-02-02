@@ -305,4 +305,16 @@ class Validation extends BaseConfig
             ],
         ],
     ];
+
+    public array $author = [
+
+        'name' => [
+            'rules'  => 'required|min_length[3]|max_length[100]',
+            'errors' => [
+                'required'   => 'Pflichtfeld bitte Namen ausfüllen',
+                'min_length' => 'Der Name ist zu kurz',
+                'max_length' => 'Der Name ist zu lang',
+            ],
+        ],
+    ];
 }

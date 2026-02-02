@@ -1,3 +1,4 @@
+    //Form Selects
     document.addEventListener("DOMContentLoaded", function () {
         const $standard = $("#standardSelect");
         const $requirement = $("#requirementSelect");
@@ -99,6 +100,7 @@
         });
     });
 
+    //Validatin
     (() => {
         'use strict';
 
@@ -106,6 +108,9 @@
 
         form.addEventListener('submit', event => {
             const fileInput = document.getElementById("pdf-input");
+
+            // Wenn vorher schon verhindert wurde (Relevant Pages), abbrechen
+            if (event.defaultPrevented) return;
 
             if (!form.checkValidity() || fileInput.files.length === 0) {
                 event.preventDefault();
@@ -120,3 +125,61 @@
             form.classList.add('was-validated');
         }, false);
     })();
+
+
+    // Form Relevant Pages Validation
+    const check = document.getElementById("relevantPagesCheck");
+    const container = document.getElementById("relevantPagesContainer");
+    const addBtn = document.getElementById("addRangeBtn");
+    const enabledInput = document.getElementById("relevantPagesEnabled");
+    const errorBox = document.getElementById("relevantPagesError");
+
+    let rangeIndex = 1;
+
+    check.addEventListener("change", function () {
+        if (this.checked) {
+            container.classList.remove("d-none");
+            enabledInput.value = "1";
+        } else {
+            container.classList.add("d-none");
+            enabledInput.value = "0";
+            container.querySelectorAll("input").forEach(i => i.value = "");
+            errorBox.classList.add("d-none");
+        }
+    });
+
+    addBtn.addEventListener("click", function () {
+        const row = document.createElement("div");
+        row.className = "range-row d-flex gap-2 mb-2";
+
+        row.innerHTML = `
+        <input type="number" min="1" class="form-control" name="relevant_pages[${rangeIndex}][start]" placeholder="Start">
+        <input type="number" min="1" class="form-control" name="relevant_pages[${rangeIndex}][end]" placeholder="Ende">
+    `;
+
+        container.insertBefore(row, addBtn);
+        rangeIndex++;
+    });
+
+    document.querySelector("#createReportForm").addEventListener("submit", function (e) {
+        if (!check.checked) return; // Checkbox aus = OK
+
+        const rows = container.querySelectorAll(".range-row");
+        let validPairs = 0;
+
+        rows.forEach(row => {
+            const start = row.querySelector("input[name*='start']").value;
+            const end   = row.querySelector("input[name*='end']").value;
+
+            if (start !== "" && end !== "" && parseInt(start) <= parseInt(end)) {
+                validPairs++;
+            }
+        });
+
+        if (validPairs === 0) {
+            e.preventDefault();
+            errorBox.classList.remove("d-none");
+        } else {
+            errorBox.classList.add("d-none");
+        }
+    });

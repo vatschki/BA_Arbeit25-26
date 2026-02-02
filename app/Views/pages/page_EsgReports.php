@@ -251,9 +251,16 @@ $errors = session('errors') ?? [];
 
                                         <!-- Unternehmen -->
                                         <div class="mb-3 row align-items-center">
-                                            <label class="col-sm-3 col-form-label d-flex align-items-center gap-2">
-                                                Unternhemen
-                                                <i class="fa-regular fa-circle-question text-muted" title="Wähle ein unternehmen"></i>
+                                            <label class="col-sm-3 col-form-label d-flex align-items-center">
+                                                Unternehmen<span class="text-danger">*</span>
+                                                <a href="<?= site_url('help') ?>#help-upload"
+                                                   class="ms-2 text-muted"
+                                                   data-bs-toggle="tooltip"
+                                                   data-bs-placement="top"
+                                                   title="Hier wählst du das Unternehmen aus, zu dem der Bericht gehört."
+                                                   aria-label="Hilfe zum Feld Unternehmen">
+                                                    <i class="fa-regular fa-circle-question"></i>
+                                                </a>
                                             </label>
 
                                             <div class="col-sm-9">
@@ -275,9 +282,16 @@ $errors = session('errors') ?? [];
 
                                         <!-- Author -->
                                         <div class="mb-3 row align-items-center">
-                                            <label class="col-sm-3 col-form-label d-flex align-items-center gap-2">
-                                                Author
-                                                <i class="fa-regular fa-circle-question text-muted" title="Wähle ein Author"></i>
+                                            <label class="col-sm-3 col-form-label d-flex align-items-center">
+                                                Author<span class="text-danger">*</span>
+                                                <a href="<?= site_url('help') ?>#help-upload"
+                                                   class="ms-2 text-muted"
+                                                   data-bs-toggle="tooltip"
+                                                   data-bs-placement="top"
+                                                   title="Hier wählst du den Autor bzw. Ersteller des Berichts aus."
+                                                   aria-label="Hilfe zum Feld Author">
+                                                    <i class="fa-regular fa-circle-question"></i>
+                                                </a>
                                             </label>
 
                                             <div class="col-sm-9">
@@ -299,9 +313,16 @@ $errors = session('errors') ?? [];
 
                                         <!-- JAHR -->
                                         <div class="mb-3 row align-items-center">
-                                            <label class="col-sm-3 col-form-label d-flex align-items-center gap-2">
-                                                Jahr
-                                                <i class="fa-regular fa-circle-question text-muted" title="Wähle ein Jahr aus"></i>
+                                            <label class="col-sm-3 col-form-label d-flex align-items-center">
+                                                Jahr<span class="text-danger">*</span>
+                                                <a href="<?= site_url('help') ?>#help-upload"
+                                                   class="ms-2 text-muted"
+                                                   data-bs-toggle="tooltip"
+                                                   data-bs-placement="top"
+                                                   title="Hier wählst du das Berichtsjahr aus."
+                                                   aria-label="Hilfe zum Feld Jahr">
+                                                    <i class="fa-regular fa-circle-question"></i>
+                                                </a>
                                             </label>
 
                                             <div class="col-sm-9">
@@ -326,10 +347,18 @@ $errors = session('errors') ?? [];
 
                                         <!-- ESRS-Standard -->
                                         <div class="mb-3 row align-items-center">
-                                            <label class="col-sm-3 col-form-label d-flex align-items-center gap-2">
-                                                ESRS-Standard
-                                                <i class="fa-regular fa-circle-question text-muted" title="Wähle ein ESRS-Standard"></i>
+                                            <label class="col-sm-3 col-form-label d-flex align-items-center">
+                                                ESRS-Standard<span class="text-danger">*</span>
+                                                <a href="<?= site_url('help') ?>#help-upload"
+                                                   class="ms-2 text-muted"
+                                                   data-bs-toggle="tooltip"
+                                                   data-bs-placement="top"
+                                                   title="Hier wählst du den ESRS-Standard aus, nach dem der Bericht ausgewertet wird."
+                                                   aria-label="Hilfe zum Feld ESRS-Standard">
+                                                    <i class="fa-regular fa-circle-question"></i>
+                                                </a>
                                             </label>
+
 
                                             <div class="col-sm-9">
                                                 <select class="form-select select2-standard" name="standard_id" id="standardSelect" required>
@@ -350,9 +379,16 @@ $errors = session('errors') ?? [];
 
                                         <!-- ESRS-Requirement -->
                                         <div class="mb-3 row align-items-center">
-                                            <label class="col-sm-3 col-form-label d-flex align-items-center gap-2">
-                                                ESRS-Anforderung
-                                                <i class="fa-regular fa-circle-question text-muted" title="Wähle eine ESRS-Anforderung"></i>
+                                            <label class="col-sm-3 col-form-label d-flex align-items-center">
+                                                ESRS-Anforderung<span class="text-danger">*</span>
+                                                <a href="<?= site_url('help') ?>#help-upload"
+                                                   class="ms-2 text-muted"
+                                                   data-bs-toggle="tooltip"
+                                                   data-bs-placement="top"
+                                                   title="Hier wählst du eine konkrete ESRS-Anforderung oder alle Anforderungen des Standards aus."
+                                                   aria-label="Hilfe zum Feld ESRS-Anforderung">
+                                                    <i class="fa-regular fa-circle-question"></i>
+                                                </a>
                                             </label>
 
                                             <div class="col-sm-9">
@@ -376,7 +412,47 @@ $errors = session('errors') ?? [];
                                             </div>
                                         </div>
 
-                                        <!-- hier ein feld wo man einen hacken setzeten kann, dass wenn es aktiviert ein textfeld öffnet, wo man seitenzahelne eingeben kan, die den start und das ende des relevanten bereichs speichern. der string soll known pages heißen. -->
+                                        <!-- Relevante Seiten -->
+                                        <input type="hidden" name="relevantPagesCheck" id="relevantPagesEnabled" value="0">
+
+                                        <div class="mb-3 row align-items-start">
+                                            <label class="col-sm-3 col-form-label d-flex align-items-center">
+                                                Relevante Seiten
+                                                <a href="<?= site_url('help') ?>#help-upload"
+                                                   class="ms-2 text-muted"
+                                                   data-bs-toggle="tooltip"
+                                                   data-bs-placement="top"
+                                                   title="Optional: Hier kannst du Seitenbereiche angeben, die besonders relevant für die Analyse sind."
+                                                   aria-label="Hilfe zum Feld Relevante Seiten">
+                                                    <i class="fa-regular fa-circle-question"></i>
+                                                </a>
+                                            </label>
+
+
+                                            <div class="col-sm-9">
+                                                <div class="form-check mb-2">
+                                                    <input class="form-check-input" type="checkbox" id="relevantPagesCheck" onchange="document.getElementById('relevantPagesEnabled').value = this.checked ? '1' : '0';">
+                                                    <label class="form-check-label" for="relevantPagesCheck">
+                                                        Relevante Seiten angeben
+                                                    </label>
+                                                </div>
+
+                                                <div id="relevantPagesContainer" class="d-none">
+                                                    <div class="range-row d-flex gap-2 mb-2">
+                                                        <input type="number" min="1" class="form-control" name="relevant_pages[0][start]" placeholder="Start">
+                                                        <input type="number" min="1" class="form-control" name="relevant_pages[0][end]" placeholder="Ende">
+                                                    </div>
+
+                                                    <button type="button" class="btn btn-sm btn-outline-secondary" id="addRangeBtn">
+                                                        + Bereich hinzufügen
+                                                    </button>
+                                                </div>
+                                                <div id="relevantPagesError" class="text-danger small d-none">
+                                                    Bitte gib mindestens einen gültigen Seitenbereich an.
+                                                </div>
+                                            </div>
+                                        </div>
+
 
                                         <!-- Drag and Drop Zone -->
                                         <div id="pdf-drop-zone" class="pdf-drop-zone">
@@ -422,20 +498,3 @@ $errors = session('errors') ?? [];
         </div>
     </div>
 <?php endif; ?>
-
-
-<script>
-    document.querySelector("#reportTable tbody")
-        .addEventListener("click", function (e) {
-
-            if (e.target.closest("button, a, input, select, textarea, label, form")) {
-                return;
-            }
-
-            const row = e.target.closest("tr[data-href]");
-            if (!row) return;
-
-            window.location.href = row.dataset.href;
-        });
-
-</script>

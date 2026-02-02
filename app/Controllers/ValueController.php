@@ -69,9 +69,19 @@ class ValueController extends BaseController
             $job_id = $job['job_id'];
         }
 
+        $report = $this->reportModel->getReportById($report_id);
+
+        if (!$report) {
+            throw new \RuntimeException('Report nicht gefunden');
+        }
+
+        $company = $this->companyModel->getCompanyNameById($report['company_id']);
+
+
 
         $data = [
-            'report' => $this->reportModel->getReportById($report_id),
+            'report' => $report,
+            'company' => $company,
             'standards' => $this->standardModel->getStandards(),
             'requirements' => $this->requirementModel->getRequirements(),
             'report_values' => $this->reportValueModel->getReportValues($report_id),

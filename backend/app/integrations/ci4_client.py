@@ -38,5 +38,10 @@ class CI4Client:
             raise RuntimeError(
                 f"CI4 rejected payload ({response.status_code}): {response.text}"
             )
+        
+        print("STATUS:", response.status_code)
+        print("HEADERS:", response.headers)
+        print("BODY:", response.text)
+
 
         return response.json()

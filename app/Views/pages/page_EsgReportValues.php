@@ -14,7 +14,7 @@ $errors = session('errors') ?? [];
 
                     <div>
                         <?php
-                        $companyName   = $report_values[0]['company_name'] ?? 'Unbekanntes Unternehmen';
+                        $companyName   = $company['name'] ?? 'Unbekanntes Unternehmen';
                         $reportingYear = $report['reporting_year'] ?? '—';
                         ?>
                         <h4 class="mb-0">
@@ -219,14 +219,25 @@ $errors = session('errors') ?? [];
                     bar.textContent = percent + '%';
                     text.textContent = data.message ?? 'Pipeline läuft …';
 
-                    if (percent >= 100) {
+                    const terminalStates = ['finished', 'error', 'no_match', 'not_compatible'];
+
+                    if (terminalStates.includes(data.step)) {
+                        bar.style.width = '100%';
+                        bar.textContent = '100%';
+
+                        text.textContent = data.message ?? 'Pipeline beendet';
+
                         pipelineModal.hide();
 
-                        if (data.step === 'error') {
-                            alert(data.message || 'Pipeline fehlgeschlagen');
-                        } else {
+                        if (data.step === 'finished') {
                             loadReportValues();
+                        } else {
+                            // Fehlerfälle → Redirect nach kurzer Zeit
+                            setTimeout(() => {
+                                window.location.href = '/esg-reports';
+                            }, 2000);
                         }
+
                         return;
                     }
                     else {

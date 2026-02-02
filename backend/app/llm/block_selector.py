@@ -24,36 +24,70 @@ class BlockSelector:
         blocks = analysis_json.get("blocks", [])
         total_blocks = len(blocks)
 
-        max_windows = 5
-        max_blocks = self.window_size * max_windows
-        limit = min(total_blocks, max_blocks)
+        found_pages: set[int] = set()
+        offset = 0
 
-        for offset in range(0, limit, self.window_size):
-            window_blocks = blocks[offset : offset + self.window_size]
+        FIRST_PHASE_LIMIT = self.window_size * 5
+        VALIDATION_WINDOWS = 2
 
-            logger.info(
-                f"[SELECTOR] Trying blocks {offset}–{offset + len(window_blocks) - 1}"
-            )
+        phase = "FIRST"
 
-            window_json = {
-                **analysis_json,
-                "blocks": window_blocks,
-            }
+        while offset < total_blocks:
 
-            pages = self._run_single_call(
-                window_json,
-                search_term_start,
-                search_term_end,
-            )
+            window_blocks = blocks[offset: offset + self.window_size]
+            logger.info(f"[SELECTOR] {phase} blocks {offset}–{offset + len(window_blocks) - 1}")
+
+            window_json = {**analysis_json, "blocks": window_blocks}
+            pages = self._run_single_call(window_json, search_term_start, search_term_end)
 
             if pages:
-                logger.info("[SELECTOR] Valid pages found – stopping iteration")
-                return pages
+                before = len(found_pages)
+                found_pages.update(pages)
 
-            logger.info("[SELECTOR] No result found – continuing with next window")
+                # ---------- VALIDATION ----------
+                logger.info("[SELECTOR] Hit found → entering validation")
 
-        logger.info("[SELECTOR] Exhausted all blocks – no pages found")
-        return []
+                validation_offset = offset + self.window_size
+                new_found = False
+
+                for i in range(VALIDATION_WINDOWS):
+                    if validation_offset >= total_blocks:
+                        break
+
+                    v_blocks = blocks[validation_offset: validation_offset + self.window_size]
+                    logger.info(f"[SELECTOR] VALIDATE blocks {validation_offset}–{validation_offset + len(v_blocks) - 1}")
+
+                    v_json = {**analysis_json, "blocks": v_blocks}
+                    v_pages = self._run_single_call(v_json, search_term_start, search_term_end)
+
+                    if v_pages:
+                        prev = len(found_pages)
+                        found_pages.update(v_pages)
+                        if len(found_pages) > prev:
+                            new_found = True
+                            logger.info("[SELECTOR] New pages found in validation → terminating")
+                            return sorted(found_pages)
+
+                    validation_offset += self.window_size
+
+                # ---------- no new pages in validation → continue search ----------
+                logger.info("[SELECTOR] No new pages in validation → continuing search")
+                offset = validation_offset
+                phase = "GLOBAL"
+                continue
+
+            # ---------- No pages found ----------
+            offset += self.window_size
+
+            if phase == "FIRST" and offset >= FIRST_PHASE_LIMIT:
+                logger.info("[SELECTOR] Phase1 finished → switching to GLOBAL")
+                phase = "GLOBAL"
+
+        if not found_pages:
+            logger.info("[SELECTOR] No pages found at all")
+            return []
+
+        return sorted(found_pages)
 
     
     def _run_single_call(

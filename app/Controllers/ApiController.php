@@ -150,7 +150,7 @@ class ApiController extends ResourceController{
             $year = $request->getPost('year');
             $standard_id = $request->getPost('standard_id');
             $requirement_id = $request->getPost('requirement_id');
-            #$knownpages = $request->getPost('knownpages');
+            $relevant_pages = $request->getPost('relevant_pages');
 
             if (! $company_id || ! $author_id || ! $year || ! $standard_id) {
                 throw new \RuntimeException('Pflichtfelder ausfüllen.');
@@ -201,7 +201,6 @@ class ApiController extends ResourceController{
             //-------- Standards --------
             $main_standard = $this->standardModel->getStandardById($standard_id);
 
-
             $second_standard = $this->standardModel->getStandardById($standard_id + 1);  #das ist temporär nur funktional - DB pointer via ID auf nächsten standard muss in Zukunft geändert werden
 
             if (!$main_standard || empty($main_standard['code'])) {
@@ -209,6 +208,38 @@ class ApiController extends ResourceController{
             }
 
             log_message('info', 'STANDARDS OK');
+
+            //-------- Relevant Pages --------
+            $useRelevantPages = $request->getPost('relevantPagesCheck') === '1';// Checkbox
+
+            if ($useRelevantPages) {
+
+                if (empty($relevant_pages) || !is_array($relevant_pages)) {
+                    throw new \RuntimeException('Bitte relevante Seiten angeben.');
+                }
+
+                $cleanPages = [];
+
+                foreach ($relevant_pages as $pair) {
+                    $start = (int)($pair['start'] ?? 0);
+                    $end   = (int)($pair['end'] ?? 0);
+
+                    if ($start > 0 && $end > 0 && $start <= $end) {
+                        for ($i = $start; $i <= $end; $i++) {
+                            $cleanPages[] = $i;
+                        }
+                    }
+                }
+
+                if (count($cleanPages) === 0) {
+                    throw new \RuntimeException('Mindestens ein gültiger Seitenbereich erforderlich.');
+                }
+
+                $relevant_pages = $cleanPages;
+
+            } else {
+                $relevant_pages = null;
+            }
 
             //-------- Context --------
             $context_payload = [
@@ -222,6 +253,7 @@ class ApiController extends ResourceController{
                 'second_standard_name' => $second_standard['name'] ?? null,
                 'second_standard_description' => $second_standard['description'] ?? null,
                 'second_standard_description_eng' => $second_standard['description_eng'] ?? null,
+                'relevant_pages' => $relevant_pages,
             ];
 
             log_message('info', 'CONTEXT OK');
@@ -362,14 +394,21 @@ class ApiController extends ResourceController{
                 throw new \RuntimeException('Analyse konnte nicht gestartet werden (keine Job-ID).');
             }
 
+            $user = session()->get('user');
+            $user_id = $user['id'] ?? null;
+
+            if (!$user_id) {
+                throw new \RuntimeException('Kein Benutzer eingeloggt.');
+            }
 
             $jobData = [
                 'job_id'        => $job_id,
                 'report_id'       => $report_id,
+                'user_id'        => $user_id,
                 'standard_id'     => (int) $standard_id,
                 'requirements_all'=> $requirement_id === 'ALL' ? 1 : 0,
                 'status'          => 'running',
-                'created_at'      => date('Y-m-d H:i:s'),
+                #'created_at'      => date('Y-m-d H:i:s'),
             ];
 
             $this->jobModel->createJob($jobData);

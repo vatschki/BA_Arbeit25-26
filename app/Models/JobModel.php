@@ -13,13 +13,17 @@ class JobModel extends BaseModel{
 
     protected $allowedFields = [
         'job_id',
+        'user_id',
         'report_id',
         'standard_id',
         'requirements_all',
         'status',
+        'created_at',
+        'updated_at',
     ];
 
     protected $useTimestamps = true;
+    protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
 
 

@@ -23,7 +23,7 @@ class ReportModel extends BaseModel{
         'author_id' => 'required|integer',
         'reporting_year' => 'required|integer',
         'description' => 'permit_empty|max_length[500]',
-        'status' => 'required|in_list[draft,published,archived]',
+        'status' => 'required|in_list[draft,failed, not_compatible, ready, archived]',
     ];
 
     public function getReports(): array
@@ -45,12 +45,13 @@ class ReportModel extends BaseModel{
             ->join('companies', 'reports.company_id = companies.id', 'left')
             ->join('industries', 'companies.industry_id = industries.id', 'left')
             ->join('authors', 'reports.author_id = authors.id', 'left')
+            ->where('reports.status', 'ready')
             ->findAll();
     }
 
     public function getReportById(int $report_id): array
     {
-        return $this->select('reporting_year')
+        return $this->select('reports.*')
             ->where('id', $report_id)
             ->first();
     }

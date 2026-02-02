@@ -14,14 +14,12 @@ class AuthorModel extends BaseModel
         'name',
         'description',
         'type',
-        'timestamp'
     ];
 
     protected $validationRules = [
         'name'        => 'required|min_length[3]|max_length[100]',
         'description' => 'permit_empty|max_length[500]',
         'type'        => 'permit_empty|max_length[100]',
-        'timestamp'   => 'permit_empty|valid_date'
     ];
 
     public function getAuthors(): array

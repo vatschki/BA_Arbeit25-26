@@ -65,10 +65,48 @@ def run_pipeline(
 
         
         # 3. PDF parsen
-        doob_document = parser.toBlock(
-            file_path=Path(pdf_path),
-            file_extension=FileExtensionType.PDF
-        )
+        page_numbers = None
+        if context.relevant_pages:
+            page_numbers = context.relevant_pages
+            logger.info(f"[JOB {job_id}] --------------------- User-defined relevant pages: {page_numbers}")
+
+        try:
+            doob_document = parser.toBlock(
+                file_path=Path(pdf_path),
+                file_extension=FileExtensionType.PDF,
+                page_numbers=None # Filterung nach Seitanzahlen von anfang an Fehlgeschlagen. Kan später umgesetzt werden deswegen nur None 
+            )
+        except ValueError as e:
+            # === NOT COMPATIBLE CALLBACK ===
+            logger.warning(f"[JOB {job_id}] PDF nicht kompatibel: {e}")
+
+            update_status(
+                job_id,
+                step="not_compatible",
+                percent=100,
+                message=str(e)
+            )
+
+            try:
+                ci4 = CI4Client(
+                    base_url=config.base_url,
+                    pipeline_secret=config.pipeline_secret
+                )
+                ci4.send_pipeline_result(
+                    job_id=job_id,
+                    status="not_compatible",
+                    progress=100,
+                    message=str(e),
+                    result=None
+                )
+            except Exception:
+                logger.exception(f"[JOB {job_id}] CI4 not_compatible callback fehlgeschlagen")
+
+            return {
+                "job_id": job_id,
+                "status": "not_compatible",
+            }
+
         
 
         update_status(job_id, "pdf_parsed", 20, "PDF analysiert")
@@ -83,11 +121,10 @@ def run_pipeline(
             )
         
         analysis_json = None
-        analysis_json = doob_to_json_blocklimit(
+        analysis_json = doob_to_json(
             doob=doob_document,
             job_id=job_id,
             company_name=context.company_name,
-            blocklimit=90
         )
 
         if debug_mode:
@@ -101,52 +138,59 @@ def run_pipeline(
 
         
         #4. Erster LLM Call Selection
-        selector = BlockSelector(llm_client, config)
         SEARCH_TERM_START = f"{context.main_standard_code} , {context.main_standard_name} , {context.main_standard_description} , {context.main_standard_description_eng}"
         SEARCH_TERM_END = f"{context.second_standard_code} , {context.second_standard_name} , {context.second_standard_description} , {context.second_standard_description_eng}"
 
-        relevant_pages = selector.select_blocks(
-            analysis_json=analysis_json,
-            search_term_start=SEARCH_TERM_START,
-            search_term_end=SEARCH_TERM_END,
-        )
+        if context.relevant_pages and len(context.relevant_pages) > 0:
+            logger.info(f"[JOB {job_id}] Using user-defined relevant pages for selection.")
 
-        if not relevant_pages:
-            logger.warning(f"[JOB {job_id}] No relevant pages found for selection")
+            relevant_pages = context.relevant_pages
+            update_status(job_id, "user_page_selection_done", 40, "Vom User vorgegebene Seiten verwendet")
 
-            update_status(
-                job_id,
-                step="no_match",
-                percent=100,
-                message="In dem Dokument konnten keine passenden Textstellen zu den gewählten Standards gefunden werden."
+        else:
+            selector = BlockSelector(llm_client, config)
+            relevant_pages = selector.select_blocks_iterative(
+                analysis_json=analysis_json,
+                search_term_start=SEARCH_TERM_START,
+                search_term_end=SEARCH_TERM_END,
             )
 
-            # ---------- ERROR / NO-MATCH CALLBACK ----------
-            try:
-                ci4 = CI4Client(
-                    base_url=config.base_url,
-                    pipeline_secret=config.pipeline_secret
+            if not relevant_pages:
+                logger.warning(f"[JOB {job_id}] No relevant pages found for selection")
+
+                update_status(
+                    job_id,
+                    step="no_match",
+                    percent=100,
+                    message="In dem Dokument konnten keine passenden Textstellen zu den gewählten Standards gefunden werden."
                 )
-                ci4.send_pipeline_result(
-                    job_id=job_id,
-                    status="no_match",
-                    progress=100,
-                    message="In dem Dokument konnten keine passenden Textstellen zu den gewählten Standards gefunden werden.",
-                    result=[]
-                )
-            except Exception:
-                logger.exception(f"[JOB {job_id}] CI4 no-match callback fehlgeschlagen")
 
-            return {
-                "job_id": job_id,
-                "status": "no_match",
-            }
+                # ---------- ERROR / NO-MATCH CALLBACK ----------
+                try:
+                    ci4 = CI4Client(
+                        base_url=config.base_url,
+                        pipeline_secret=config.pipeline_secret
+                    )
+                    ci4.send_pipeline_result(
+                        job_id=job_id,
+                        status="no_match",
+                        progress=100,
+                        message="In dem Dokument konnten keine passenden Textstellen zu den gewählten Standards gefunden werden.",
+                        result=[]
+                    )
+                except Exception:
+                    logger.exception(f"[JOB {job_id}] CI4 no-match callback fehlgeschlagen")
 
-       
-
-        update_status(job_id, "llm_block_selection_done", 40, "Relevante Seiten ausgewählt")
+                return {
+                    "job_id": job_id,
+                    "status": "no_match",
+                }
 
         
+
+            update_status(job_id, "llm_block_selection_done", 40, "Relevante Seiten ausgewählt")
+
+            
         #5. Filtern der relevanten Blöcke
         filtered_json=None
 

@@ -55,7 +55,8 @@ class Parser:
     def toBlock(
         self,
         file_path: Path | str,
-        file_extension: str | FileExtensionType | None = None
+        file_extension: str | FileExtensionType | None = None,
+        page_numbers: list[int] | None = None
         ) -> DOOB: #Dokument out of Blocks
 
         file_extension = self.validator.validate_data(
@@ -66,6 +67,7 @@ class Parser:
         elements: List[Element] = self.loader.load(
             file_path=file_path,
             file_extension=file_extension,
+            page_numbers=page_numbers
         )
 
         return self.__to_doob_document(elements)

@@ -29,7 +29,8 @@ class ApiResultController extends ResourceController{
     {
         log_message('error', 'STORE HIT');
         log_message('error', 'Headers: ' . json_encode($this->request->getHeaders()));
-        log_message('error', 'Body: ' . $this->request->getBody());
+        $raw = $this->request->getBody();
+        log_message('error', 'Body: ' . $raw);
 
         $token = $this->request->getHeaderLine('X-PIPELINE-TOKEN');
         log_message('debug', 'Auth header: ' . $this->request->getHeaderLine('X-PIPELINE-TOKEN'));
@@ -39,10 +40,14 @@ class ApiResultController extends ResourceController{
             return $this->failUnauthorized();
         }
 
-        $data = $this->request->getJSON(true);
+        $data = json_decode($raw, true);
 
-        if (empty($data['job_id']) || !isset($data['result'])) {
-            return $this->failValidationErrors('JobId or result missing');
+        if ($data === null) {
+            return $this->failValidationErrors('Invalid JSON body');
+        }
+
+        if (empty($data['job_id'])) {
+            return $this->failValidationErrors('JobId missing');
         }
 
         $job = $this->jobModel->findByjob_id($data['job_id']);
@@ -73,9 +78,17 @@ class ApiResultController extends ResourceController{
 
             if ($status === 'no_match') {
                 $this->jobModel->updateStatus($job['job_id'], 'no_match');
-                $this->reportModel->delete($job['report_id']);
+                $this->reportModel->update($job['report_id'], ['status' => 'ready']); //vllt lieber updaten
                 return $this->respond(['ok' => true]);
             }
+
+            if ($status === 'not_compatible') {
+                $this->jobModel->updateStatus($job['job_id'], 'not_compatible');
+                $this->reportModel->update($job['report_id'], ['status' => 'not_compatible']);
+
+                return $this->respond(['ok' => true]);
+            }
+
 
 
             // Erfolgfall
@@ -85,8 +98,11 @@ class ApiResultController extends ResourceController{
                     return $this->failValidationErrors('Missing result for finished job');
                 }
 
-                // 1) Job auf finished setzen
+                //Job auf finished setzen
                 $this->jobModel->updateStatus($job['job_id'], 'finished');
+
+                //Report auf ready setzen
+                $this->reportModel->update($job['report_id'], ['status' => 'ready']);
 
                 // 2) Werte persistieren
                 $this->reportValueModel->persistFromPipelineResult(
