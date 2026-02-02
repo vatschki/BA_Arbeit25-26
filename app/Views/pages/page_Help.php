@@ -17,7 +17,7 @@
 
 
                 <!-- ===================== -->
-                <!-- 1. Einführung -->
+                <!-- Einführung -->
                 <!-- ===================== -->
                 <section id="help-intro" class="mb-5">
                     <h3>Überblick</h3>
@@ -36,7 +36,7 @@
                 </section>
 
                 <!-- ===================== -->
-                <!-- 2. Ablauf -->
+                <!-- Ablauf -->
                 <!-- ===================== -->
                 <section id="help-flow" class="mb-5">
                     <h3>Gesamtablauf</h3>
@@ -81,7 +81,7 @@
 
 
                 <!-- ===================== -->
-                <!-- 3. API Key -->
+                <!-- API Key -->
                 <!-- ===================== -->
                 <section id="help-apikey" class="mb-5">
                     <h3>API-Key hinterlegen</h3>
@@ -159,7 +159,7 @@
 
 
                 <!-- ===================== -->
-                <!-- 4. PDF Upload -->
+                <!-- PDF Upload -->
                 <!-- ===================== -->
                 <section id="help-upload" class="mb-5">
                     <h3>Bericht hochladen</h3>
@@ -178,6 +178,7 @@
                         <h5 class="mb-2">Pflicht Eingabefelder im Upload-Formular</h5>
                         <ul class="text-grey mb-0">
                             <li><strong>Unternehmen</strong> (Zuordnung des Berichts)</li>
+                            <li><strong>Author</strong> (Verfasser des Berichts)</li>
                             <li><strong>Jahr</strong> (Berichtsjahr für Historie und Vergleich)</li>
                             <li><strong>ESRS-Standard</strong> (bestimmt Struktur und verfügbare Anforderungen)</li>
                             <li><strong>ESRS-Anforderung</strong> (Einzelauswertung oder alle Anforderungen)</li>
@@ -203,7 +204,26 @@
                         </div>
                     </div>
 
+                    <!-- Author -->
+                    <div class="mb-4">
+                        <h5 class="mb-1">Autor</h5>
 
+                        <div class="help-indented">
+                            <p class="text-grey mb-2">
+                                Wählen Sie den Autor aus, der das Unternehmen dabei unterstützt hat, den Bericht zu Verfassen.
+                                Diese Information wird für regulatorische Zuordnungen und spätere
+                                Auswertungen verwendet. Der Autor kann zum einen das Unternehmen selber sein,
+                                oder ein externer Dienstleister wie KPMG oder Deloitte.
+                            </p>
+                        </div>
+
+                        <!-- Richtiger Link zu Auhtorverwaltung -->
+                        <div class="mt-4">
+                            <a href="#help-author" class="btn btn-primary">
+                                Author Hinzufügen
+                            </a>
+                        </div>
+                    </div>
 
                     <!-- Jahr -->
                     <div class="mb-4">
@@ -279,7 +299,7 @@
 
 
                 <!-- ===================== -->
-                <!-- 5. Unternehmen hochladen -->
+                <!-- Unternehmen hochladen -->
                 <!-- ===================== -->
                 <section id="help-company" class="mb-5">
                     <h3>Unternehmen hinzufügen</h3>
@@ -417,7 +437,7 @@
                 </section>
 
                 <!-- ===================== -->
-                <!-- 6. Ergebnisse -->
+                <!-- Ergebnisse -->
                 <!-- ===================== -->
                 <section id="help-results" class="mb-5">
                     <h3>Ergebnisse anzeigen</h3>
@@ -448,7 +468,28 @@
                 </section>
 
                 <!-- ===================== -->
-                <!-- 6. Sektoren -->
+                <!-- Authoren -->
+                <!-- ===================== -->
+                <section id="help-authoren" class="mb-5">
+                    <h3>Autor </h3>
+
+                    <p class="text-grey">
+                        Sektoren dienen der Kategorisierung von Unternehmen
+                        und sind entscheidend für die Zuordnung von ESG-Berichten.
+                        Jeder Sektor umfasst mehrere Industrien, die spezifische Branchen
+                        innerhalb des Sektors repräsentieren.
+                    </p>
+
+                    <div class="mt-4">
+                        <a href="/config/sector" class="btn btn-primary">
+                            Zur Sektorenverwaltung
+                        </a>
+                    </div>
+
+                </section>
+
+                <!-- ===================== -->
+                <!-- Sektoren -->
                 <!-- ===================== -->
                 <section id="help-sektors" class="mb-5">
                     <h3>Sektoren </h3>
@@ -468,24 +509,9 @@
 
                 </section>
 
-
-
-
                 <!-- ===================== -->
-                <!-- 6. Industrien -->
+                <!-- Industrien -->
                 <!-- ===================== -->
-                <p class="text-grey">
-                    Die Auswahl der richtigen Industrie ist wichtig, da sie den
-                    zugehörigen Sektor automatisch bestimmt und somit die Grundlage
-                    für die Analyse und Auswertung der Berichte bildet.
-                </p>
-
-                <div class="mt-4">
-                    <a href="/config/industry" class="btn btn-primary">
-                        Zur Industrie- und Sektorenverwaltung
-                    </a>
-                </div>
-
                 <section id="help-sektors" class="mb-5">
                     <h3>Industrien</h3>
 
@@ -610,7 +636,7 @@
                 </section>
 
                 <!-- ===================== -->
-                <!-- 7. FAQ - kommt noch -->
+                <!-- FAQ - kommt noch -->
                 <!-- ===================== -->
 
             </div>
