@@ -9,22 +9,24 @@
             <?= view('pages/partials/config_sidebar_nav') ?>
 
             <main class="config-content">
+                <div class="container">
+
+                    <?php if (session()->getFlashdata('success')): ?>
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <?= esc(session()->getFlashdata('success')) ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if (session()->getFlashdata('error')): ?>
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <?= esc(session()->getFlashdata('error')) ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    <?php endif; ?>
+
+
                     <div class="card">
-
-                        <?php if (session()->getFlashdata('success')): ?>
-                            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                <?= esc(session()->getFlashdata('success')) ?>
-                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                            </div>
-                        <?php endif; ?>
-
-                        <?php if (session()->getFlashdata('error')): ?>
-                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                <?= esc(session()->getFlashdata('error')) ?>
-                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                            </div>
-                        <?php endif; ?>
-
                         <div class="card-body container-fluid">
                             <div class="d-flex justify-content-between mb-3">
                                 <!-- Left: "Neu" Button -->
@@ -100,6 +102,7 @@
                                     <tr>
                                         <th data-field="id" data-sortable="true">ID</th>
                                         <th data-field="standard_id" data-sortable="true">Standard ID</th>
+                                        <th data-field="code" data-sortable="true">Code</th>
                                         <th data-field="disclosure_requirement" data-sortable="true">Disclosure Requirement</th>
                                         <th data-field="paragraph" data-sortable="true">Paragraph</th>
                                         <th data-field="title" data-sortable="true">Titel</th>
@@ -118,6 +121,7 @@
                                                 <tr>
                                                     <td><?= esc($requirement['id']) ?></td>
                                                     <td><?= esc($requirement['standard_id']) ?></td>
+                                                    <td><?= esc($requirement['code']) ?></td>
                                                     <td><?= esc($requirement['disclosure_requirement']) ?></td>
                                                     <td><?= esc($requirement['paragraph']) ?></td>
                                                     <td><?= esc($requirement['title']) ?></td>
@@ -129,19 +133,20 @@
                                                         <!-- EDIT -->
                                                         <a href="#"
                                                            class="text-secondary me-2 edit-btn"
-                                                           title="Bearbeiten"
                                                            data-bs-toggle="modal"
                                                            data-bs-target="#createRequirementModal"
 
                                                            data-id="<?= $requirement['id'] ?>"
                                                            data-standard_id="<?= esc($requirement['standard_id']) ?>"
+                                                           data-code="<?= esc($requirement['code']) ?>"
                                                            data-disclosure_requirement="<?= esc($requirement['disclosure_requirement']) ?>"
                                                            data-paragraph="<?= esc($requirement['paragraph']) ?>"
                                                            data-title="<?= esc($requirement['title']) ?>"
                                                            data-data_type="<?= esc($requirement['data_type']) ?>"
                                                            data-conditional_alternative_disclosure_requirement="<?= esc($requirement['conditional_alternative_disclosure_requirement']) ?>"
                                                         >
-                                                            <i class="fa-solid fa-pen-to-square"></i>
+
+                                                        <i class="fa-solid fa-pen-to-square"></i>
                                                         </a>
 
                                                         <!-- DELETE -->
@@ -171,7 +176,7 @@
                             </div>
                         </div>
                     </div>
-
+                </div>
             </main>
         </div>
 
@@ -189,12 +194,12 @@
             <div class="modal-content">
 
                 <div class="modal-header">
-                    <h5 class="modal-title" id="dynamicModalTitle">Anforderung hinzufügen</h5>
+                    <h5 class="modal-title" id="dynamicRequirementModalTitle">Anforderung hinzufügen</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
                 <form class="config-form needs-validation"
-                      id="standardForm"
+                      id="requirementForm"
                       method="post"
                       action="<?= base_url('config/requirement/create') ?>"
                       data-create-url="<?= base_url('config/requirement/create') ?>"
@@ -220,10 +225,21 @@
                                         <div class="mb-3 row align-items-center">
                                             <label class="col-sm-3 col-form-label d-flex align-items-center">
                                                 Standard<span class="text-danger">*</span>
+                                                <a
+                                                        href="<?= site_url('help') ?>#help-requirement"
+                                                        class="ms-2 text-muted"
+                                                        data-bs-toggle="tooltip"
+                                                        data-bs-placement="top"
+                                                        title="Standard der Anforderung."
+                                                        aria-label="Hilfe zum Feld Standard"
+                                                >
+                                                    <i class="fa-regular fa-circle-question"></i>
+                                                </a>
                                             </label>
                                             <div class="col-sm-9">
                                                 <select
                                                         name="standard_id"
+                                                        id="standard_id"
                                                         class="form-select <?= isset($errors['standard_id']) ? 'is-invalid' : '' ?>"
                                                         required
                                                 >
@@ -247,12 +263,23 @@
 
                                         <!-- Code -->
                                         <div class="mb-3 row align-items-center">
-                                            <label class="col-sm-3 col-form-label">
+                                            <label class="col-sm-3 col-form-label d-flex align-items-center">
                                                 Code<span class="text-danger">*</span>
+                                                <a
+                                                        href="<?= site_url('help') ?>#help-requirement"
+                                                        class="ms-2 text-muted"
+                                                        data-bs-toggle="tooltip"
+                                                        data-bs-placement="top"
+                                                        title="Code der Anforderung."
+                                                        aria-label="Hilfe zum Feld Code"
+                                                >
+                                                    <i class="fa-regular fa-circle-question"></i>
+                                                </a>
                                             </label>
                                             <div class="col-sm-9">
                                                 <input type="text"
                                                        name="code"
+                                                       id="code"
                                                        class="form-control <?= isset($errors['code']) ? 'is-invalid' : '' ?>"
                                                        value="<?= esc(old('code') ?? '') ?>"
                                                        placeholder="z. B. E4.EBM-3_01"
@@ -265,12 +292,23 @@
 
                                         <!-- DISCLOSURE REQUIREMENT -->
                                         <div class="mb-3 row align-items-center">
-                                            <label class="col-sm-3 col-form-label">
-                                                Disclosure Requirement<span class="text-danger">*</span>
+                                            <label class="col-sm-3 col-form-label d-flex align-items-center">
+                                                Disclosure Requirement (DR)<span class="text-danger">*</span>
+                                                <a
+                                                        href="<?= site_url('help') ?>#help-requirement"
+                                                        class="ms-2 text-muted"
+                                                        data-bs-toggle="tooltip"
+                                                        data-bs-placement="top"
+                                                        title="DR der Anforderung."
+                                                        aria-label="Hilfe zum Feld DR"
+                                                >
+                                                    <i class="fa-regular fa-circle-question"></i>
+                                                </a>
                                             </label>
                                             <div class="col-sm-9">
                                                 <input type="text"
                                                        name="disclosure_requirement"
+                                                         id="disclosure_requirement"
                                                        class="form-control <?= isset($errors['disclosure_requirement']) ? 'is-invalid' : '' ?>"
                                                        value="<?= esc(old('disclosure_requirement') ?? '') ?>"
                                                        placeholder="z. B. DR 1"
@@ -283,12 +321,23 @@
 
                                         <!-- PARAGRAPH -->
                                         <div class="mb-3 row align-items-center">
-                                            <label class="col-sm-3 col-form-label">
+                                            <label class="col-sm-3 col-form-label d-flex align-items-center">
                                                 Paragraph<span class="text-danger">*</span>
+                                                <a
+                                                        href="<?= site_url('help') ?>#help-requirement"
+                                                        class="ms-2 text-muted"
+                                                        data-bs-toggle="tooltip"
+                                                        data-bs-placement="top"
+                                                        title="Paragraph der Anforderung."
+                                                        aria-label="Hilfe zum Feld Paragraph"
+                                                >
+                                                    <i class="fa-regular fa-circle-question"></i>
+                                                </a>
                                             </label>
                                             <div class="col-sm-9">
                                                 <input type="text"
                                                        name="paragraph"
+                                                       id="paragraph"
                                                        class="form-control <?= isset($errors['paragraph']) ? 'is-invalid' : '' ?>"
                                                        value="<?= esc(old('paragraph') ?? '') ?>"
                                                        placeholder="z. B. §12"
@@ -301,12 +350,23 @@
 
                                         <!-- TITLE -->
                                         <div class="mb-3 row align-items-center">
-                                            <label class="col-sm-3 col-form-label">
+                                            <label class="col-sm-3 col-form-label d-flex align-items-center">
                                                 Titel<span class="text-danger">*</span>
+                                                <a
+                                                        href="<?= site_url('help') ?>#help-requirement"
+                                                        class="ms-2 text-muted"
+                                                        data-bs-toggle="tooltip"
+                                                        data-bs-placement="top"
+                                                        title="Titel der Anforderung."
+                                                        aria-label="Hilfe zum Feld Titel"
+                                                >
+                                                    <i class="fa-regular fa-circle-question"></i>
+                                                </a>
                                             </label>
                                             <div class="col-sm-9">
                                                 <input type="text"
                                                        name="title"
+                                                       id="title"
                                                        class="form-control <?= isset($errors['title']) ? 'is-invalid' : '' ?>"
                                                        value="<?= esc(old('title') ?? '') ?>"
                                                        placeholder="Titel der Anforderung"
@@ -319,11 +379,22 @@
 
                                         <!-- DATA TYPE -->
                                         <div class="mb-3 row align-items-center">
-                                            <label class="col-sm-3 col-form-label">
+                                            <label class="col-sm-3 col-form-label d-flex align-items-center">
                                                 Datentyp<span class="text-danger">*</span>
+                                                <a
+                                                        href="<?= site_url('help') ?>#help-requirement"
+                                                        class="ms-2 text-muted"
+                                                        data-bs-toggle="tooltip"
+                                                        data-bs-placement="top"
+                                                        title="Datentyp der Anforderung."
+                                                        aria-label="Hilfe zum Feld Datentyp"
+                                                >
+                                                    <i class="fa-regular fa-circle-question"></i>
+                                                </a>
                                             </label>
                                             <div class="col-sm-9">
                                                 <select name="data_type"
+                                                        id="data_type"
                                                         class="form-select <?= isset($errors['data_type']) ? 'is-invalid' : '' ?>"
                                                         required>
                                                     <option value="">Bitte Datentyp wählen</option>
@@ -347,10 +418,10 @@
                                         <!-- CONDITIONAL ALTERNATIVE -->
                                         <div class="mb-3 row align-items-center">
                                             <label class="col-sm-3 col-form-label">
-                                                Alternative Disclosure (optional)
+                                                Alternative DR
                                             </label>
                                             <div class="col-sm-9">
-                                                <textarea name="conditional_alternative_disclosure_requirement" class="form-control" rows="3" placeholder="Alternative Anforderung, falls zutreffend"><?= esc(old('conditional_alternative_disclosure_requirement') ?? '') ?></textarea>
+                                                <textarea name="conditional_alternative_disclosure_requirement" id="conditional_alternative_disclosure_requirement" class="form-control" rows="3" placeholder="Alternative Anforderung, falls zutreffend"><?= esc(old('conditional_alternative_disclosure_requirement') ?? '') ?></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -374,3 +445,56 @@
     ></div>
 
 <?php endif; ?>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        var modal = document.getElementById('createRequirementModal');
+        if (!modal) return;
+
+        var form = document.getElementById('requirementForm');
+        var modalTitle = document.getElementById('dynamicRequirementModalTitle');
+
+        var idField = document.getElementById('requirement_id');
+        var standardField = document.getElementById('standard_id');
+        var codeField = document.getElementById('code');
+        var disclosureField = document.getElementById('disclosure_requirement');
+        var paragraphField = document.getElementById('paragraph');
+        var titleField = document.getElementById('title');
+        var dataTypeField = document.getElementById('data_type');
+        var conditionalField = document.getElementById('conditional_alternative_disclosure_requirement');
+
+        var createUrl = form.getAttribute('data-create-url');
+        var updateUrl = form.getAttribute('data-update-url');
+
+        modal.addEventListener('show.bs.modal', function (event) {
+
+            var trigger = event.relatedTarget;
+
+            // CREATE MODE
+            if (!trigger || !trigger.classList.contains('edit-btn')) {
+
+                modalTitle.textContent = 'Anforderung hinzufügen';
+                form.action = createUrl;
+
+                form.reset();
+                idField.value = '';
+                return;
+            }
+
+            // EDIT MODE
+            modalTitle.textContent = 'Anforderung bearbeiten';
+            form.action = updateUrl + '/' + trigger.dataset.id;
+
+            idField.value = trigger.dataset.id;
+            standardField.value = trigger.dataset.standard_id || '';
+            codeField.value = trigger.dataset.code || '';
+            disclosureField.value = trigger.dataset.disclosure_requirement || '';
+            paragraphField.value = trigger.dataset.paragraph || '';
+            titleField.value = trigger.dataset.title || '';
+            dataTypeField.value = trigger.dataset.data_type || '';
+            conditionalField.value = trigger.dataset.conditional_alternative_disclosure_requirement || '';
+        });
+    });
+</script>
+

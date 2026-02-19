@@ -572,7 +572,7 @@
                 <!-- ===================== -->
                 <!-- Requirements -->
                 <!-- ===================== -->
-                <section id="help-requirements" class="mb-5">
+                <section id="help-requirement" class="mb-5">
                     <h3>Anforderungen</h3>
 
                     <p class="text-grey">
