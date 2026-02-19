@@ -13,8 +13,11 @@
         "php": "^8.1",
         "ext-intl": "*",
         "ext-mbstring": "*",
+        "codeigniter4/shield": "^1.2",
         "laminas/laminas-escaper": "^2.17",
-        "psr/log": "^3.0"
+        "phpoffice/phpspreadsheet": "^5.4",
+        "psr/log": "^3.0",
+        "smalot/pdfparser": "^2.12"
     },
     "require-dev": {
         "codeigniter/coding-standard": "^1.7",

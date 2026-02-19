@@ -6,6 +6,7 @@
     --esr-bg:#f3f4f6;         /* Seitenhintergrund */
     --esr-card:#ffffff;       /* Karten/Flächen */
     --esr-border:#e5e7eb;     /* Rahmen/Trennlinien */
+    --esr-red-warning: #ff0000;     /* Red Warning */
 }
 
 html, body{
@@ -125,8 +126,47 @@ body > div:first-of-type{
             box-shadow .18s ease;
 }
 
+/* Sidbar im modal */
+.sidebar-nav {
+    width: 220px;
+    background-color: var(--esr-bg); /* leicht dunkles Grau */
+    border-right: 2px solid var(--esr-border); /* Vertikale Linie rechts */
+    padding-top: 15px;
+}
 
-/* Suchfeld + Button-Gruppe */
+/* Sidebar Buttons */
+.sidebar-nav .nav-link {
+    color: var(--esr-blue-700);
+    text-align: left;
+    padding: 10px 15px;
+    border-radius: 6px;
+    margin-bottom: 4px;
+    font-weight: 500;
+}
+
+/* Aktiver Button */
+.sidebar-nav .nav-link.active {
+    background-color: var(--esr-accent);
+    color: #ffffff !important;
+}
+
+/* Hover-Effekt */
+.sidebar-nav .nav-link:hover {
+    background-color: var(--esr-accent);
+    color: #ffffff;
+}
+
+
+#main-content .container{
+    max-width: 100% !important;
+    padding: 1px;
+}
+
+#main-content .card {
+    width: 100%;
+    margin: 0;
+}
+
 #main-content .card-body > .d-flex.justify-content-between { align-items: center; gap: 1rem; }
 #main-content .card-body .d-flex.align-items-center { gap: .75rem; }
 
@@ -145,17 +185,6 @@ body > div:first-of-type{
 }
 
 /* Dropdown */
-.btn-secondary {
-    background: #fff;
-    color: var(--esr-blue-700);
-    border: 1px solid var(--esr-border);
-    border-radius: .55rem;
-}
-.btn-secondary:hover,
-.btn-secondary:focus {
-    background: color-mix(in oklab, var(--esr-accent) 85%, black);
-    box-shadow: 0 2px 10px rgba(30,136,229,.15);
-}
 .dropdown-menu {
     border: 1px solid var(--esr-border);
     box-shadow: 0 16px 32px rgba(0,0,0,.08);
@@ -164,6 +193,19 @@ body > div:first-of-type{
 .dropdown-item { display: flex; align-items: center; gap: .5rem; color: var(--esr-blue-700); }
 .dropdown-item:hover { background: color-mix(in oklab, var(--esr-accent) 12%, white); }
 .dropdown-item input[type="checkbox"] { accent-color: var(--esr-accent); }
+
+.dropdown-overflow-control{
+    width: 220px;
+    overflow-x: hidden;
+}
+
+.filter-name-sector,
+.filter-name-industry {
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+}
+
 
 /* Tabelle */
 .table{
@@ -197,6 +239,12 @@ body > div:first-of-type{
     text-align: center;
     font-weight: 500;
 }
+.table-scroll {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
 
 /* Buttons */
 .btn-primary{
@@ -211,6 +259,78 @@ body > div:first-of-type{
     background-color: color-mix(in oklab, var(--esr-accent) 85%, black);
     border-color: color-mix(in oklab, var(--esr-accent) 85%, black);
 }
+
+.btn-secondary {
+    background: #fff;
+    color: var(--esr-blue-700);
+    border: 1px solid var(--esr-border);
+    border-radius: .55rem;
+}
+.btn-secondary:hover,
+.btn-secondary:focus {
+    background: color-mix(in oklab, var(--esr-accent) 85%, black);
+    box-shadow: 0 2px 10px rgba(30,136,229,.15);
+}
+
+.erstellen_spalte{
+    margin-left: .5em; height: 2.5em; width: 7em; border-radius: 8px;
+    background-color: var(--esr-accent);
+    font-weight: bold; color: #fff;
+}
+.erstellen_spalte:hover{
+    background-color: color-mix(in oklab, var(--esr-accent) 85%, black);
+}
+.abbrechen_button{
+    background-color: #fff; /* neutral lassen, oder: color-mix(in oklab, var(--esr-blue-700) 20%, #777) */
+    font-weight: bold; color: var(--esr-red-warning);
+    width: 7em; height: 2.5em; margin-left: .5em; border-radius: 8px;
+    border: 1px solid var(--esr-border);
+    border-radius: .55rem;
+}
+
+.abbrechen_button:focus,
+.abbrechen_button:focus-visible,
+.abbrechen_button:active {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.abbrechen_button:hover {
+    background-color: var(--esr-red-warning);
+    color: #fff;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* form foolproof */
+.is-invalid {
+    border-color: #dc3545;
+}
+.invalid-feedback {
+    display: none;
+}
+.is-invalid + .invalid-feedback {
+    display: block;
+}
+
+
+/* Pdf Dropzone */
+.pdf-drop-zone{
+    border: 2px dashed var(--esr-border);
+    border-radius: 1rem;
+    background: color-mix(in oklab, var(--esr-bg) 80%, #ffffff);
+    padding: 2.5rem 1rem;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color .2s ease, border-color .2s ease;
+}
+
+.pdf-drop-zone.dragover{
+    background: color-mix(in oklab, var(--esr-accent) 10%, #ffffff);
+    border-color: var(--esr-accent);
+}
+
+
 
 /* Footer */
 .footer{
@@ -228,20 +348,7 @@ body > div:first-of-type{
 
 .container-card { margin: 20px; }
 
-.erstellen_spalte{
-    margin-left: .5em; height: 2.5em; width: 7em; border-radius: 8px;
-    background-color: var(--esr-accent);
-    font-weight: bold; color: #fff;
-}
-.erstellen_spalte:hover{
-    background-color: color-mix(in oklab, var(--esr-accent) 85%, black);
-}
-.abbrechen_spalte{
-    background-color: #777777; /* neutral lassen, oder: color-mix(in oklab, var(--esr-blue-700) 20%, #777) */
-    font-weight: bold; color: #fff;
-    width: 7em; height: 2.5em; margin-left: .5em; border-radius: 8px;
-}
-.abbrechen_spalte:hover{ background-color: #9a9a9a; }
+
 
 /* Links, Icons */
 .hidden-link{ text-decoration: none; color: inherit; font-weight: bold; }
@@ -257,7 +364,7 @@ body > div:first-of-type{
 /* Tabellen-Buttons (lokal) */
 .table-button{
     margin-bottom: .5em; border-radius: 12px; width: 6em; height: 2em;
-    color: #fff; font-weight: bold; background-color: var(--esr-accent); font-size: 1.05em;
+    color: var(--esr-card); font-weight: bold; background-color: var(--esr-accent); font-size: 1.05em;
 }
 .table-button:hover{ background-color: color-mix(in oklab, var(--esr-accent) 85%, black); }
 
@@ -290,13 +397,13 @@ body > div:first-of-type{
 #sortid_erstellen{ padding: .25em 0; }
 #spaltenbezeichnung{ padding: .25em 0; }
 
-/* Menüeffekte aus CSS 1: Farben auf neues Schema angepasst (dezent) */
+/* Menüeffekte */
 .menu-item{ position: relative; display: inline-block; margin: 0 10px; }
 .menu-item a{
     display: flex; align-items: center; font-size: 18px; text-decoration: none; padding: 10px 20px;
     position: relative; background-size: 200% 100%; background-position: 100%; background-clip: text;
     -webkit-text-fill-color: transparent; transition: .8s ease-in-out; cursor: pointer;
-    background-image: linear-gradient(to right, var(--esr-blue-700), #ffffff 50%, var(--esr-accent) 50%);
+    background-image: linear-gradient(to right, var(--esr-blue-700), var(--esr-card) 50%, var(--esr-accent) 50%);
 }
 .menu-item a:hover{ background-position: 0 0; }
 .menu-item.active a{ background-position: 0 0; -webkit-text-fill-color: #020202; font-weight: bold; }
@@ -307,23 +414,256 @@ body > div:first-of-type{
 .draggable-card:active{ cursor: grabbing; }
 a:hover{ color: color-mix(in oklab, var(--esr-accent) 60%, black); }
 a:link{ text-decoration: none; }
-table th{ background-color: var(--esr-accent) !important; color: #fff !important; }
+table th{ background-color: var(--esr-accent) !important; color: var(--esr-card) !important; }
 
-/* Platzhalter-Spalten in Boards */
+/* Platzhalter-Spalten */
 .spalte{ min-height: 1em; }
 
 /* Such-Button-Press-Effekt */
 .search_Button{ transition: transform .1s ease-in-out; }
 .search_Button:active{ transform: scale(0.9); }
 
-/* Checkbox-Logik (aus deinem JS) */
+/* Checkbox-Logik */
 .column-toggle{}
 .disabled-option{ pointer-events: none; opacity: .5; }
 
-/* EINE Definition (doppelt war vorher): ------------------------------- */
-.personenkuerzel{
-    text-align: center; padding-top: .4em; height: 2.5em; width: 2.5em;
+/* Sidebar */
+
+/* Seite wie modal-content */
+.config-page{
+    background: var(--esr-card);
+    border-radius: 0.75rem;
 }
+
+.config-sidebar-nav{
+    flex: 0 0 220px;
+    width: 220px;
+    background-color: var(--esr-bg);
+    border-right: 2px solid var(--esr-border);
+
+    padding-top: 15px;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+
+    position: relative;
+    z-index: 1;
+}
+
+/* Links */
+.config-sidebar-nav .nav-link{
+    display: block;
+    color: var(--esr-blue-700);
+    text-align: left;
+    padding: 10px 15px;
+    border-radius: 6px;
+    margin-bottom: 4px;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+/* Hover */
+.config-sidebar-nav .nav-link:hover{
+    background-color: var(--esr-accent);
+    color: var(--esr-card);
+}
+
+/* Active (verschmilzt mit Content) */
+.config-sidebar-nav .nav-link.active,
+.config-sidebar-nav .nav-link.is-active{
+    background: var(--esr-card);
+    color: var(--esr-black-205) !important;
+
+    margin-right: calc(-0.75rem - 2px);
+    padding-right: calc(15px + 0.75rem + 2px);
+
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+
+    position: relative;
+    z-index: 2;
+}
+
+.config-page__header,
+.config-page__footer{
+    padding: 1rem 1.25rem;
+    min-height: 56px;
+    display: flex;
+    align-items: center;
+}
+
+
+.config-page__header{
+    border-bottom: 2px solid var(--esr-border);
+}
+
+.config-page__title{
+    font-weight: 600;
+}
+
+/* Body: links Menü, rechts Content – ohne Außenabstände */
+.config-page__body{
+    display: flex;
+    min-height: 60vh;
+}
+
+/* Footer-Linie wie „unten nochmal Strich“ */
+.config-page__footer{
+    border-top: 2px solid var(--esr-border);
+}
+
+#requirementsTable {
+    width: max-content;
+    min-width: 100%;
+}
+
+
+
+.config-content{
+    background: #fff;       /* falls nicht schon */
+    flex: 1;
+    padding: 1rem 1.25rem;  /* damit der Content nicht am Rand klebt */
+    min-width: 0;
+}
+
+/* Help seite suchfeld*/
+.help-search-wrapper {
+    max-width: 360px;
+}
+
+.help-flow-buttons {
+    row-gap: .75rem;
+}
+
+.help-flow-arrow {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--esr-blue-700);
+    user-select: none;
+}
+
+/* Help – API Key Beispiele (Provider / Model) */
+
+.help-step.card {
+    border: 1px solid var(--esr-border);
+    border-radius: .75rem;
+    box-shadow: 0 8px 24px rgba(0,0,0,.04);
+    min-width: 260px;
+    background: color-mix(in oklab, var(--esr-bg) 85%, #ffffff);
+}
+
+
+.help-step-badge {
+    display: inline-block;
+    padding: .25rem .6rem;
+    border-radius: .5rem;
+    background: var(--esr-accent);
+    color: #fff;
+    font-weight: 600;
+    font-size: .8rem;
+}
+
+.help-copy-text {
+    font-size: .75rem;
+    color: var(--esr-blue-700);
+    opacity: .8;
+    white-space: nowrap;
+}
+
+.help-copy-btn:hover .help-copy-text {
+    opacity: 1;
+}
+
+.help-copy-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: transparent;
+    border: none;
+    color: var(--esr-blue-700);
+    cursor: pointer;
+    padding: 4px;
+}
+
+.help-copy-btn:hover {
+    color: var(--esr-accent);
+}
+
+/* Help – Wichtiger Hinweis (z. B. Pflichtvoraussetzungen) */
+.help-important-note{
+    border-left: 4px solid var(--esr-accent);
+    background: color-mix(in oklab, var(--esr-accent) 8%, #ffffff);
+    border-radius: .35rem;
+    padding: .6rem .75rem;
+    color: var(--esr-black-205);
+}
+
+.help-important-note strong{
+    color: var(--esr-blue-700);
+}
+
+/* Help – Demo-Formfelder (rein erklärend, ohne Funktion) */
+.help-demo-select{
+    background-color: color-mix(in oklab, var(--esr-bg) 85%, #ffffff);
+    border: 1px dashed var(--esr-border);
+    color: var(--esr-blue-700);
+    opacity: 0.9;
+    cursor: not-allowed;
+}
+
+/* Keine Interaktion erlauben */
+.help-demo-select:disabled{
+    pointer-events: none;
+}
+
+/* Optional: Label für Demo-Felder */
+.help-demo-label{
+    font-size: .85rem;
+    color: #777;
+}
+
+/* Optional: kompaktere Darstellung in Help-Karten */
+#help-upload .help-demo-select{
+    max-width: 280px;
+}
+
+/* Vertikale Liste für Auswahlkarten */
+.help-choice-list {
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+}
+
+.help-choice-title::before {
+    content: "– ";
+    color: var(--esr-blue-700);
+    font-weight: 600;
+}
+
+.help-highlight {
+    outline: 3px solid #0d6efd;
+    outline-offset: 6px;
+    border-radius: 6px;
+    transition: outline 0.3s ease;
+}
+
+
+
+
+
+
+
+/* Mobile: Pfeile nach unten */
+@media (max-width: 768px) {
+    .help-flow-buttons {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .help-flow-arrow {
+        transform: rotate(90deg);
+        margin-left: .25rem;
+    }
+}
+
 
 /* Darkmode */
 body.dark-mode{

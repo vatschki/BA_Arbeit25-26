@@ -18,3 +18,33 @@
     </div>
   </div>
 </footer>
+
+
+
+<!-- Core JS-Dateien laden -->
+<script src="<?= base_url('resources/js/core.js') ?>"></script>
+<?php
+    $uri = service('uri');
+    $seg1 = $uri->getSegment(1) ?? '';
+?>
+<?php if ($seg1 === 'companies'): ?>
+    <script src="<?= base_url('resources/js/company_form.js') ?>"></script>
+    <script src="<?= base_url('resources/js/home_board.js') ?>"></script>
+<?php endif; ?>
+<?php if ($seg1 === 'esg-reports'): ?>
+    <script src="<?= base_url('resources/js/esg_form.js') ?>"></script>
+    <script src="<?= base_url('resources/js/home_board.js') ?>"></script>
+<?php endif; ?>
+<?php if ($seg1 === 'help'): ?>
+    <script src="<?= base_url('resources/js/help_page.js') ?>"></script>
+<?php endif; ?>
+<?php if ($seg1 === 'config'): ?>
+    <script src="<?= base_url('resources/js/config_forms.js') ?>"></script>
+<?php endif; ?>
+
+
+
+
+
+</body>
+</html>

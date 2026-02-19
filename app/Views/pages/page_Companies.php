@@ -1,215 +1,431 @@
-<!-- Darstellung des ausgewählten Menüs style="background-color: aliceblue !important; -->
+<?php
+$canManageContent = auth()->loggedIn() && auth()->user()->can('content.manage');
+$errors = session('errors') ?? [];
+?>
 <div id="main-content" class="container-card">
     <div class="container">
         <div class="card">
-            <div class="card-body container-fluid">
+            <div class="card-body">
                 <div class="d-flex justify-content-between mb-3">
                     <!-- Left: "Neu" Button -->
-                    <a href="<?= base_url('companies/create') ?>">
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-plus-circle"></i> Neu
-                        </button>
-                    </a>
-
+                    <div>
+                        <?php if (auth() -> loggedIn() && auth() -> user() -> can('content.manage')): ?>
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createCompanyModal">
+                                <i class="fas fa-plus-circle"></i> Neu
+                            </button>
+                        <?php endif; ?>
+                    </div>
                     <!-- Right: Button Group mit Search Field -->
                     <div class="d-flex align-items-center">
 
                         <!-- Search Field mit kleinem Abstand -->
-                        <input id="table-search" class="form-control w-75" type="search" placeholder="Search" aria-label="Search" style="margin-right: 10px;">
-
-                        <!-- Button Group für bessere Verbindung -->
-                        <div class="btn-group">
-                            <!-- Ansicht umschalten Button -->
-                            <button id="toggleView" class="btn btn-secondary rounded-start" type="button" name="toggle" aria-label="Show card view" title="Show card view">
-                                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        <!-- Dropdown für Land mit Suchfeld -->
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle rounded-end" type="button"
+                                    id="dropdownLandButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                Land
                             </button>
 
-                            <!-- Spaltenfilter Dropdown (Direkt in der Gruppe) -->
-                            <button class="btn btn-secondary dropdown-toggle rounded-end" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fa-solid fa-bars"></i>
-                            </button>
+                            <ul class="dropdown-menu p-2 dropdown-overflow-control" aria-labelledby="dropdownLandButton" style="width: 230px;" id="countryDropdownMenu">
 
-                            <!-- Dropdown-Menü außerhalb von btn-group -->
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <!-- Suchfeld oben -->
                                 <li>
-                                    <label class="dropdown-item">
-                                        <input type="checkbox" class="column-toggle" data-column="0" checked> ID
-                                    </label>
+                                    <input type="text" class="form-control" placeholder="Search..." id="searchCountryInput">
                                 </li>
-                                <li>
-                                    <label class="dropdown-item">
-                                        <input type="checkbox" class="column-toggle" data-column="1" checked> Name
-                                    </label>
-                                </li>
+
+                                <li><hr class="dropdown-divider"></li>
+
+                                <!-- Country-Liste -->
+                                <?php if (!empty($countries)): ?>
+                                    <?php foreach ($countries as $country): ?>
+                                        <li class="filter-item-country">
+                                            <label class="dropdown-item d-flex align-items-center">
+                                                <input class="form-check-input me-2 country-filter-checkbox" type="checkbox" value="<?= $country['id'] ?>">
+                                                <span class="filter-name-country"><?= $country['name_de'] ?></span>
+                                            </label>
+                                        </li>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <li class="dropdown-item disabled">Keine Länder vorhanden</li>
+                                <?php endif; ?>
                             </ul>
                         </div>
+
+                        <!-- Dropdown für Sektor mit Suchfeld -->
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle rounded-end" type="button"
+                                    id="dropdownSectorButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                Sektor
+                            </button>
+
+                            <ul class="dropdown-menu p-2 dropdown-overflow-control" aria-labelledby="dropdownSectorButton" style="width: 230px;" id="sectorDropdownMenu">
+
+                                <!-- Suchfeld oben -->
+                                <li>
+                                    <input type="text" class="form-control" placeholder="Search..." id="searchSectorInput">
+                                </li>
+
+                                <li><hr class="dropdown-divider"></li>
+
+                                <!-- Sektors-Liste -->
+                                <?php if (!empty($sectors)): ?>
+                                    <?php foreach ($sectors as $sector): ?>
+                                        <li class="filter-item-sector">
+                                            <label class="dropdown-item d-flex align-items-center">
+                                                <input class="form-check-input me-2 sector-filter-checkbox" type="checkbox" value="<?= $sector['id'] ?>">
+                                                <span class="filter-name-sector"><?= $sector['name'] ?></span>
+                                            </label>
+                                        </li>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <li class="dropdown-item disabled">Keine Sektoren vorhanden</li>
+                                <?php endif; ?>
+                            </ul>
+                        </div>
+
+                        <!-- Dropdown für Industry mit Suchfeld -->
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle rounded-end" type="button"
+                                    id="dropdownIndustryButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                Industrie
+                            </button>
+
+                            <ul class="dropdown-menu p-2 dropdown-overflow-control" aria-labelledby="dropdownIndustryButton" style="width: 230px;" id="industryDropdownMenu">
+
+                                <!-- Suchfeld oben -->
+                                <li>
+                                    <input type="text" class="form-control" placeholder="Search..." id="searchIndustryInput">
+                                </li>
+
+                                <li><hr class="dropdown-divider"></li>
+
+                                <!-- Industry-Liste -->
+                                <?php if (!empty($industries)): ?>
+                                    <?php foreach ($industries as $industry): ?>
+                                        <li class="filter-item-industry">
+                                            <label class="dropdown-item d-flex align-items-center">
+                                                <input class="form-check-input me-2 industry-filter-checkbox" type="checkbox" value="<?= $industry['id'] ?>">
+                                                <span class="filter-name-industry"><?= $industry['name'] ?></span>
+                                            </label>
+                                        </li>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <li class="dropdown-item disabled">Keine Industrien vorhanden</li>
+                                <?php endif; ?>
+                            </ul>
+                        </div>
+
+                        <!-- Spaltenfilter Dropdown (Direkt in der Gruppe) -->
+                        <button class="btn btn-secondary dropdown-toggle rounded-end" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fa-solid fa-bars"></i>
+                        </button>
+
+                        <!-- Dropdown-Menü außerhalb von btn-group -->
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <li>
+                                <label class="dropdown-item">
+                                    <input type="checkbox" class="column-toggle" data-column="0" data-table-id="companiesTable" checked> ID
+                                </label>
+                            </li>
+                            <li>
+                                <label class="dropdown-item">
+                                    <input type="checkbox" class="column-toggle" data-column="1" data-table-id="companiesTable" checked> Unternehmen
+                                </label>
+                            </li>
+                            <li>
+                                <label class="dropdown-item">
+                                    <input type="checkbox" class="column-toggle" data-column="2" data-table-id="companiesTable" checked> Land
+                                </label>
+                            </li>
+                            <li>
+                                <label class="dropdown-item">
+                                    <input type="checkbox" class="column-toggle" data-column="3" data-table-id="companiesTable" checked> Sektor
+                                </label>
+                            </li>
+                            <li>
+                                <label class="dropdown-item">
+                                    <input type="checkbox" class="column-toggle" data-column="4" data-table-id="companiesTable" checked> Industrie
+                                </label>
+                            </li>
+                        </ul>
+
+                        <input id="table-search" class="form-control w-75" type="search" placeholder="Firma..." data-table-id="companiesTable" aria-label="Search">
+
                     </div>
                 </div>
             </div>
 
-
             <!-- Tabellenansicht -->
-            <div class="card-body container-fluid" id="table-view">
+            <div class="card-body" id="table-view">
                 <div class="table-responsive">
-                    <table class="table table-hover" id="boardTable" data-toggle="table">
+
+                    <?php if (session()->getFlashdata('success')): ?>
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <?= esc(session()->getFlashdata('success')) ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if (session()->getFlashdata('error')): ?>
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <?= esc(session()->getFlashdata('error')) ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    <?php endif; ?>
+
+                    <table class="table table-hover table-border table-striped" id="companiesTable" data-toggle="table">
                         <thead>
                         <tr>
                             <th data-field="id" data-sortable="true">ID</th>
-                            <th data-field="name" data-sortable="true">Name</th>
-                            <th data-field="name" data-sortable="true">Bericht</th>
+                            <th data-field="company" data-sortable="true">Unternehmen</th>
+                            <th data-field="country" data-sortable="true">Land</th>
+                            <th data-field="sector" data-sortable="true">Sektor</th>
+                            <th data-field="industry" data-sortable="true">Industrie</th>
+                            <?php if ($canManageContent): ?>
+                                <th class="text-end">Aktionen</th>
+                            <?php endif; ?>
                         </tr>
                         </thead>
                         <tbody>
                             <?php if (!empty($companies)): ?>
                                 <?php foreach ($companies as $company): ?>
-                                    <tr>
-                                        <td><?= $company['id'] ?></td>
-                                        <td><?= $company['name'] ?></td>
-                                        <td><?= $company['bericht'] ?></td>
+                                    <tr data-country-id="<?= esc($company['country_id']) ?>"
+                                        data-sector-id="<?= esc($company['sector_id']) ?>"
+                                        data-industry-id="<?= esc($company['industry_id']) ?>"
+                                    >
+                                        <td><?= esc($company['id']) ?></td>
+                                        <td>
+                                            <a href="<?= site_url('esg-reports/company/' . $company['id']) ?>">
+                                                <?= esc($company['name']) ?>
+                                            </a>
+                                        </td>
+                                        <td><?= esc($company['country_name_de']) ?></td>
+                                        <td><?= esc($company['sector_name']) ?></td>
+                                        <td><?= esc($company['industry_name']) ?></td>
+                                        <?php if ($canManageContent): ?>
+                                            <td class="text-end">
+                                                <a href="#"
+                                                   class="text-secondary me-2 edit-company-btn"
+                                                   title="Bearbeiten"
+                                                   data-bs-toggle="modal"
+                                                   data-bs-target="#createCompanyModal"
+
+                                                   data-id="<?= $company['id'] ?>"
+                                                   data-name="<?= esc($company['name']) ?>"
+                                                   data-country="<?= $company['country_id'] ?>"
+                                                   data-industry="<?= $company['industry_id'] ?>"
+                                                   data-description="<?= esc($company['description']) ?>"
+                                                >
+                                                    <i class="fa-solid fa-pen-to-square"></i>
+                                                </a>
+
+                                                <form action="<?= base_url('companies/delete/' . $company['id']) ?>"
+                                                      method="post"
+                                                      class="d-inline">
+                                                    <?= csrf_field() ?>
+                                                    <button type="submit"
+                                                            class="btn btn-link text-danger p-0"
+                                                            onclick="return confirm('Unternehmen wirklich löschen?');"
+                                                            title="Löschen">
+                                                        <i class="fa-solid fa-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        <?php endif; ?>
                                     </tr>
                                 <?php endforeach; ?>
                             <?php else: ?>
                             <tr class="no-data-row">
-                                <td colspan="3">Keine Daten verfügbar.</td>
+                                <td colspan="5">Keine Daten verfügbar.</td>
                             </tr>
                             <?php endif; ?>
+                            <tr id="no-search-result-row" style="display:none;">
+                                <td colspan="6">Kein Unternehmen gefunden.</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
-            </div>
-
-
-            <!-- Kartenansicht als Tabelle -->
-            <div class="d-none card-body container-fluid" id="card-view">
-                <table class="table" id="cardTable">
-                    <tbody>
-                        <?php if (!empty($companies)): ?>
-                            <?php foreach ($companies as $company): ?>
-                                <tr class="card-table-row">
-                                    <td colspan="2">
-                                        <div class="card-entry"><strong>ID:</strong> <span><?= $company['id'] ?></span></div>
-                                        <div class="card-entry"><strong>Name:</strong> <span><?= $company['name'] ?></span></div>
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
-                            <?php else: ?>
-                                <tr class="no-data-row">
-                                    <td colspan="2">Keine Daten verfügbar.</td>
-                                </tr>
-                            <?php endif; ?>
-                    </tbody>
-                </table>
-            </div>
-            <div id="no-results-message" class="text-center mt-3 text-danger d-none">
-                Leider musst du das Board noch erstellen
             </div>
         </div>
     </div>
 </div>
 
+<?php if (auth() -> loggedIn() && auth() -> user() -> can('content.manage')): ?>
+    <div class="modal fade" id="createCompanyModal" tabindex="-1" aria-labelledby="createCompanyModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
 
-<script>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="dynamicModalTitle">Unternehmen hinzufügen</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
 
-    // Suchfunktion
-    document.getElementById("table-search").addEventListener("keyup", function () {
-        let value = this.value.toLowerCase();
-        let rows = document.querySelectorAll("#boardTable tbody tr");
-        let visibleRows = 0;
+                <form id="companyForm" action="<?= base_url('companies/create') ?>" method="post" data-create-url="<?= base_url('companies/create') ?>" data-update-url="<?= base_url('companies/update') ?>">
+                    <input type="hidden" name="company_id" id="company_id">
 
-        rows.forEach(row => {
-            if (row.textContent.toLowerCase().includes(value)) {
-                row.style.display = "table-row";
-                visibleRows++;
-            } else {
-                row.style.display = "none";
-            }
-        });
+                    <div class="modal-body p-0">
 
-        let cards = document.querySelectorAll("#cardTable tbody .card-table-row");
-        let visibleCards = 0;
+                        <div class="d-flex" style="min-height: 350px;">
+                            <!-- Content Area -->
+                            <div class="flex-grow-1 p-4">
+                                <div class="tab-content" id="modalContent">
 
-        cards.forEach(card => {
-            if (card.textContent.toLowerCase().includes(value)) {
-                card.style.display = "table-row";
-                visibleCards++;
-            } else {
-                card.style.display = "none";
-            }
-        });
+                                    <!-- Tab 1 -->
+                                    <div class="tab-pane fade show active" id="tab-company" role="tabpanel">
 
-        let noResultsMessage = document.getElementById("no-results-message");
+                                        <!-- FIRMA NAME -->
+                                        <div class="mb-3 row align-items-center">
+                                            <label class="col-sm-3 col-form-label d-flex align-items-center">
+                                                Firma<span class="text-danger">*</span>
+                                                <a
+                                                        href="<?= site_url('help') ?>#help-company"
+                                                        class="ms-2 text-muted"
+                                                        data-bs-toggle="tooltip"
+                                                        data-bs-placement="top"
+                                                        title="Hier gibst du den offiziellen Namen deines Unternehmens an."
+                                                        aria-label="Hilfe zum Feld Firma"
+                                                >
+                                                    <i class="fa-regular fa-circle-question"></i>
+                                                </a>
+                                            </label>
+                                            <div class="col-sm-9">
+                                                <input
+                                                        type="text"
+                                                        class="form-control <?= isset($errors['name'])  ? 'is-invalid' : '' ?>"
+                                                        name="name"
+                                                        value="<?= esc(old('name') ?? '') ?>"
+                                                        placeholder="Firma eingeben"
+                                                >
 
-        if (visibleRows === 0 && visibleCards === 0) {
-            noResultsMessage.classList.remove("d-none");
-        } else {
-            noResultsMessage.classList.add("d-none");
-        }
-    });
+                                                <div class="invalid-feedback">
+                                                    <?= $errors['name'] ?? '' ?>
+                                                </div>
+                                            </div>
+                                        </div>
 
-    //Dropdowns open
-    document.querySelectorAll(".dropdown-menu").forEach(menu => {
-        menu.addEventListener("click", function (event) {
-            event.stopPropagation();
-        });
-    });
+                                        <!-- LAND -->
+                                        <div class="mb-3 row align-items-center">
+                                            <label class="col-sm-3 col-form-label d-flex align-items-center ">
+                                                Land<span class="text-danger">*</span>
+                                                <a
+                                                        href="<?= site_url('help') ?>#help-company"
+                                                        class="ms-2 text-muted"
+                                                        data-bs-toggle="tooltip"
+                                                        data-bs-placement="top"
+                                                        title="Hier wählst du das Land aus."
+                                                        aria-label="Hilfe zum Feld Land"
+                                                >
+                                                    <i class="fa-regular fa-circle-question"></i>
+                                                </a>
+                                            </label>
 
-    // Spaltenfilter
-    document.querySelectorAll(".column-toggle").forEach(checkbox => {
-        checkbox.addEventListener("change", function () {
-            let checkboxes = document.querySelectorAll(".column-toggle:checked");
-            let columnIndex = this.getAttribute("data-column");
-            let isChecked = this.checked;
+                                            <div class="col-sm-9">
+                                                <select class="form-select select2-country <?= isset($errors['country_id']) ? 'is-invalid' : '' ?>" name="country_id">
+                                                    <option value="" disabled <?= old('country_id') ? '' : 'selected' ?>>
+                                                        Land auswählen
+                                                    </option>
+
+                                                    <?php if (!empty($countries)): ?>
+                                                        <?php foreach ($countries as $country): ?>
+                                                            <option value="<?= esc($country['id']) ?>" <?= old('country_id') == $country['id'] ? 'selected' : '' ?>>
+                                                                <?= esc($country['name_de']) ?>
+                                                            </option>
+                                                        <?php endforeach; ?>
+                                                    <?php else: ?>
+                                                        <option value="" disabled>Keine Länder Vorhanden</option>
+                                                    <?php endif; ?>
+                                                </select>
+                                                <div class="invalid-feedback">
+                                                    <?= $errors['country_id'] ?? '' ?>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- INDUSTRIE -->
+                                        <div class="mb-3 row align-items-center">
+                                            <label class="col-sm-3 col-form-label d-flex align-items-center">
+                                                Industrie<span class="text-danger">*</span>
+                                                <a
+                                                        href="<?= site_url('help') ?>#help-company"
+                                                        class="ms-2 text-muted"
+                                                        data-bs-toggle="tooltip"
+                                                        data-bs-placement="top"
+                                                        title="Hier wählst du die zugehörige Industrie aus."
+                                                        aria-label="Hilfe zum Feld Industrie"
+                                                >
+                                                    <i class="fa-regular fa-circle-question"></i>
+                                                </a>
+                                            </label>
+
+                                            <div class="col-sm-9">
+                                                <select class="form-select select2-industry <?= isset($errors['industry_id']) ? 'is-invalid' : '' ?>" name="industry_id" id="industry_id">
+                                                    <option value="" disabled <?= old('industry_id') ? '' : 'selected' ?>>
+                                                        Industrie auswählen
+                                                    </option>
+
+                                                    <?php if (!empty($industries)): ?>
+                                                        <?php foreach ($industries as $industry): ?>
+                                                            <option value="<?= esc($industry['id']) ?>" data-sector-name="<?= esc($industry['sector_name'] ?? '') ?>" <?= old('industry_id') == $industry['id'] ? 'selected' : '' ?>>
+                                                                <?= esc($industry['name']) ?>
+                                                                <?php if (! empty($industry['sector_name'])): ?>
+                                                                    (<?= esc($industry['sector_name']) ?>)
+                                                                <?php endif; ?>
+                                                            </option>
+                                                        <?php endforeach; ?>
+                                                    <?php else: ?>
+                                                        <option value="" disabled>Keine Industrien vorhanden</option>
+                                                    <?php endif; ?>
+                                                </select>
+                                                <div class="invalid-feedback">
+                                                    <?= $errors['industry_id'] ?? '' ?>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- DESCRIPTION -->
+                                        <div class="mb-3 row align-items-center">
+                                            <label class="col-sm-3 col-form-label d-flex align-items-center gap-2">
+                                                Beschreibung
+                                                <a
+                                                        href="<?= site_url('help') ?>#help-company"
+                                                        class="ms-2 text-muted"
+                                                        data-bs-toggle="tooltip"
+                                                        data-bs-placement="top"
+                                                        title="Hier kann das Unternehmen kurz beschrieben werden."
+                                                        aria-label="Hilfe zum Feld Beschreibung"
+                                                >
+                                                    <i class="fa-regular fa-circle-question"></i>
+                                                </a>
+                                            </label>
+                                            <div class="col-sm-9">
+                                                <textarea class="form-control" name="description" rows="3" placeholder="Kurze Beschreibung des Unternehmens eingeben"><?= esc(old('description') ?? '') ?></textarea>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn abbrechen_button" data-bs-dismiss="modal">Abbrechen</button>
+                        <button type="submit" id="createSaveBtn" class="btn btn-success">Speichern</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+    <div
+            id="company-modal-trigger"
+            data-open="<?= session('openCompanyModal') ? '1' : '0' ?>"
+    ></div>
+
+<?php endif; ?>
 
 
-            if (checkboxes.length === 0) {
-                this.checked = true;
-                return;
-            }
-
-
-            document.querySelectorAll("#boardTable tr").forEach(row => {
-                let cells = row.querySelectorAll("th, td");
-                if (cells[columnIndex]) {
-                    cells[columnIndex].style.display = isChecked ? "" : "none";
-                }
-            });
-
-
-            document.querySelectorAll("#cardTable .card-table-row").forEach(row => {
-                let cardEntries = row.querySelectorAll(".card-entry");
-                if (cardEntries[columnIndex]) {
-                    cardEntries[columnIndex].style.display = isChecked ? "" : "none";
-                }
-            });
-
-
-            checkboxes = document.querySelectorAll(".column-toggle:checked");
-
-
-            document.querySelectorAll(".column-toggle").forEach(cb => {
-                cb.disabled = false;
-                cb.parentElement.classList.remove("disabled-option");
-            });
-
-            if (checkboxes.length === 1) {
-                checkboxes[0].disabled = true;
-                checkboxes[0].parentElement.classList.add("disabled-option");
-            }
-        });
-    });
-
-    // Ansicht umschalten
-    document.getElementById("toggleView").addEventListener("click", function () {
-        let tableView = document.getElementById("table-view");
-        let cardView = document.getElementById("card-view");
-
-        if (tableView.classList.contains("d-none")) {
-            tableView.classList.remove("d-none");
-            cardView.classList.add("d-none");
-        } else {
-            tableView.classList.add("d-none");
-            cardView.classList.remove("d-none");
-        }
-    });
-
-</script>
