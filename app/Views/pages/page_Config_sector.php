@@ -159,7 +159,7 @@ $errors = session('errors') ?? [];
             <div class="modal-content">
 
                 <div class="modal-header">
-                    <h5 class="modal-title" id="dynamicModalTitle">Sektor hinzufügen</h5>
+                    <h5 class="modal-title" id="dynamicSectorModalTitle">Sektor hinzufügen</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
@@ -261,3 +261,52 @@ $errors = session('errors') ?? [];
     ></div>
 
 <?php endif; ?>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        const modal = document.getElementById('createSectorModal');
+        if (!modal) return;
+
+        const form = document.getElementById('sectorForm');
+        const modalTitle = document.getElementById('dynamicSectorModalTitle');
+
+        const idField = document.getElementById('sector_id');
+        const nameField = form.querySelector('input[name="name"]');
+        const descriptionField = form.querySelector('textarea[name="description"]');
+
+        const createUrl = form.dataset.createUrl;
+        const updateUrl = form.dataset.updateUrl;
+
+        modal.addEventListener('show.bs.modal', function (event) {
+
+            const trigger = event.relatedTarget;
+
+            // =========================
+            // CREATE MODE
+            // =========================
+            if (!trigger || !trigger.classList.contains('edit-btn')) {
+
+                modalTitle.textContent = 'Sektor hinzufügen';
+                form.action = createUrl;
+
+                form.reset();
+                idField.value = '';
+
+                return;
+            }
+
+            // =========================
+            // EDIT MODE
+            // =========================
+            modalTitle.textContent = 'Sektor bearbeiten';
+            form.action = updateUrl + '/' + trigger.dataset.id;
+
+            idField.value = trigger.dataset.id;
+            nameField.value = trigger.dataset.name;
+            descriptionField.value = trigger.dataset.description || '';
+        });
+
+    });
+</script>
+

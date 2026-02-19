@@ -414,7 +414,7 @@
                         </div>
 
                         <div class="mt-4">
-                            <a href="#help-sectors" class="btn btn-primary">
+                            <a href="#help-sector" class="btn btn-primary">
                                 Sektoren
                             </a>
                         </div>
@@ -503,7 +503,7 @@
                 <!-- ===================== -->
                 <!-- Sektoren -->
                 <!-- ===================== -->
-                <section id="help-sectors" class="mb-5">
+                <section id="help-sector" class="mb-5">
                     <h3>Sektoren </h3>
 
                     <p class="text-grey">
