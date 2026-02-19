@@ -202,7 +202,19 @@
 
                                 <!-- CODE -->
                                 <div class="mb-3 row align-items-center">
-                                    <label class="col-sm-3 col-form-label">Code<span class="text-danger">*</span></label>
+                                    <label class="col-sm-3 col-form-label d-flex align-items-center">
+                                        Code<span class="text-danger">*</span>
+                                        <a
+                                                href="<?= site_url('help') ?>#help-country"
+                                                class="ms-2 text-muted"
+                                                data-bs-toggle="tooltip"
+                                                data-bs-placement="top"
+                                                title="Code des Landes"
+                                                aria-label="Hilfe zum Feld Code"
+                                        >
+                                            <i class="fa-regular fa-circle-question"></i>
+                                        </a>
+                                    </label>
                                     <div class="col-sm-9">
                                         <input type="text"
                                                class="form-control <?= isset($errors['code']) ? 'is-invalid' : '' ?>"
@@ -218,7 +230,19 @@
 
                                 <!-- NAME DE -->
                                 <div class="mb-3 row align-items-center">
-                                    <label class="col-sm-3 col-form-label">Name (DE)<span class="text-danger">*</span></label>
+                                    <label class="col-sm-3 col-form-label d-flex align-items-center">
+                                        Name (DE)<span class="text-danger">*</span>
+                                        <a
+                                                href="<?= site_url('help') ?>#help-country"
+                                                class="ms-2 text-muted"
+                                                data-bs-toggle="tooltip"
+                                                data-bs-placement="top"
+                                                title="Name des Landes auf Deutsch"
+                                                aria-label="Hilfe zum Feld Name"
+                                        >
+                                            <i class="fa-regular fa-circle-question"></i>
+                                        </a>
+                                    </label>
                                     <div class="col-sm-9">
                                         <input type="text"
                                                class="form-control <?= isset($errors['name_de']) ? 'is-invalid' : '' ?>"
@@ -234,7 +258,19 @@
 
                                 <!-- NAME ENG -->
                                 <div class="mb-3 row align-items-center">
-                                    <label class="col-sm-3 col-form-label">Name (ENG)<span class="text-danger">*</span></label>
+                                    <label class="col-sm-3 col-form-label d-flex align-items-center">
+                                        Name (ENG)<span class="text-danger">*</span>
+                                        <a
+                                                href="<?= site_url('help') ?>#help-country"
+                                                class="ms-2 text-muted"
+                                                data-bs-toggle="tooltip"
+                                                data-bs-placement="top"
+                                                title="Name des Landes auf Englisch"
+                                                aria-label="Hilfe zum Feld Name"
+                                        >
+                                            <i class="fa-regular fa-circle-question"></i>
+                                        </a>
+                                    </label>
                                     <div class="col-sm-9">
                                         <input type="text"
                                                class="form-control <?= isset($errors['name_eng']) ? 'is-invalid' : '' ?>"
@@ -250,7 +286,19 @@
 
                                 <!-- REGION -->
                                 <div class="mb-3 row align-items-center">
-                                    <label class="col-sm-3 col-form-label">Region<span class="text-danger">*</span></label>
+                                    <label class="col-sm-3 col-form-label d-flex align-items-center">
+                                        Region<span class="text-danger">*</span>
+                                        <a
+                                                href="<?= site_url('help') ?>#help-country"
+                                                class="ms-2 text-muted"
+                                                data-bs-toggle="tooltip"
+                                                data-bs-placement="top"
+                                                title="Region des Landes"
+                                                aria-label="Hilfe zum Feld Region"
+                                        >
+                                            <i class="fa-regular fa-circle-question"></i>
+                                        </a>
+                                    </label>
                                     <div class="col-sm-9">
                                         <input type="text"
                                                class="form-control <?= isset($errors['region']) ? 'is-invalid' : '' ?>"
@@ -266,7 +314,19 @@
 
                                 <!-- EU MEMBER -->
                                 <div class="mb-3 row align-items-center">
-                                    <label class="col-sm-3 col-form-label">EU-Mitglied<span class="text-danger">*</span></label>
+                                    <label class="col-sm-3 col-form-label d-flex align-items-center">
+                                        EU-Mitglied<span class="text-danger">*</span>
+                                        <a
+                                                href="<?= site_url('help') ?>#help-country"
+                                                class="ms-2 text-muted"
+                                                data-bs-toggle="tooltip"
+                                                data-bs-placement="top"
+                                                title="EU Mitgliedschaft des Landes"
+                                                aria-label="Hilfe zum Feld EU-Mitglied"
+                                        >
+                                            <i class="fa-regular fa-circle-question"></i>
+                                        </a>
+                                    </label>
                                     <div class="col-sm-9">
                                         <select class="form-select"
                                                 name="eu_member"
@@ -300,3 +360,53 @@
          data-open="<?= session('openCountryModal') ? '1' : '0' ?>">
     </div>
 <?php endif; ?>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        const modal = document.getElementById('createCountryModal');
+        if (!modal) return;
+
+        const form = document.getElementById('countryForm');
+        const modalTitle = document.getElementById('dynamicCountryModalTitle');
+
+        const idField = document.getElementById('country_id');
+        const codeField = document.getElementById('country_code');
+        const nameDeField = document.getElementById('country_name_de');
+        const nameEngField = document.getElementById('country_name_eng');
+        const regionField = document.getElementById('country_region');
+        const euField = document.getElementById('country_eu_member');
+
+        const createUrl = form.dataset.createUrl;
+        const updateUrl = form.dataset.updateUrl;
+
+        modal.addEventListener('show.bs.modal', function (event) {
+
+            const trigger = event.relatedTarget;
+
+            // CREATE MODE
+            if (!trigger || !trigger.classList.contains('edit-btn')) {
+
+                modalTitle.textContent = 'Land hinzufügen';
+                form.action = createUrl;
+
+                form.reset();
+                idField.value = '';
+                return;
+            }
+
+            // EDIT MODE
+            modalTitle.textContent = 'Land bearbeiten';
+            form.action = updateUrl + '/' + trigger.dataset.id;
+
+            idField.value = trigger.dataset.id;
+            codeField.value = trigger.dataset.code;
+            nameDeField.value = trigger.dataset.name_de;
+            nameEngField.value = trigger.dataset.name_eng;
+            regionField.value = trigger.dataset.region;
+            euField.value = trigger.dataset.eu_member;
+        });
+
+    });
+</script>
+

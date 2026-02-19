@@ -357,14 +357,14 @@
                                 Wählen Sie das Land aus, in dem das Unternehmen seinen Hauptsitz hat.
                                 Diese Information wird für regulatorische Zuordnungen und spätere
                                 Auswertungen verwendet. Das Land sollte im ISO 3166-1 Alpha-2 Format angegeben werden
-                                (z.B. "DE" für Deutschland).<
+                                (z.B. "DE" für Deutschland).
                             </p>
                         </div>
 
                         <!-- Richtiger Link zu Länderverwaltung -->
                         <div class="mt-4">
-                            <a href="#help-industries" class="btn btn-primary">
-                                Land Hinzufügen
+                            <a href="#help-country" class="btn btn-primary">
+                                Länder
                             </a>
                         </div>
                     </div>
@@ -390,7 +390,7 @@
                         </div>
 
                         <div class="mt-4">
-                            <a href="#help-industries" class="btn btn-primary">
+                            <a href="#help-industry" class="btn btn-primary">
                                 Industrien
                             </a>
                         </div>
@@ -468,21 +468,33 @@
                 </section>
 
                 <!-- ===================== -->
-                <!-- Authoren -->
+                <!-- Länder -->
                 <!-- ===================== -->
-                <section id="help-authoren" class="mb-5">
-                    <h3>Autor </h3>
+                <section id="help-country" class="mb-5">
+                    <h3>Länder </h3>
 
                     <p class="text-grey">
-                        Sektoren dienen der Kategorisierung von Unternehmen
-                        und sind entscheidend für die Zuordnung von ESG-Berichten.
-                        Jeder Sektor umfasst mehrere Industrien, die spezifische Branchen
-                        innerhalb des Sektors repräsentieren.
+                        Länder dienen der geografischen Zuordnung von Unternehmen,
+                        Standorten und ESG-Berichten. Sie ermöglichen eine strukturierte
+                        regionale Auswertung sowie regulatorische Einordnung, beispielsweise
+                        im Hinblick auf EU-Mitgliedschaften.
+                        <br><br>
+                        Jedes Land enthält folgende Attribute:
+                            <ul>
+                                <li><strong>Code</strong> – standardisierter Ländercode (z. B. ISO-Alpha-2)</li>
+                                <li><strong>Name (DE)</strong> – offizielle Bezeichnung auf Deutsch</li>
+                                <li><strong>Name (EN)</strong> – offizielle Bezeichnung auf Englisch</li>
+                                <li><strong>Region</strong> – geografische Zuordnung (z. B. Westliches Europa, Nordeuropa)</li>
+                                <li><strong>EU-Mitglied</strong> – Kennzeichnung, ob das Land Mitglied der Europäischen Union ist</li>
+                            </ul>
+                        Diese Struktur stellt eine konsistente geografische Klassifikation
+                        innerhalb des Systems sicher.
                     </p>
 
+
                     <div class="mt-4">
-                        <a href="/config/sector" class="btn btn-primary">
-                            Zur Sektorenverwaltung
+                        <a href="/config/country" class="btn btn-primary">
+                            Zur Länderverwaltung
                         </a>
                     </div>
 
@@ -491,7 +503,7 @@
                 <!-- ===================== -->
                 <!-- Sektoren -->
                 <!-- ===================== -->
-                <section id="help-sektors" class="mb-5">
+                <section id="help-sectors" class="mb-5">
                     <h3>Sektoren </h3>
 
                     <p class="text-grey">
@@ -512,7 +524,7 @@
                 <!-- ===================== -->
                 <!-- Industrien -->
                 <!-- ===================== -->
-                <section id="help-sektors" class="mb-5">
+                <section id="help-industry" class="mb-5">
                     <h3>Industrien</h3>
 
                     <p class="text-grey">
@@ -527,7 +539,7 @@
                     </p>
 
                     <div class="mt-4">
-                        <a href="/config/industrie" class="btn btn-primary">
+                        <a href="/config/industry" class="btn btn-primary">
                             Zur Indstrienverwaltung
                         </a>
                     </div>
@@ -581,6 +593,27 @@
                             Zur Anforderungsverwaltung
                         </a>
                     </div>
+                </section>
+
+                <!-- ===================== -->
+                <!-- Autoren -->
+                <!-- ===================== -->
+                <section id="help-authoren" class="mb-5">
+                    <h3>Autor </h3>
+
+                    <p class="text-grey">
+                        Sektoren dienen der Kategorisierung von Unternehmen
+                        und sind entscheidend für die Zuordnung von ESG-Berichten.
+                        Jeder Sektor umfasst mehrere Industrien, die spezifische Branchen
+                        innerhalb des Sektors repräsentieren.
+                    </p>
+
+                    <div class="mt-4">
+                        <a href="/config/sector" class="btn btn-primary">
+                            Zur Sektorenverwaltung
+                        </a>
+                    </div>
+
                 </section>
 
                 <!-- ===================== -->
