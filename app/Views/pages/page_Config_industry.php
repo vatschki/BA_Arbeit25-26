@@ -162,7 +162,7 @@
             <div class="modal-content">
 
                 <div class="modal-header">
-                    <h5 class="modal-title" id="dynamicModalTitle">Industrie hinzufügen</h5>
+                    <h5 class="modal-title" id="dynamicIndustryModalTitle">Industrie hinzufügen</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
@@ -305,3 +305,56 @@
     ></div>
 
 <?php endif; ?>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        const modal = document.getElementById('createIndustryModal');
+        if (!modal) return;
+
+        const form = document.getElementById('industryForm');
+        const modalTitle = document.getElementById('dynamicIndustryModalTitle');
+
+        const idField = document.getElementById('industry_id');
+        const sectorField = form.querySelector('select[name="sector_id"]');
+        const nameField = document.getElementById('industry_name');
+        const descriptionField = form.querySelector('textarea[name="description"]');
+
+        const createUrl = form.dataset.createUrl;
+        const updateUrl = form.dataset.updateUrl;
+
+        modal.addEventListener('show.bs.modal', function (event) {
+
+            const trigger = event.relatedTarget;
+
+            // =========================
+            // CREATE MODE
+            // =========================
+            if (!trigger || !trigger.classList.contains('edit-btn')) {
+
+                modalTitle.textContent = 'Industrie hinzufügen';
+                form.action = createUrl;
+
+                form.reset();
+                idField.value = '';
+
+                return;
+            }
+
+            // =========================
+            // EDIT MODE
+            // =========================
+            modalTitle.textContent = 'Industrie bearbeiten';
+            form.action = updateUrl + '/' + trigger.dataset.id;
+
+            idField.value = trigger.dataset.id;
+            nameField.value = trigger.dataset.name;
+            descriptionField.value = trigger.dataset.description || '';
+
+            // WICHTIG: Select-Feld korrekt setzen
+            sectorField.value = trigger.dataset.sector_id;
+        });
+
+    });
+</script>
+
