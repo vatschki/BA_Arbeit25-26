@@ -1,14 +1,26 @@
     // Suchfunktion tabelle
     document.getElementById("table-search").addEventListener("keyup", function () {
         const value = this.value.toLowerCase();
-        const tableId = this.dataset.tableId; // übergabe Tabellen ID
-        const rows = document.querySelectorAll(`#${tableId} tbody tr`);
+        const tableId = this.dataset.tableId;
+        const rows = document.querySelectorAll(
+            `#${tableId} tbody tr:not(#no-search-result-row)`
+        );
+
+        let visibleCount = 0;
 
         rows.forEach(row => {
-            row.style.display = row.textContent.toLowerCase().includes(value)
-                ? ""
-                : "none";
+            const match = row.textContent.toLowerCase().includes(value);
+            row.style.display = match ? "" : "none";
+            if (match) visibleCount++;
         });
+
+        const noResultRow = document.getElementById("no-search-result-row");
+
+        if (visibleCount === 0 && value.length > 0) {
+            noResultRow.style.display = "";
+        } else {
+            noResultRow.style.display = "none";
+        }
     });
 
 

@@ -26,7 +26,7 @@ $errors = session('errors') ?? [];
                                 Land
                             </button>
 
-                            <ul class="dropdown-menu p-2 dropdown-overflow-control" aria-labelledby="dropdownLandButton" style="width: 220px;" id="countryDropdownMenu">
+                            <ul class="dropdown-menu p-2 dropdown-overflow-control" aria-labelledby="dropdownLandButton" style="width: 230px;" id="countryDropdownMenu">
 
                                 <!-- Suchfeld oben -->
                                 <li>
@@ -58,7 +58,7 @@ $errors = session('errors') ?? [];
                                 Sektor
                             </button>
 
-                            <ul class="dropdown-menu p-2 dropdown-overflow-control" aria-labelledby="dropdownSectorButton" style="width: 220px;" id="sectorDropdownMenu">
+                            <ul class="dropdown-menu p-2 dropdown-overflow-control" aria-labelledby="dropdownSectorButton" style="width: 230px;" id="sectorDropdownMenu">
 
                                 <!-- Suchfeld oben -->
                                 <li>
@@ -90,7 +90,7 @@ $errors = session('errors') ?? [];
                                 Industrie
                             </button>
 
-                            <ul class="dropdown-menu p-2 dropdown-overflow-control" aria-labelledby="dropdownIndustryButton" style="width: 220px;" id="industryDropdownMenu">
+                            <ul class="dropdown-menu p-2 dropdown-overflow-control" aria-labelledby="dropdownIndustryButton" style="width: 230px;" id="industryDropdownMenu">
 
                                 <!-- Suchfeld oben -->
                                 <li>
@@ -239,6 +239,9 @@ $errors = session('errors') ?? [];
                                 <td colspan="5">Keine Daten verfügbar.</td>
                             </tr>
                             <?php endif; ?>
+                            <tr id="no-search-result-row" style="display:none;">
+                                <td colspan="6">Kein Unternehmen gefunden.</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>

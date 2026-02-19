@@ -90,22 +90,6 @@ $errors = session('errors') ?? [];
                                 </label>
                             </li>
 
-                            <li>
-                                <label class="dropdown-item">
-                                    <input type="checkbox" class="column-toggle"
-                                           data-column="6" data-table-id="reportValueTable" checked>
-                                    Report
-                                </label>
-                            </li>
-
-                            <li>
-                                <label class="dropdown-item">
-                                    <input type="checkbox" class="column-toggle"
-                                           data-column="7" data-table-id="reportValueTable" checked>
-                                    Job
-                                </label>
-                            </li>
-
                         </ul>
 
                         <input id="table-search" class="form-control w-75" type="search" placeholder="Wert Suche" data-table-id="reportValueTable" aria-label="Search">
@@ -127,8 +111,6 @@ $errors = session('errors') ?? [];
                                     <th data-field="page" data-sortable="true">Seite</th>
                                     <th data-field="text" data-sortable="true">Inhalt</th>
                                     <th data-field="company_name" data-sortable="true">Unternehmen</th>
-                                    <th data-field="report_id" data-sortable="true">Report</th>
-                                    <th data-field="job_id" data-sortable="true">Job</th>
                                 </tr>
                             </thead>
                             <tbody id="reportValuesBody">
@@ -141,8 +123,6 @@ $errors = session('errors') ?? [];
                                             <td><?= esc($value['page']) ?></td>
                                             <td><?= esc($value['text']) ?></td>
                                             <td><?= esc($value['company_name']) ?></td>
-                                            <td><?= esc($value['report_id']) ?></td>
-                                            <td><?= esc($value['job_id']) ?></td>
                                         </tr>
                                     <?php endforeach; ?>
                                 <?php else: ?>

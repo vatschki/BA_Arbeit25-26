@@ -40,15 +40,21 @@ class EsgReportsController extends BaseController
 
     public function index()
     {
+        $reports = $this->reportModel->getReports();
+
+        $years = array_unique(array_column($reports, 'reporting_year'));
+        rsort($years);
+
         $data = [
-            'companies' => $this->companyModel->getCompanies(),
-            'countries' => $this->countryModel->getCountries(),
-            'sectors' => $this->sectorModel->getSectors(),
-            'industries' => $this->industryModel->getIndustriesWithSectors(),
-            'reports' => $this->reportModel->getReports(),
-            'standards' => $this->standardModel->getStandards(),
+            'companies'    => $this->companyModel->getCompanies(),
+            'countries'    => $this->countryModel->getCountries(),
+            'sectors'      => $this->sectorModel->getSectors(),
+            'industries'   => $this->industryModel->getIndustriesWithSectors(),
+            'reports'      => $reports,
+            'years'        => $years,
+            'standards'    => $this->standardModel->getStandards(),
             'requirements' => $this->requirementModel->getRequirements(),
-            'authors' => $this->authorModel->getAuthors(),
+            'authors'      => $this->authorModel->getAuthors(),
         ];
 
         echo view('templates/header_home');

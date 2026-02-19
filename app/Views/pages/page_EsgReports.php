@@ -22,67 +22,41 @@ $errors = session('errors') ?? [];
                     <div class="d-flex align-items-center">
 
                         <!-- Search Field mit kleinem Abstand -->
-                        <!-- Dropdown für Land mit Suchfeld -->
+                        <!-- Dropdown für Jahr mit Suchfeld -->
                         <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle rounded-end" type="button"
-                                    id="dropdownLandButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                Land
+                            <button class="btn btn-secondary dropdown-toggle rounded-end"
+                                    type="button"
+                                    id="dropdownYearButton"
+                                    data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                Jahr
                             </button>
 
-                            <ul class="dropdown-menu p-2 dropdown-overflow-control" aria-labelledby="dropdownLandButton" style="width: 220px;" id="countryDropdownMenu">
+                            <ul class="dropdown-menu p-2 dropdown-overflow-control"
+                                style="width: 230px;"
+                                id="yearDropdownMenu">
 
-                                <!-- Suchfeld oben -->
                                 <li>
-                                    <input type="text" class="form-control" placeholder="Search..." id="searchCountryInput">
+                                    <input type="text"
+                                           class="form-control"
+                                           placeholder="Search..."
+                                           id="searchYearInput">
                                 </li>
 
                                 <li><hr class="dropdown-divider"></li>
 
-                                <!-- Country-Liste -->
-                                <?php if (!empty($countries)): ?>
-                                    <?php foreach ($countries as $country): ?>
-                                        <li class="filter-item-country">
-                                            <label class="dropdown-item d-flex align-items-center">
-                                                <input class="form-check-input me-2 country-filter-checkbox" type="checkbox" value="<?= $country['id'] ?>">
-                                                <span class="filter-name-country"><?= $country['name_de'] ?></span>
-                                            </label>
-                                        </li>
-                                    <?php endforeach; ?>
-                                <?php else: ?>
-                                    <li class="dropdown-item disabled">Keine Länder vorhanden</li>
-                                <?php endif; ?>
-                            </ul>
-                        </div>
-
-                        <!-- Dropdown für Sektor mit Suchfeld -->
-                        <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle rounded-end" type="button"
-                                    id="dropdownSectorButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                Sektor
-                            </button>
-
-                            <ul class="dropdown-menu p-2 dropdown-overflow-control" aria-labelledby="dropdownSectorButton" style="width: 220px;" id="sectorDropdownMenu">
-
-                                <!-- Suchfeld oben -->
-                                <li>
-                                    <input type="text" class="form-control" placeholder="Search..." id="searchSectorInput">
-                                </li>
-
-                                <li><hr class="dropdown-divider"></li>
-
-                                <!-- Sektors-Liste -->
-                                <?php if (!empty($sectors)): ?>
-                                    <?php foreach ($sectors as $sector): ?>
-                                        <li class="filter-item-sector">
-                                            <label class="dropdown-item d-flex align-items-center">
-                                                <input class="form-check-input me-2 sector-filter-checkbox" type="checkbox" value="<?= $sector['id'] ?>">
-                                                <span class="filter-name-sector"><?= $sector['name'] ?></span>
-                                            </label>
-                                        </li>
-                                    <?php endforeach; ?>
-                                <?php else: ?>
-                                    <li class="dropdown-item disabled">Keine Sektoren vorhanden</li>
-                                <?php endif; ?>
+                                <?php foreach ($years as $year): ?>
+                                    <li class="filter-item-year">
+                                        <label class="dropdown-item d-flex align-items-center">
+                                            <input class="form-check-input me-2 year-filter-checkbox"
+                                                   type="checkbox"
+                                                   value="<?= esc($year) ?>">
+                                            <span class="filter-name-year">
+                                                <?= esc($year) ?>
+                                            </span>
+                                        </label>
+                                    </li>
+                                <?php endforeach; ?>
                             </ul>
                         </div>
 
@@ -93,7 +67,7 @@ $errors = session('errors') ?? [];
                                 Industrie
                             </button>
 
-                            <ul class="dropdown-menu p-2 dropdown-overflow-control" aria-labelledby="dropdownIndustryButton" style="width: 220px;" id="industryDropdownMenu">
+                            <ul class="dropdown-menu p-2 dropdown-overflow-control" aria-labelledby="dropdownIndustryButton" style="width: 230px;" id="industryDropdownMenu">
 
                                 <!-- Suchfeld oben -->
                                 <li>
@@ -177,41 +151,46 @@ $errors = session('errors') ?? [];
                             </tr>
                         </thead>
                         <tbody>
-                        <?php if (!empty($reports)): ?>
-                            <?php foreach ($reports as $report): ?>
-                                <tr data-country-id="<?= esc($report['country_id']) ?>"
-                                    data-sector-id="<?= esc($report['sector_id']) ?>"
-                                    data-industry-id="<?= esc($report['industry_id']) ?>"
-                                    data-company-id="<?= esc($report['company_id']) ?>"
-                                    data-href="<?= site_url('/esg-reports/value/' . $report['report_id']) ?>"
-                                    style="cursor: pointer;"
-                                >
-                                    <td><?= esc($report['report_id']) ?></td>
-                                    <td><?= esc($report['company_name']) ?></td>
-                                    <td><?= esc($report['author_name']) ?></td>
-                                    <td><?= esc($report['reporting_year']) ?></td>
-                                    <?php if ($canManageContent): ?>
-                                        <td>
-                                            <form action="<?= base_url('esg-reports/delete/' . $report['report_id']) ?>"
-                                                  method="post"
-                                                  class="d-inline">
-                                                <?= csrf_field() ?>
-                                                <button type="submit"
-                                                        class="btn btn-link text-danger p-0"
-                                                        onclick="return confirm('Report wirklich löschen?');"
-                                                        title="Löschen">
-                                                    <i class="fa-solid fa-trash"></i>
-                                                </button>
-                                            </form>
-                                        </td>
-                                    <?php endif; ?>
+                            <?php if (!empty($reports)): ?>
+                                <?php foreach ($reports as $report): ?>
+                                    <tr data-country-id="<?= esc($report['country_id']) ?>"
+                                        data-sector-id="<?= esc($report['sector_id']) ?>"
+                                        data-industry-id="<?= esc($report['industry_id']) ?>"
+                                        data-company-id="<?= esc($report['company_id']) ?>"
+                                        data-year-id="<?= esc($report['reporting_year']) ?>"
+                                        data-href="<?= site_url('/esg-reports/value/' . $report['report_id']) ?>"
+                                        style="cursor: pointer;"
+                                    >
+                                        <td><?= esc($report['report_id']) ?></td>
+                                        <td><?= esc($report['company_name']) ?></td>
+                                        <td><?= esc($report['author_name']) ?></td>
+                                        <td><?= esc($report['reporting_year']) ?></td>
+                                        <?php if ($canManageContent): ?>
+                                            <td>
+                                                <form action="<?= base_url('esg-reports/delete/' . $report['report_id']) ?>"
+                                                      method="post"
+                                                      class="d-inline">
+                                                    <?= csrf_field() ?>
+                                                    <button type="submit"
+                                                            class="btn btn-link text-danger p-0"
+                                                            onclick="return confirm('Report wirklich löschen?');"
+                                                            title="Löschen">
+                                                        <i class="fa-solid fa-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        <?php endif; ?>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <tr class="no-data-row">
+                                    <td colspan="5">Keine Daten verfügbar.</td>
                                 </tr>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <tr class="no-data-row">
-                                <td colspan="5">Keine Daten verfügbar.</td>
+                            <?php endif; ?>
+
+                            <tr id="no-search-result-row" style="display:none;">
+                                <td colspan="6">Kein Unternehmen gefunden.</td>
                             </tr>
-                        <?php endif; ?>
                         </tbody>
                     </table>
                 </div>
@@ -498,3 +477,16 @@ $errors = session('errors') ?? [];
         </div>
     </div>
 <?php endif; ?>
+
+<script>
+    document.addEventListener("click", function (e) {
+        const row = e.target.closest("#reportTable tbody tr[data-href]");
+        if (!row) return;
+
+        // Verhindert Weiterleitung wenn auf Delete-Button geklickt wird
+        if (e.target.closest("button, a, form")) return;
+
+        window.location.href = row.dataset.href;
+    });
+</script>
+

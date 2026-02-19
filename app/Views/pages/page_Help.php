@@ -599,18 +599,22 @@
                 <!-- Autoren -->
                 <!-- ===================== -->
                 <section id="help-authoren" class="mb-5">
-                    <h3>Autor </h3>
+                    <h3>Autor / Prüfer </h3>
 
                     <p class="text-grey">
-                        Sektoren dienen der Kategorisierung von Unternehmen
-                        und sind entscheidend für die Zuordnung von ESG-Berichten.
-                        Jeder Sektor umfasst mehrere Industrien, die spezifische Branchen
-                        innerhalb des Sektors repräsentieren.
+                        Autoren und Prüfer repräsentieren externe Organisationen oder
+                        verantwortliche Personen, die an der Erstellung, Prüfung oder
+                        Testierung von Berichten beteiligt sind.
+                        <br><br>
+                        In der Regel handelt es sich bei Prüfern um Wirtschaftsprüfungs-
+                        oder Beratungsgesellschaften, die Nachhaltigkeits- oder
+                        ESG-Berichte im Rahmen regulatorischer Anforderungen
+                        (z. B. CSRD) prüfen und testieren.
                     </p>
 
                     <div class="mt-4">
-                        <a href="/config/sector" class="btn btn-primary">
-                            Zur Sektorenverwaltung
+                        <a href="/config/author" class="btn btn-primary">
+                            Zur Prüferverwaltung
                         </a>
                     </div>
 

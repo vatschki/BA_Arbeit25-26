@@ -1,21 +1,3 @@
-
-
-    // Suchfunktion tabelle
-    document.getElementById("table-search").addEventListener("keyup", function () {
-        let value = this.value.toLowerCase();
-        let rows = document.querySelectorAll("#boardTable tbody tr");
-        let visibleRows = 0;
-
-        rows.forEach(row => {
-            if (row.textContent.toLowerCase().includes(value)) {
-                row.style.display = "table-row";
-                visibleRows++;
-            } else {
-                row.style.display = "none";
-            }
-        });
-    });
-
     // Suchfunktion Dropdown
     document.addEventListener('DOMContentLoaded', function () {
 
@@ -74,82 +56,78 @@
             });
         }
 
-        // Filter-Logik für Tabelle nach Ländern
-        function filterTableByCountries() {
-            // IDs der ausgewählten Länder
-            const selected = Array.from(document.querySelectorAll('.country-filter-checkbox:checked'))
-            .map(cb => cb.value);
+        // ===============================
+        // Zentrale Tabellen-Filterlogik
+        // ===============================
 
-            // Alle Tabellenzeilen jedes Mal frisch holen
-            const rows = document.querySelectorAll('#boardTable tbody tr');
+        function applyFilters(tableId) {
 
-            rows.forEach(function (row) {
+            const selectedCountries = Array.from(document.querySelectorAll('.country-filter-checkbox:checked')).map(cb => cb.value);
+            const selectedSectors = Array.from(document.querySelectorAll('.sector-filter-checkbox:checked')).map(cb => cb.value);
+            const selectedIndustries = Array.from(document.querySelectorAll('.industry-filter-checkbox:checked')).map(cb => cb.value);
+            const selectedYears = Array.from(document.querySelectorAll('.year-filter-checkbox:checked')).map(cb => cb.value);
+
+            const rows = document.querySelectorAll(`#${tableId} tbody tr:not(#no-search-result-row)`);
+
+            let visibleCount = 0;
+
+            rows.forEach(row => {
+
                 const countryId = row.getAttribute('data-country-id');
+                const sectorId = row.getAttribute('data-sector-id');
+                const industryId = row.getAttribute('data-industry-id');
+                const yearId = row.getAttribute('data-year-id');
 
-                if (selected.length === 0 || selected.includes(countryId)) {
+                const matchCountry = selectedCountries.length === 0 || !countryId || selectedCountries.includes(countryId);
+                const matchSector = selectedSectors.length === 0 || !sectorId || selectedSectors.includes(sectorId);
+                const matchIndustry = selectedIndustries.length === 0 || !industryId || selectedIndustries.includes(industryId);
+                const matchYear = selectedYears.length === 0 || !yearId || selectedYears.includes(yearId);
+
+                if (matchCountry && matchSector && matchIndustry && matchYear) {
                     row.style.display = '';
-                } else {
-                row.style.display = 'none';
-                }
-            });
-        }
-
-        // Filter-Logik für Tabelle nach Sektoren
-        function filterTableBySectors() {
-            // IDs der ausgewählten Länder
-            const selected = Array.from(document.querySelectorAll('.sector-filter-checkbox:checked'))
-                .map(cb => cb.value);
-
-            // Alle Tabellenzeilen jedes Mal frisch holen
-            const rows = document.querySelectorAll('#boardTable tbody tr');
-
-            rows.forEach(function (row) {
-                const countryId = row.getAttribute('data-sector-id');
-
-                if (selected.length === 0 || selected.includes(countryId)) {
-                    row.style.display = '';
+                    visibleCount++;
                 } else {
                     row.style.display = 'none';
                 }
             });
+
+            // No-Result-Row steuern
+            const noResultRow = document.querySelector(`#${tableId} #no-search-result-row`);
+
+            if (noResultRow) {
+                if (visibleCount === 0) {
+                    noResultRow.style.display = '';
+                } else {
+                    noResultRow.style.display = 'none';
+                }
+            }
         }
 
-        // Filter-Logik für Tabelle nach Industrien
-        function filterTableByIndustries() {
-            // IDs der ausgewählten Länder
-            const selected = Array.from(document.querySelectorAll('.industry-filter-checkbox:checked'))
-                .map(cb => cb.value);
+        // ===============================
+        // Event Listener für alle Filter
+        // ===============================
 
-            // Alle Tabellenzeilen jedes Mal frisch holen
-            const rows = document.querySelectorAll('#boardTable tbody tr');
+        const allFilterCheckboxes = document.querySelectorAll(
+            '.country-filter-checkbox, .sector-filter-checkbox, .industry-filter-checkbox, .year-filter-checkbox'
+        );
 
-            rows.forEach(function (row) {
-                const countryId = row.getAttribute('data-industry-id');
+        allFilterCheckboxes.forEach(cb => {
+            cb.addEventListener('change', function () {
 
-                if (selected.length === 0 || selected.includes(countryId)) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
+                if (document.getElementById('companiesTable')) {
+                    applyFilters('companiesTable');
+                }
+
+                if (document.getElementById('reportTable')) {
+                    applyFilters('reportTable');
                 }
             });
-        }
-
-
-
-        // Event-Listener für Checkboxen Country
-        document.querySelectorAll('.country-filter-checkbox').forEach(function (cb) {
-            cb.addEventListener('change', filterTableByCountries);
         });
 
-        // Event-Listener für Checkboxen Sektoren
-        document.querySelectorAll('.sector-filter-checkbox').forEach(function (cb) {
-            cb.addEventListener('change', filterTableBySectors);
-        });
 
-        // Event-Listener für Checkboxen Industrien
-        document.querySelectorAll('.industry-filter-checkbox').forEach(function (cb) {
-            cb.addEventListener('change', filterTableByIndustries);
-        });
+
+
+
 
     });
 
@@ -172,7 +150,9 @@
                 return;
             }
 
-            document.querySelectorAll("#boardTable tr").forEach(row => {
+            let tableId = this.dataset.tableId;
+
+            document.querySelectorAll(`#${tableId} tr`).forEach(row => {
                 let cells = row.querySelectorAll("th, td");
                 if (cells[columnIndex]) {
                     cells[columnIndex].style.display = isChecked ? "" : "none";
@@ -246,107 +226,3 @@
 
         filterRequirements();
     });
-
-    // PDF Drag & Drop
-    document.addEventListener("DOMContentLoaded", function () {
-
-        const dropZone   = document.getElementById("pdf-drop-zone");
-        const fileInput  = document.getElementById("pdf-input");
-        const browseBtn  = document.getElementById("pdf-browse-btn");
-        const fileListEl = document.getElementById("pdf-file-list");
-
-        let selectedFile = null;
-
-        function setFile(file) {
-            if (!file) return;
-
-            const isPdf = file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf");
-            if (!isPdf) {
-                selectedFile = null;
-                window.selectedPdfFile = null
-                fileListEl.textContent = "Bitte eine gültige PDF-Datei auswählen.";
-                return;
-            }
-
-            selectedFile = file;
-            window.selectedPdfFile = selectedFile;
-            fileListEl.innerHTML = `• ${file.name} (${Math.round(file.size / 1024)} KB)`;
-        }
-
-        dropZone.addEventListener("click", () => fileInput.click());
-        browseBtn.addEventListener("click", (e) => {
-            e.stopPropagation();
-            fileInput.click();
-        });
-
-        // File input
-        fileInput.addEventListener("change", (e) => setFile(e.target.files?.[0]));
-
-        // Drag Events
-        dropZone.addEventListener("dragover", (e) => {
-            e.preventDefault();
-            dropZone.classList.add("dragover");
-        });
-
-        dropZone.addEventListener("dragleave", (e) => {
-            e.preventDefault();
-            dropZone.classList.remove("dragover");
-        });
-
-        dropZone.addEventListener("drop", (e) => {
-            e.preventDefault();
-            dropZone.classList.remove("dragover");
-            setFile(e.dataTransfer.files?.[0]);
-        });
-
-        window.selectedPdfFile = selectedFile;
-    });
-
-    // Save Button - Pipeline starten
-    document.addEventListener("DOMContentLoaded", function () {
-
-        const saveBtn = document.getElementById("createSaveBtn");
-
-        saveBtn.addEventListener("click", async () => {
-
-            const file = window.selectedPdfFile;
-            if (!file) {
-                alert("Bitte eine PDF auswählen.");
-                return;
-            }
-
-            const modal = document.getElementById("createReportModal");
-            const companyId     = modal.querySelector('select[name="company_id"]').value;
-            const year          = modal.querySelector('select[name="year"]').value;
-            const standardId    = modal.querySelector('select[name="standard_id"]').value;
-            const requirementId = modal.querySelector('select[name="requirement_id"]').value;
-
-            const formData = new FormData();
-            formData.append("report", file);
-            formData.append("company_id", companyId);
-            formData.append("year", year);
-            formData.append("standard_id", standardId);
-            formData.append("requirement_id", requirementId);
-
-            saveBtn.disabled = true;
-            saveBtn.textContent = "Wird gespeichert...";
-
-            const res = await fetch("/esg-reports/process", {
-                method: "POST",
-                body: formData
-            });
-
-            const data = await res.json();
-
-            saveBtn.disabled = false;
-            saveBtn.textContent = "Speichern";
-
-            if (!res.ok) {
-                alert(data?.message ?? "Fehler beim Upload.");
-                return;
-            }
-
-            alert("OK. Job-ID: " + data.job_id);
-        });
-    });
-

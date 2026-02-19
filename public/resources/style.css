@@ -196,9 +196,16 @@ body > div:first-of-type{
 
 .dropdown-overflow-control{
     width: 220px;
-    overflow-x: auto;
-    white-space: nowrap;
+    overflow-x: hidden;
 }
+
+.filter-name-sector,
+.filter-name-industry {
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+}
+
 
 /* Tabelle */
 .table{
