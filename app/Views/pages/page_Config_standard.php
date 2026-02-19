@@ -164,7 +164,7 @@
             <div class="modal-content">
 
                 <div class="modal-header">
-                    <h5 class="modal-title" id="dynamicModalTitle">Standard hinzufügen</h5>
+                    <h5 class="modal-title" id="dynamicStandardModalTitle">Standard hinzufügen</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
@@ -187,14 +187,26 @@
 
                                 <!-- CODE -->
                                 <div class="mb-3 row align-items-center">
-                                    <label class="col-sm-3 col-form-label">Code<span class="text-danger">*</span></label>
+                                    <label class="col-sm-3 col-form-label d-flex align-items-center">
+                                        Code<span class="text-danger">*</span>
+                                        <a
+                                                href="<?= site_url('help') ?>#help-standard"
+                                                class="ms-2 text-muted"
+                                                data-bs-toggle="tooltip"
+                                                data-bs-placement="top"
+                                                title="Code des Standards."
+                                                aria-label="Hilfe zum Feld Code"
+                                        >
+                                            <i class="fa-regular fa-circle-question"></i>
+                                        </a>
+                                    </label>
                                     <div class="col-sm-9">
                                         <input type="text"
                                                class="form-control <?= isset($errors['code']) ? 'is-invalid' : '' ?>"
                                                name="code"
                                                id="code"
                                                value="<?= esc(old('code') ?? '') ?>"
-                                               placeholder="z.B. ISO-123"
+                                               placeholder="z.B. E1; G1; S1"
                                                required
                                         >
                                         <div class="invalid-feedback"><?= $errors['code'] ?? '' ?></div>
@@ -203,14 +215,26 @@
 
                                 <!-- NAME -->
                                 <div class="mb-3 row align-items-center">
-                                    <label class="col-sm-3 col-form-label">Name<span class="text-danger">*</span></label>
+                                    <label class="col-sm-3 col-form-label d-flex align-items-center">
+                                        Name<span class="text-danger">*</span>
+                                        <a
+                                                href="<?= site_url('help') ?>#help-standard"
+                                                class="ms-2 text-muted"
+                                                data-bs-toggle="tooltip"
+                                                data-bs-placement="top"
+                                                title="Name des Standards."
+                                                aria-label="Hilfe zum Feld Name"
+                                        >
+                                            <i class="fa-regular fa-circle-question"></i>
+                                        </a>
+                                    </label>
                                     <div class="col-sm-9">
                                         <input type="text"
                                                class="form-control <?= isset($errors['name']) ? 'is-invalid' : '' ?>"
                                                name="name"
                                                id="standard_name"
                                                value="<?= esc(old('name') ?? '') ?>"
-                                               placeholder="Standardname"
+                                               placeholder="Standardname z.B. ESRS E1"
                                                required
                                         >
                                         <div class="invalid-feedback"><?= $errors['name'] ?? '' ?></div>
@@ -219,7 +243,19 @@
 
                                 <!-- DESCRIPTION -->
                                 <div class="mb-3 row align-items-center">
-                                    <label class="col-sm-3 col-form-label">Beschreibung<span class="text-danger">*</span></label>
+                                    <label class="col-sm-3 col-form-label d-flex align-items-center">
+                                        Beschreibung (DE)<span class="text-danger">*</span>
+                                        <a
+                                                href="<?= site_url('help') ?>#help-standard"
+                                                class="ms-2 text-muted"
+                                                data-bs-toggle="tooltip"
+                                                data-bs-placement="top"
+                                                title="Beschreibung (DE) des Standards."
+                                                aria-label="Hilfe zum Feld Beschreibung (DE)"
+                                        >
+                                            <i class="fa-regular fa-circle-question"></i>
+                                        </a>
+                                    </label>
                                     <div class="col-sm-9">
                                     <textarea class="form-control"
                                               name="description"
@@ -234,7 +270,19 @@
 
                                 <!-- DESCRIPTION ENG -->
                                 <div class="mb-3 row align-items-center">
-                                    <label class="col-sm-3 col-form-label">Beschreibung Englisch<span class="text-danger">*</span></label>
+                                    <label class="col-sm-3 col-form-label d-flex align-items-center">
+                                        Beschreibung (EN)<span class="text-danger">*</span>
+                                        <a
+                                                href="<?= site_url('help') ?>#help-standard"
+                                                class="ms-2 text-muted"
+                                                data-bs-toggle="tooltip"
+                                                data-bs-placement="top"
+                                                title="Beschreibung (EN) des Standards."
+                                                aria-label="Hilfe zum Feld Beschreibung (EN)"
+                                        >
+                                            <i class="fa-regular fa-circle-question"></i>
+                                        </a>
+                                    </label>
                                     <div class="col-sm-9">
                                         <textarea class="form-control" name="description_eng" id="description_eng" rows="3" placeholder="Kurze Beschreibung des Standards auf Englisch eingeben" required><?= esc(old('description_eng') ?? '') ?></textarea>
                                         <div class="invalid-feedback"><?= $errors['description'] ?? '' ?></div>
@@ -259,3 +307,55 @@
          data-open="<?= session('openStandardModal') ? '1' : '0' ?>">
     </div>
 <?php endif; ?>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        var modal = document.getElementById('createStandardModal');
+        if (!modal) return;
+
+        var form = document.getElementById('standardForm');
+        var modalTitle = document.getElementById('dynamicStandardModalTitle');
+
+        var idField = document.getElementById('standard_id');
+        var codeField = document.getElementById('code');
+        var nameField = document.getElementById('standard_name');
+        var descriptionField = document.getElementById('description');
+        var descriptionEngField = document.getElementById('description_eng');
+
+        var createUrl = form.getAttribute('data-create-url');
+        var updateUrl = form.getAttribute('data-update-url');
+
+        modal.addEventListener('show.bs.modal', function (event) {
+
+            var trigger = event.relatedTarget;
+
+            // =========================
+            // CREATE MODE
+            // =========================
+            if (!trigger || !trigger.classList.contains('edit-btn')) {
+
+                modalTitle.textContent = 'Standard hinzufügen';
+                form.action = createUrl;
+
+                form.reset();
+                idField.value = '';
+
+                return;
+            }
+
+            // =========================
+            // EDIT MODE
+            // =========================
+            modalTitle.textContent = 'Standard bearbeiten';
+            form.action = updateUrl + '/' + trigger.dataset.id;
+
+            idField.value = trigger.dataset.id;
+            codeField.value = trigger.dataset.code;
+            nameField.value = trigger.dataset.name;
+            descriptionField.value = trigger.dataset.description || '';
+            descriptionEngField.value = trigger.dataset.descriptionEng || '';
+        });
+
+    });
+</script>

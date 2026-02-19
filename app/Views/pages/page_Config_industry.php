@@ -85,7 +85,7 @@
                                     <thead>
                                     <tr>
                                         <th data-field="id" data-sortable="true">ID</th>
-                                        <th data-field="sector_id" data-sortable="true">SeKtor_ID</th>
+                                        <th data-field="sector_id" data-sortable="true">Sektor ID</th>
                                         <th data-field="name" data-sortable="true">Name</th>
                                         <th data-field="description" data-sortable="true">Beschreibung</th>
                                         <th data-field="timestamp" data-sortable="true">Timestamp</th>
