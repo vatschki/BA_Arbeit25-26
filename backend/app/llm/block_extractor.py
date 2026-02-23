@@ -256,7 +256,7 @@ class BlockExtractor:
                     - ARs MUST NEVER block or downgrade a valid ESRS paragraph match.
                     - Do NOT output explanations, comments, or text outside the JSON.
 
-                                        ────────────────────────────────────────────
+                    ────────────────────────────────────────────
                     INPUT DATA (AUTHORITATIVE)
                     ────────────────────────────────────────────
 

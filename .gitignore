@@ -1,13 +1,7 @@
 # --------------------------------
 # CodeIgniter specific
 # --------------------------------
-writable/cache/
-writable/logs/
-writable/session/
-writable/debugbar/
-writable/uploads/
-writable/build/
-writable/filecache/
+writable/
 
 # Prevent environment-specific config leak
 .env
@@ -43,3 +37,9 @@ backend/debug/
 # --------------------------------
 __pycache__/
 *.pyc
+backend/venv/
+backend/.venv/
+backend/__pycache__/
+backend/**/*.pyc
+backend/.pytest_cache/
+backend/.coverage
