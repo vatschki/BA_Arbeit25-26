@@ -15,14 +15,14 @@ def dump_json_debug(
     output_dir: str = "debug",
 
 ):
-    output_path = Path(output_dir)
+    output_path = Path(output_dir) / job_id
     output_path.mkdir(parents=True, exist_ok=True)
 
     final_json = doob_to_json(doob_document, job_id, company_name)
 
     write_output_json(
         final_json=final_json,
-        output_dir=output_dir,
+        output_dir=output_path,
         filename=f"{job_id}_{name}.json"
     )
 
@@ -33,12 +33,12 @@ def dump_requirements_debug(
     name: str,
     output_dir: str = "debug",
 ):
-    output_path = Path(output_dir)
+    output_path = Path(output_dir) / job_id
     output_path.mkdir(parents=True, exist_ok=True)
 
     write_output_json(
         final_json=requirements_json,
-        output_dir=output_dir,
+        output_dir=output_path,
         filename=f"{job_id}_{name}_requirements.json",
     )
 

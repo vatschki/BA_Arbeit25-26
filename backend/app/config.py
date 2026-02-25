@@ -27,6 +27,8 @@ class Config(BaseModel):
                 ttl_hours=int(env["TTL_HOURS"]),
                 pipeline_secret=env["PIPELINE_SECRET"],
                 base_url=env["BASE_URL"],
+                max_jobs=int(env.get("MAX_STORAGE_JOBS")),
+                max_debug_jobs=int(env.get("MAX_DEBUG_JOBS")),
             )
         except KeyError as e:
             raise RuntimeError(f"Missing required env var: {e.args[0]}") from e

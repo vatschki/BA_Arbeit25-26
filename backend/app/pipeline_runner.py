@@ -15,6 +15,7 @@ from app.services.doob_to_json import doob_to_json_blocklimit, doob_to_json, req
 from app.services.doob_filtering import filter_doob_by_category, filter_doob_by_pages
 from app.services.job_status import update_status
 from app.integrations.ci4_client import CI4Client
+from app.services.storage_cleanup import limit_job_storage, limit_debug_jobs
 
 
 logger = logging.getLogger(__name__)
@@ -306,6 +307,9 @@ def run_pipeline(
             percent=100,
             message=str(e)
         )
+
+        limit_job_storage(config.max_jobs)
+        limit_debug_jobs(config.max_debug_jobs)
 
         # ---------- ERROR CALLBACK ----------
         try:

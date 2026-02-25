@@ -9,7 +9,7 @@
                 <div class="container-fluid px-4">
                     <!-- Logo -->
                     <a class="navbar-brand d-flex align-items-center" href="<?= base_url('/') ?>">
-                        <img src="<?= base_url('resources/images/Logo_Universitaet.svg') ?>" alt="Logo" width="180" class="me-2 mt-2 mb-2">
+                        <img src="<?= base_url('resources/images/Logo_Universitaet.svg') ?>" alt="Logo" class="navbar-logo me-2">
                     </a>
 
                     <!-- Hamburger icon for mobile -->
