@@ -1,46 +1,58 @@
     //Form Selects
-    document.addEventListener("DOMContentLoaded", function () {
-        const $standard = $("#standardSelect");
-        const $requirement = $("#requirementSelect");
+    document.addEventListener('DOMContentLoaded', function () {
 
-        const allRequirementOptions = $requirement.find("option").clone();
+        const standardSelect       = document.getElementById('standardSelect');
+        const requirementSelect    = document.getElementById('requirementSelect');
+        const allRequirementsBox   = document.getElementById('select-all-requirements');
+        const allRequirementsCheck = document.getElementById('allRequirementsCheck');
+        const requirementHidden    = document.getElementById('requirementHidden');
 
-        function filterRequirements() {
-            const standardId = $standard.val();
+        // Alle originalen Options einmalig speichern
+        const allOptions = Array.from(
+            requirementSelect.querySelectorAll('option[data-standard-id]')
+        );
 
-            $requirement.empty();
+        // Einzelauswahl → Hidden-Field befüllen
+        requirementSelect.addEventListener('change', function () {
+            requirementHidden.value = this.value;
+        });
 
-            $requirement.append(
-                `<option value="" disabled selected>ESRS-Anforderung auswählen</option>`
+        standardSelect.addEventListener('change', function () {
+            const selectedStandardId = this.value;
+
+            // Checkbox zurücksetzen
+            allRequirementsCheck.checked = false;
+            requirementSelect.disabled   = false;
+            requirementHidden.value      = '';
+
+            // Options filtern: nur passende zum gewählten Standard anzeigen
+            requirementSelect.innerHTML =
+                '<option value="" disabled selected>ESRS-Anforderung auswählen</option>';
+
+            const filtered = allOptions.filter(
+                opt => opt.dataset.standardId === selectedStandardId
             );
 
-            if (!standardId) {
-                $requirement.trigger("change");
-                return;
+            filtered.forEach(opt => requirementSelect.appendChild(opt.cloneNode(true)));
+
+            // "Alle auswählen" nur zeigen wenn es Optionen gibt
+            if (filtered.length > 0) {
+                allRequirementsBox.classList.remove('d-none');
+            } else {
+                allRequirementsBox.classList.add('d-none');
             }
+        });
 
-            allRequirementOptions.each(function () {
-                const value = $(this).val();
-                const reqStandardId = $(this).data("standard-id");
-
-                // Sonderfall: "Alle Anforderungen"
-                if (value === 'ALL') {
-                    $requirement.append($(this).clone());
-                    return;
-                }
-
-                // Normale Requirements nach Standard filtern
-                if (reqStandardId == standardId) {
-                    $requirement.append($(this).clone());
-                }
-            });
-
-            $requirement.trigger("change");
-        }
-
-        $standard.on("change", filterRequirements);
-
-        filterRequirements();
+        allRequirementsCheck.addEventListener('change', function () {
+            if (this.checked) {
+                requirementSelect.disabled  = true;
+                requirementHidden.value     = 'ALL';
+            } else {
+                requirementSelect.disabled  = false;
+                requirementHidden.value     = '';
+                requirementSelect.value     = '';
+            }
+        });
     });
 
     // PDF Drag & Drop

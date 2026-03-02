@@ -358,6 +358,8 @@ $errors = session('errors') ?? [];
 
                                         <!-- ESRS-Requirement -->
                                         <div class="mb-3 row align-items-center">
+                                            <!-- ESRS-Requirement -->
+
                                             <label class="col-sm-3 col-form-label d-flex align-items-center">
                                                 ESRS-Anforderung<span class="text-danger">*</span>
                                                 <a href="<?= site_url('help') ?>#help-upload"
@@ -371,16 +373,20 @@ $errors = session('errors') ?? [];
                                             </label>
 
                                             <div class="col-sm-9">
-                                                <select class="form-select select2-requirement" name="requirement_id" id="requirementSelect" required>
-                                                    <option value="" disabled <?= old('requirement_id') ? '' : 'selected' ?>>ESRS-Anforderung auswählen</option>
 
-                                                    <option value="ALL">
-                                                        Alle Anforderungen des gewählten Standards
-                                                    </option>
+                                                <div id="select-all-requirements" class="form-check mb-2 d-none">
+                                                    <input class="form-check-input" type="checkbox" id="allRequirementsCheck">
+                                                    <label class="form-check-label" for="allRequirementsCheck">
+                                                        Alle Anforderungen des gewählten Standards auswählen
+                                                    </label>
+                                                </div>
+
+                                                <select class="form-select select2-requirement" id="requirementSelect" required>
+                                                    <option value="" disabled <?= old('requirement_id') ? '' : 'selected' ?>>ESRS-Anforderung auswählen</option>
 
                                                     <?php if (!empty($requirements)): ?>
                                                         <?php foreach ($requirements as $requirement): ?>
-                                                            <option value="<?= esc($requirement['id']) ?>" data-standard-id = "<?= esc($requirement['standard_id']) ?>" <?= old('requirement_id') == $requirement['id'] ? 'selected' : '' ?>>
+                                                            <option value="<?= esc($requirement['id']) ?>" data-standard-id="<?= esc($requirement['standard_id']) ?>" <?= old('requirement_id') == $requirement['id'] ? 'selected' : '' ?>>
                                                                 <?= esc($requirement['code']) ?>
                                                             </option>
                                                         <?php endforeach; ?>
@@ -388,6 +394,9 @@ $errors = session('errors') ?? [];
                                                         <option value="" disabled>Keine ESRS-Anforderung Vorhanden</option>
                                                     <?php endif; ?>
                                                 </select>
+
+                                                <input type="hidden" name="requirement_id" id="requirementHidden" value="">
+
                                             </div>
                                         </div>
 
@@ -488,5 +497,16 @@ $errors = session('errors') ?? [];
 
         window.location.href = row.dataset.href;
     });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const standardSelect    = document.getElementById('standardSelect');
+        const requirementSelect = document.getElementById('requirementSelect');
+
+        console.log('standardSelect:', standardSelect);
+        console.log('requirementSelect:', requirementSelect);
+        console.log('Alle IDs im Dokument:', Array.from(document.querySelectorAll('[id]')).map(el => el.id));
+    });
+
+
 </script>
 
