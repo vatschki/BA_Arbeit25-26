@@ -46,6 +46,7 @@ class ReportModel extends BaseModel{
             ->join('industries', 'companies.industry_id = industries.id', 'left')
             ->join('authors', 'reports.author_id = authors.id', 'left')
             ->where('reports.status', 'ready')
+            ->orderBy('companies.name', 'ASC')
             ->findAll();
     }
 

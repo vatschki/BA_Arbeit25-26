@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-use App\Models\AuthorModel;
+use App\Models\AuditorModel;
 use App\Models\CompanyModel;
 use App\Models\ReportModel;
 use App\Models\StandardModel;
@@ -23,7 +23,7 @@ class EsgReportsController extends BaseController
     protected ReportModel $reportModel;
     protected RequirementModel $requirementModel;
     //protected reportvalueModel $reportvalueModel;
-    protected AuthorModel $authorModel;
+    protected AuditorModel $authorModel;
 
     public function __construct()
     {
@@ -34,7 +34,7 @@ class EsgReportsController extends BaseController
         $this->reportModel = new ReportModel();
         $this->sectorModel = new SectorModel();
         $this->requirementModel = new RequirementModel();
-        $this->authorModel = new AuthorModel();
+        $this->authorModel = new AuditorModel();
     }
 
 

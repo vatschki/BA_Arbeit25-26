@@ -5,7 +5,7 @@ namespace App\Models;
 use App\Models\BaseModel;
 use RuntimeException;
 
-class AuthorModel extends BaseModel
+class AuditorModel extends BaseModel
 {
     protected $table = 'authors';
     protected $primaryKey = 'id';

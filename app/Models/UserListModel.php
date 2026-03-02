@@ -31,6 +31,7 @@ class UserListModel extends BaseModel
             ->where('auth_identities.type', 'email_password')
             ->where('users.deleted_at', null)
             ->groupBy('users.id')
+            ->orderBy('username', 'ASC')
             ->findAll();
     }
 }

@@ -41,6 +41,7 @@ class CompanyModel extends BaseModel{
         ->join("industries", "companies.industry_id = industries.id", "left")
         ->join("countries", "companies.country_id = countries.id", "left")
         ->join("sectors", "industries.sector_id = sectors.id", "left")
+        ->orderBy("companies.name", "ASC")
         ->findAll();
     }
 

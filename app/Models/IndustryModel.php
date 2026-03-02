@@ -32,6 +32,7 @@ class IndustryModel extends BaseModel{
             sectors.name AS sector_name
         ")
             ->join('sectors', 'industries.sector_id = sectors.id', 'left')
+            ->orderBy('industries.name', 'ASC')
             ->findAll();
     }
 

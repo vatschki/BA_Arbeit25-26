@@ -32,7 +32,8 @@ class RequirementModel extends BaseModel{
 
     public function getRequirements(): array
     {
-        return $this->findAll();
+        return $this->orderBy('paragraph', 'ASC')
+                    ->findAll();
     }
 
     public function getRequirementByIdAndStandard(int $requirementId, int $standardId): ?array

@@ -29,7 +29,8 @@ class CountryModel extends BaseModel
 
     public function getCountries(): array
     {
-        return $this->findAll();
+        return $this->orderBy('name_de', 'ASC')
+                    ->findAll();
     }
 
     public function createCountry(array $data): int

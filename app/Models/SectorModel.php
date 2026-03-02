@@ -22,7 +22,8 @@ class SectorModel extends BaseModel{
 
     public function getSectors(): array
     {
-        return $this->findAll();
+        return $this->orderBy('name', 'ASC')
+                    ->findAll();
     }
 
     public function createSector(array $data): int
