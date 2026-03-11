@@ -65,11 +65,11 @@ $routes->group('', ['filter' => 'permission:content.manage'], function($routes) 
 
     $routes->get('export/values/(:num)', 'ExportController::values/$1');
 
-    //Config Author
-    $routes->get('/config/author', 'ConfigAuthorController::author');
-    $routes->post('/config/author/create', 'ConfigAuthorController::createAuthor');
-    $routes->post('/config/author/update/(:num)', 'ConfigAuthorController::updateAuthor/$1');
-    $routes->post('/config/author/delete/(:num)', 'ConfigAuthorController::deleteAuthor/$1');
+    //Config Auditor
+    $routes->get('/config/auditor', 'ConfigAuditorController::auditor');
+    $routes->post('/config/auditor/create', 'ConfigAuditorController::createAuditor');
+    $routes->post('/config/auditor/update/(:num)', 'ConfigAuditorController::updateAuditor/$1');
+    $routes->post('/config/auditor/delete/(:num)', 'ConfigAuditorController::deleteAuditor/$1');
 
 });
 

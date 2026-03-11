@@ -12,7 +12,6 @@ class ReportModel extends BaseModel{
     protected $primaryKey = 'id';
     protected $allowedFields = [
         'company_id',
-        'author_id',
         'reporting_year',
         'description',
         'status',
@@ -20,7 +19,6 @@ class ReportModel extends BaseModel{
 
     protected $validationRules = [
         'company_id' => 'required|integer',
-        'author_id' => 'required|integer',
         'reporting_year' => 'required|integer',
         'description' => 'permit_empty|max_length[500]',
         'status' => 'required|in_list[draft,failed, not_compatible, ready, archived]',
@@ -29,23 +27,28 @@ class ReportModel extends BaseModel{
     public function getReports(): array
     {
         return $this->select("
-                reports.id AS report_id,
-                reports.reporting_year,
-        
-                companies.id AS company_id,
-                companies.name AS company_name,
-                companies.country_id,
-                companies.industry_id,
-        
-                industries.sector_id,
-        
-                authors.id AS author_id,
-                authors.name AS author_name
-            ")
+            reports.id AS report_id,
+            reports.reporting_year,
+
+            companies.id AS company_id,
+            companies.name AS company_name,
+            companies.country_id,
+            companies.industry_id,
+
+            industries.sector_id,
+
+            GROUP_CONCAT(DISTINCT auditors.name ORDER BY auditors.name SEPARATOR ', ') AS auditor_name
+        ")
             ->join('companies', 'reports.company_id = companies.id', 'left')
             ->join('industries', 'companies.industry_id = industries.id', 'left')
-            ->join('authors', 'reports.author_id = authors.id', 'left')
+
+            ->join('audit_report', 'audit_report.report_id = reports.id', 'left')
+            ->join('auditors', 'auditors.id = audit_report.auditor_id', 'left')
+
             ->where('reports.status', 'ready')
+
+            ->groupBy('reports.id')
+
             ->orderBy('companies.name', 'ASC')
             ->findAll();
     }
@@ -64,9 +67,9 @@ class ReportModel extends BaseModel{
             reports.id AS report_id,
             reports.reporting_year,
             reports.company_id,
-            reports.author_id,
+            reports.auditor_id,
             companies.name AS company_name,
-            authors.name AS author_name
+            auditors.name AS auditor_name
         ')
             ->join(
                 'companies',
@@ -74,8 +77,8 @@ class ReportModel extends BaseModel{
                 'left'
             )
             ->join(
-                'authors',
-                'authors.id = reports.author_id',
+                'auditors',
+                'auditors.id = reports.auditor_id',
                 'left'
             )
             ->where('reports.company_id', $company_id)

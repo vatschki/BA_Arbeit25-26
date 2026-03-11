@@ -1,4 +1,3 @@
-import json
 import logging
 from pathlib import Path
 from typing import Dict
@@ -26,25 +25,20 @@ def run_pipeline(
     job_id: str,
     requirement: dict,
     context: Context,
-    api_config: ApiConfig,
-    jobs_root: str,
-    
+    api_config: ApiConfig
 ):
     
     try:
         config = Config.load()
 
-        job_dir = Path(f"{jobs_root}/{job_id}")
+        job_dir = Path(f"storage/jobs/{job_id}")
         job_dir.mkdir(parents=True, exist_ok=True)
-        update_status(job_id, step="starting", percent=0, message="Pipeline gestartet", jobs_root=jobs_root)
+        update_status(job_id, step="starting", percent=0, message="Pipeline gestartet")
 
         debug_mode = config.debug_enabled
         logger.info(f"Debug mode: {debug_mode}")
         logger.info(f"[JOB {job_id}] Pipeline gestartet")
         logger.info(f"[JOB {job_id}] PDF: {pdf_path}")
-
-        BASE_DIR = Path(__file__).resolve().parents[1]
-        DEBUG_ROOT = BASE_DIR / "debug"
 
         # 1. Kontext validieren
         if context is None or context.company_name is None:
@@ -91,9 +85,23 @@ def run_pipeline(
                 job_id,
                 step="not_compatible",
                 percent=100,
-                message=str(e),
-                jobs_root=jobs_root
+                message=str(e)
             )
+
+            try:
+                ci4 = CI4Client(
+                    base_url=config.base_url,
+                    pipeline_secret=config.pipeline_secret
+                )
+                ci4.send_pipeline_result(
+                    job_id=job_id,
+                    status="not_compatible",
+                    progress=100,
+                    message=str(e),
+                    result=None
+                )
+            except Exception:
+                logger.exception(f"[JOB {job_id}] CI4 not_compatible callback fehlgeschlagen")
 
             return {
                 "job_id": job_id,
@@ -102,7 +110,7 @@ def run_pipeline(
 
         
 
-        update_status(job_id, "pdf_parsed", 20, "PDF analysiert", jobs_root=jobs_root)
+        update_status(job_id, "pdf_parsed", 20, "PDF analysiert")
 
         
         if debug_mode:
@@ -110,8 +118,7 @@ def run_pipeline(
                 doob_document=doob_document,
                 job_id=job_id,
                 company_name=context.company_name,
-                name="doob",
-                output_dir=DEBUG_ROOT
+                name="doob"
             )
         
         analysis_json = None
@@ -127,8 +134,7 @@ def run_pipeline(
                 doob_document=doob_document,
                 job_id=job_id,
                 company_name=context.company_name,
-                name="analysis",
-                output_dir=DEBUG_ROOT
+                name="analysis"
             )
 
         
@@ -140,7 +146,7 @@ def run_pipeline(
             logger.info(f"[JOB {job_id}] Using user-defined relevant pages for selection.")
 
             relevant_pages = context.relevant_pages
-            update_status(job_id, "user_page_selection_done", 40, "Vom User vorgegebene Seiten verwendet", jobs_root=jobs_root)
+            update_status(job_id, "user_page_selection_done", 40, "Vom User vorgegebene Seiten verwendet")
 
         else:
             selector = BlockSelector(llm_client, config)
@@ -157,9 +163,24 @@ def run_pipeline(
                     job_id,
                     step="no_match",
                     percent=100,
-                    message="In dem Dokument konnten keine passenden Textstellen zu den gewählten Standards gefunden werden.",
-                    jobs_root=jobs_root,
+                    message="In dem Dokument konnten keine passenden Textstellen zu den gewählten Standards gefunden werden."
                 )
+
+                # ---------- ERROR / NO-MATCH CALLBACK ----------
+                try:
+                    ci4 = CI4Client(
+                        base_url=config.base_url,
+                        pipeline_secret=config.pipeline_secret
+                    )
+                    ci4.send_pipeline_result(
+                        job_id=job_id,
+                        status="no_match",
+                        progress=100,
+                        message="In dem Dokument konnten keine passenden Textstellen zu den gewählten Standards gefunden werden.",
+                        result=[]
+                    )
+                except Exception:
+                    logger.exception(f"[JOB {job_id}] CI4 no-match callback fehlgeschlagen")
 
                 return {
                     "job_id": job_id,
@@ -168,7 +189,7 @@ def run_pipeline(
 
         
 
-            update_status(job_id, "llm_block_selection_done", 40, "Relevante Seiten ausgewählt", jobs_root=jobs_root)
+            update_status(job_id, "llm_block_selection_done", 40, "Relevante Seiten ausgewählt")
 
             
         #5. Filtern der relevanten Blöcke
@@ -188,7 +209,7 @@ def run_pipeline(
         )
         
 
-        update_status(job_id, "block_filtering", 60, "Relevante Blöcke gefiltert", jobs_root=jobs_root)
+        update_status(job_id, "block_filtering", 60, "Relevante Blöcke gefiltert")
 
         
         if debug_mode:
@@ -196,8 +217,7 @@ def run_pipeline(
                 doob_document=filtered_doob,
                 job_id=job_id,
                 company_name=context.company_name,
-                name="filtered_doob",
-                output_dir=DEBUG_ROOT
+                name="filtered_doob"
             )
         
         # Zweiter LLM Call Extraction
@@ -209,8 +229,7 @@ def run_pipeline(
             dump_requirements_debug(
                 requirements_json=requirement_json,
                 job_id=job_id,
-                name="requirement_json",
-                output_dir=DEBUG_ROOT
+                name="requirement_json"
             )
         
         extractor = BlockExtractor(llm_client)
@@ -220,15 +239,14 @@ def run_pipeline(
             requirement_json=requirement_json
         )
         
-        update_status(job_id, "llm_block_extraction_done", 85, "Requirements extrahiert", jobs_root=jobs_root)
+        update_status(job_id, "llm_block_extraction_done", 85, "Requirements extrahiert")
         
         if debug_mode:
             dump_json_debug(
                 doob_document=filtered_doob,
                 job_id=job_id,
                 company_name=context.company_name,
-                name="extracted_result",
-                output_dir=DEBUG_ROOT
+                name="extracted_result"
             )
 
         #Alle wichtigen infos ausgeben
@@ -244,24 +262,33 @@ def run_pipeline(
             job_id=job_id,
             company_name=context.company_name
         )
-
-        final_path = job_dir / "final_result.json"
-
-        with open(final_path, "w", encoding="utf-8") as f:
-            json.dump(result_json, f, ensure_ascii=False, indent=2)
-
         
-        update_status(job_id, "result_ready", 95, "Ergebnis bereit", jobs_root=jobs_root)
+        update_status(job_id, "result_ready", 95, "Ergebnis bereit")
 
         if debug_mode:
             write_output_json(
                 final_json=result_json,
-                output_dir=f"{DEBUG_ROOT}/{job_id}",
+                output_dir=f"debug/{job_id}",
                 filename="final_result.json"
             )
         
-        update_status(job_id, "finished", 100, "Pipeline abgeschlossen", jobs_root=jobs_root)
+        update_status(job_id, "finished", 100, "Pipeline abgeschlossen")
 
+        # ---------- SUCCESS CALLBACK ----------
+        try:
+            ci4 = CI4Client(
+                base_url=config.base_url,
+                pipeline_secret=config.pipeline_secret
+            )
+            ci4.send_pipeline_result(
+                job_id=job_id,
+                status="finished",
+                progress=100,
+                message="Pipeline abgeschlossen",
+                result=result_json['results']
+            )
+        except Exception:
+            logger.exception(f"[JOB {job_id}] CI4 success callback fehlgeschlagen")
 
         return {
             "job_id": job_id,
@@ -278,16 +305,30 @@ def run_pipeline(
             job_id,
             step="error",
             percent=100,
-            message=str(e),
-            jobs_root=jobs_root
+            message=str(e)
         )
 
         limit_job_storage(config.max_jobs)
         limit_debug_jobs(config.max_debug_jobs)
 
+        # ---------- ERROR CALLBACK ----------
+        try:
+            ci4 = CI4Client(
+                base_url=config.base_url,
+                pipeline_secret=config.pipeline_secret
+            )
+            ci4.send_pipeline_result(
+                job_id=job_id,
+                status="error",
+                progress=100,
+                message=str(e),
+                result=None
+            )
+        except Exception:
+            logger.exception(f"[JOB {job_id}] CI4 error callback fehlgeschlagen")
+
         return {
             "job_id": job_id,
             "status": "error",
         }
-
 

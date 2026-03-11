@@ -268,13 +268,6 @@ class Validation extends BaseConfig
             ],
         ],
 
-        'author_id' => [
-            'rules'  => 'required|is_natural_no_zero',
-            'errors' => [
-                'required' => 'Pflichtfeld bitte Autor auswählen',
-            ],
-        ],
-
         'year' => [
             'rules'  => 'required|is_natural_no_zero|exact_length[4]',
             'errors' => [
@@ -306,7 +299,7 @@ class Validation extends BaseConfig
         ],
     ];
 
-    public array $author = [
+    public array $auditor = [
 
         'name' => [
             'rules'  => 'required|min_length[3]|max_length[100]',

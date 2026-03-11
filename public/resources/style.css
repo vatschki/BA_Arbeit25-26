@@ -323,6 +323,21 @@ body > div:first-of-type{
     display: block;
 }
 
+/* Form ESG-Reports */
+.auditor-dropdown .auditor-arrow{
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    font-size: 0.8rem;
+    color: #6c757d;
+}
+
+.auditor-menu{
+    max-height: 250px;
+    overflow-y: auto;
+}
 
 /* Pdf Dropzone */
 .pdf-drop-zone{

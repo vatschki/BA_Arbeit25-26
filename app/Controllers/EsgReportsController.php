@@ -23,7 +23,7 @@ class EsgReportsController extends BaseController
     protected ReportModel $reportModel;
     protected RequirementModel $requirementModel;
     //protected reportvalueModel $reportvalueModel;
-    protected AuditorModel $authorModel;
+    protected AuditorModel $auditorModel;
 
     public function __construct()
     {
@@ -34,7 +34,7 @@ class EsgReportsController extends BaseController
         $this->reportModel = new ReportModel();
         $this->sectorModel = new SectorModel();
         $this->requirementModel = new RequirementModel();
-        $this->authorModel = new AuditorModel();
+        $this->auditorModel = new AuditorModel();
     }
 
 
@@ -54,7 +54,7 @@ class EsgReportsController extends BaseController
             'years'        => $years,
             'standards'    => $this->standardModel->getStandards(),
             'requirements' => $this->requirementModel->getRequirements(),
-            'authors'      => $this->authorModel->getAuthors(),
+            'auditors'      => $this->auditorModel->getAuditors(),
         ];
 
         echo view('templates/header_home');

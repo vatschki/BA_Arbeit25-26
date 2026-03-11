@@ -178,7 +178,7 @@
                         <h5 class="mb-2">Pflicht Eingabefelder im Upload-Formular</h5>
                         <ul class="text-grey mb-0">
                             <li><strong>Unternehmen</strong> (Zuordnung des Berichts)</li>
-                            <li><strong>Author</strong> (Verfasser des Berichts)</li>
+                            <li><strong>Prüfer</strong> (prüfer des Berichts)</li>
                             <li><strong>Jahr</strong> (Berichtsjahr für Historie und Vergleich)</li>
                             <li><strong>ESRS-Standard</strong> (bestimmt Struktur und verfügbare Anforderungen)</li>
                             <li><strong>ESRS-Anforderung</strong> (Einzelauswertung oder alle Anforderungen)</li>
@@ -204,7 +204,7 @@
                         </div>
                     </div>
 
-                    <!-- Author -->
+                    <!-- Prüfer -->
                     <div class="mb-4">
                         <h5 class="mb-1">Autor</h5>
 
@@ -219,8 +219,8 @@
 
                         <!-- Richtiger Link zu Auhtorverwaltung -->
                         <div class="mt-4">
-                            <a href="#help-author" class="btn btn-primary">
-                                Author Hinzufügen
+                            <a href="#help-auditor" class="btn btn-primary">
+                                Prüfer Hinzufügen
                             </a>
                         </div>
                     </div>
@@ -598,7 +598,7 @@
                 <!-- ===================== -->
                 <!-- Autoren -->
                 <!-- ===================== -->
-                <section id="help-authoren" class="mb-5">
+                <section id="help-auditors" class="mb-5">
                     <h3>Autor / Prüfer </h3>
 
                     <p class="text-grey">
@@ -613,7 +613,7 @@
                     </p>
 
                     <div class="mt-4">
-                        <a href="/config/author" class="btn btn-primary">
+                        <a href="/config/auditor" class="btn btn-primary">
                             Zur Prüferverwaltung
                         </a>
                     </div>

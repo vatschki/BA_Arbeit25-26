@@ -2,11 +2,11 @@
 
 namespace App\Controllers;
 
+use App\Models\AuditReportModel;
 use App\Models\CompanyModel;
 use App\Models\CountryModel;
 use App\Models\IndustryModel;
 use App\Models\ReportModel;
-use App\Models\ReportValueModel;
 use App\Models\RequirementModel;
 use App\Models\SectorModel;
 use App\Models\StandardModel;
@@ -24,7 +24,7 @@ class ApiController extends ResourceController{
     protected ReportModel $reportModel;
     protected RequirementModel $requirementModel;
     protected JobModel $jobModel;
-    protected ReportValueModel $reportValueModel;
+    protected AuditReportModel $auditReportModel;
 
     public function __construct()
     {
@@ -36,7 +36,7 @@ class ApiController extends ResourceController{
         $this->sectorModel = new SectorModel();
         $this->requirementModel = new RequirementModel();
         $this->jobModel = new JobModel();
-        $this->reportValueModel = new ReportValueModel();
+        $this->auditReportModel = new AuditReportModel();
     }
 
     public function saveapikey()
@@ -149,14 +149,22 @@ class ApiController extends ResourceController{
 
             //-------- Formdaten --------
             $company_id = $request->getPost('company_id');
-            $author_id = (int) $request->getPost('author_id');
+            $auditor_ids = $request->getPost('auditor_ids') ?? [];
             $year = $request->getPost('year');
             $standard_id = $request->getPost('standard_id');
             $requirement_id = $request->getPost('requirement_id');
             $relevant_pages = $request->getPost('relevant_pages');
 
-            if (! $company_id || ! $author_id || ! $year || ! $standard_id) {
-                throw new \RuntimeException('Pflichtfelder ausfüllen.');
+            if (! $company_id) {
+                throw new \RuntimeException('Unternhemen ausfüllen.');
+            }
+
+            if (! $year ) {
+                throw new \RuntimeException('Jahr ausfüllen.');
+            }
+
+            if (! $standard_id) {
+                throw new \RuntimeException('Standard ausfüllen.');
             }
 
             log_message('info', 'FORM DATA OK');
@@ -324,13 +332,17 @@ class ApiController extends ResourceController{
             //-------- Report --------
             $reportData = [
                 'company_id'      => $company_id,
-                'author_id'       => $author_id,
                 'reporting_year'  => $year,
                 'description'     => null,
                 'status' => 'draft',
             ];
 
             $report_id = $this->reportModel->createReport($reportData);
+
+            if (!empty($auditor_ids)) {
+
+                $this->auditReportModel->insertAuditorsForReport($report_id, $auditor_ids);
+            }
 
             log_message('info', 'REPORT CREATED: ' . $report_id);
 
@@ -353,187 +365,113 @@ class ApiController extends ResourceController{
 
             log_message('info', 'PAYLOAD READY');
 
-            // -------- JOB DIRECTORY --------
-            $job_id   = bin2hex(random_bytes(16));
+            //-------- Pipeline --------
+            $client = \Config\Services::curlrequest();
 
-            $jobsRoot = realpath(FCPATH . '../storage/jobs');
-
-            if (!$jobsRoot) {
-                throw new \RuntimeException('Jobs-Verzeichnis existiert nicht.');
+            try {
+                $res = $client->post('http://localhost:8001/pipeline/start', [
+                    'json' => $payload,
+                    'headers' => [
+                        'Accept' => 'application/json',
+                        'Content-Type' => 'application/json'
+                    ],
+                    'timeout' => 0,
+                    'http_errors' => false,
+                ]);
+            }catch (\Throwable $e){
+                throw new \RuntimeException('Pipeline-Fehler: Pipeline nicht erreichbar');
             }
 
-            $jobDir = $jobsRoot . DIRECTORY_SEPARATOR . $job_id;
+            $statusCode = $res->getStatusCode();
+            $body       = $res->getBody();
 
-            if (!mkdir($jobDir, 0775, true)) {
-                throw new \RuntimeException('Job-Verzeichnis konnte nicht erstellt werden.');
+            log_message('error', 'PIPELINE STATUS: ' . $statusCode);
+            log_message('error', 'PIPELINE BODY: ' . $body);
+
+            if ($statusCode !== 200) {
+                /*log_message('error', 'Pipeline start failed: ' . $body);
+
+                session()->setFlashdata(
+                    'error',
+                    'Die Analyse konnte nicht gestartet werden. Bitte versuchen Sie es erneut.'
+                );
+
+                return redirect()->back();*/
+                throw new \RuntimeException('Pipeline-Fehler (' . $statusCode . '): ' . $body);
             }
 
-            file_put_contents(
-                $jobDir . '/request.json',
-                json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT)
-            );
 
-            file_put_contents(
-                $jobDir . '/status.json',
-                json_encode([
-                    'job_id' => $job_id,
-                    'step'   => 'queued',
-                    'percent'=> 0,
-                    'message'=> 'Job gestartet'
-                ])
-            );
+            $data = json_decode($res->getBody(), true);
 
-            // -------- Python-Job starten --------
-            $python = '/Applications/MAMP/htdocs/BA_WebApp/backend/.venv/bin/python';
-            $script = realpath(FCPATH . '../backend/run_job.py');
+            $job_id = $data['job_id'] ?? null;
 
-            $cmd = sprintf(
-                'nohup %s %s --job-id %s --jobs-root %s > %s 2>&1 < /dev/null &',
-                escapeshellcmd($python),
-                escapeshellarg($script),
-                escapeshellarg($job_id),
-                escapeshellarg($jobsRoot),
-                escapeshellarg($jobDir . '/stdout.log')
-            );
+            if (!$job_id) {
+                throw new \RuntimeException('Analyse konnte nicht gestartet werden (keine Job-ID).');
+            }
 
-            exec($cmd);
+            $user = session()->get('user');
+            $user_id = $user['id'] ?? null;
 
-            // -------- Job anlegen --------
-            $this->jobModel->createJob([
-                'job_id'     => $job_id,
-                'report_id'  => $report_id,
-                'user_id'    => session()->get('user')['id'],
-                'standard_id'=> (int) $standard_id,
-                'status'     => 'running',
-            ]);
+            if (!$user_id) {
+                throw new \RuntimeException('Kein Benutzer eingeloggt.');
+            }
+
+            $jobData = [
+                'job_id'        => $job_id,
+                'report_id'       => $report_id,
+                'user_id'        => $user_id,
+                'standard_id'     => (int) $standard_id,
+                'requirements_all'=> $requirement_id === 'ALL' ? 1 : 0,
+                'status'          => 'running',
+                #'created_at'      => date('Y-m-d H:i:s'),
+            ];
+
+            $this->jobModel->createJob($jobData);
+            $jobCreated = true;
+            log_message('info', 'JOB CREATED: ' . $job_id);
 
             return redirect()->to("/esg-reports/value/{$report_id}");
 
-        } catch (\Throwable $e) {
+        }catch (\Throwable $e){
+            log_message('error', (string)$e);
 
-            if ($report_id !== null && !$jobCreated) {
+            if ($report_id !== null && $jobCreated === false) {
                 $this->reportModel->delete($report_id);
-            }
 
-            if ($absolutePath && file_exists($absolutePath)) {
-                unlink($absolutePath);
+                if ($absolutePath && file_exists($absolutePath)) {
+                    unlink($absolutePath);
+                }
             }
 
             return redirect()
                 ->back()
                 ->withInput()
-                ->with('error', $e->getMessage());
+                ->with('error', $e ->getMessage());
         }
     }
 
     public function pipelinestatus(string $job_id)
     {
-        $jobsRoot   = realpath(FCPATH . '../storage/jobs') . DIRECTORY_SEPARATOR;
-        $jobDir     = $jobsRoot . $job_id . DIRECTORY_SEPARATOR;
-        $statusPath = $jobDir . 'status.json';
+        try {
+            $client = \Config\Services::curlrequest([
+                'timeout' => 3,
+            ]);
 
-        if (!is_file($statusPath)) {
+            $response = $client->get(
+                "http://localhost:8001/pipeline/status/{$job_id}"
+
+            );
+
+            return $this->respond(
+                json_decode($response->getBody(), true),
+                $response->getStatusCode()
+            );
+
+        } catch (\Throwable $e) {
             return $this->respond([
-                'job_id' => $job_id,
-                'step' => 'starting',
                 'percent' => 0,
-                'message' => 'Pipeline wird initialisiert'
-            ], 200);
+                'message' => 'Pipeline nicht erreichbar'
+            ], 502);
         }
-
-        $raw = file_get_contents($statusPath);
-        $data = json_decode($raw, true);
-
-        if (!is_array($data)) {
-            return $this->respond([
-                'job_id' => $job_id,
-                'step' => 'error',
-                'percent' => 100,
-                'message' => 'status.json ungültig'
-            ], 200);
-        }
-
-        $step = $data['step'] ?? null;
-
-        $job = $this->jobModel->findByjob_id($job_id);
-        log_message('error', "PIPESTATUS job_id={$job_id}");
-        log_message('error', "PIPESTATUS step=" . ($step ?? 'NULL'));
-        log_message('error', "PIPESTATUS db_job_status=" . ($job['status'] ?? 'NULL'));
-
-        if (!$job) {
-            return $this->respond($data, 200);
-        }
-
-        // -----------------------------
-        // TERMINAL STATES
-        // -----------------------------
-        $terminalStates = ['finished', 'error', 'no_match', 'not_compatible'];
-
-        if (in_array($step, $terminalStates, true)) {
-
-            log_message('error', 'PIPESTATUS terminal_state_detected');
-            log_message('error', 'PIPESTATUS will_finalize=' . (($job['status'] === 'running') ? 'yes' : 'no'));
-
-            if ($job['status'] === 'running') {
-
-                // Status sofort setzen (Lock-Effekt)
-                $this->jobModel->updateStatus($job_id, $step);
-
-                if ($step === 'finished') {
-
-                    $resultPath = $jobDir . 'final_result.json';
-
-                    log_message('error', 'PIPESTATUS result_path=' . $resultPath);
-                    log_message('error', 'PIPESTATUS result_exists=' . (is_file($resultPath) ? 'yes' : 'no'));
-
-                    if (is_file($resultPath)) {
-
-                        $resultRaw = file_get_contents($resultPath);
-                        $result = json_decode($resultRaw, true);
-
-                        log_message('error', 'PIPESTATUS result_json_valid=' . (is_array($result) ? 'yes' : 'no'));
-                        log_message('error', 'PIPESTATUS result_has_results=' . (isset($result['results']) ? 'yes' : 'no'));
-
-                        if (is_array($result) && isset($result['results'])) {
-
-                            $this->reportValueModel->persistFromPipelineResult(
-                                internaljobid: $job['id'],
-                                report_id: $job['report_id'],
-                                standard_id: $job['standard_id'],
-                                result: $result['results']
-                            );
-
-                            $this->reportModel->update(
-                                $job['report_id'],
-                                ['status' => 'ready']
-                            );
-                        }
-                    }
-                }
-
-                if ($step === 'error') {
-                    $this->reportModel->update(
-                        $job['report_id'],
-                        ['status' => 'failed']
-                    );
-                }
-
-                if ($step === 'not_compatible') {
-                    $this->reportModel->update(
-                        $job['report_id'],
-                        ['status' => 'not_compatible']
-                    );
-                }
-
-                if ($step === 'no_match') {
-                    $this->reportModel->update(
-                        $job['report_id'],
-                        ['status' => 'ready']
-                    );
-                }
-            }
-        }
-
-        return $this->respond($data, 200);
     }
 }

@@ -40,7 +40,7 @@ $errors = session('errors') ?? [];
                             </li>
                             <li>
                                 <label class="dropdown-item">
-                                    <input type="checkbox" class="column-toggle" data-column="2" data-table-id="reportsByCompaniesTable" checked> Author
+                                    <input type="checkbox" class="column-toggle" data-column="2" data-table-id="reportsByCompaniesTable" checked> Prüfer
                                 </label>
                             </li>
                             <li>
@@ -65,7 +65,7 @@ $errors = session('errors') ?? [];
                         <tr>
                             <th data-field="report_id" data-sortable="true">ID</th>
                             <th data-field="company_name" data-sortable="true">Unternehmen</th>
-                            <th data-field="author_name" data-sortable="true">Author</th>
+                            <th data-field="auditor_name" data-sortable="true">Prüfer</th>
                             <th data-field="reporting_year" data-sortable="true">Jahr</th>
                         </tr>
                         </thead>
@@ -77,7 +77,7 @@ $errors = session('errors') ?? [];
                                 >
                                     <td><?= esc($report['report_id']) ?></td>
                                     <td><?= esc($report['company_name']) ?></td>
-                                    <td><?= esc($report['author_name']) ?></td>
+                                    <td><?= esc($report['auditor_name']) ?></td>
                                     <td><?= esc($report['reporting_year']) ?></td>
                                 </tr>
                             <?php endforeach; ?>

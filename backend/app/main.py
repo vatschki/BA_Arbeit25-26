@@ -63,28 +63,3 @@ def pipeline_status(job_id: str):
     
     with open(path, "r", encoding="utf-8") as f:
         return json.load(f)
-
-
-
-
-
-
-
-
-
-
- # ---------- SUCCESS CALLBACK ----------
-        try:
-            ci4 = CI4Client(
-                base_url=config.base_url,
-                pipeline_secret=config.pipeline_secret
-            )
-            ci4.send_pipeline_result(
-                job_id=job_id,
-                status="finished",
-                progress=100,
-                message="Pipeline abgeschlossen",
-                result=result_json['results']
-            )
-        except Exception:
-            logger.exception(f"[JOB {job_id}] CI4 success callback fehlgeschlagen")

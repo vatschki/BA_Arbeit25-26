@@ -111,7 +111,7 @@ $errors = session('errors') ?? [];
                             </li>
                             <li>
                                 <label class="dropdown-item">
-                                    <input type="checkbox" class="column-toggle" data-column="2" data-table-id="reportTable" checked> Author
+                                    <input type="checkbox" class="column-toggle" data-column="2" data-table-id="reportTable" checked> Prüfer
                                 </label>
                             </li>
                             <li>
@@ -143,7 +143,7 @@ $errors = session('errors') ?? [];
                             <tr>
                                 <th data-field="id" data-sortable="true">ID</th>
                                 <th data-field="company_name" data-sortable="true">Unternehmen</th>
-                                <th data-field="author_name" data-sortable="true">Author</th>
+                                <th data-field="auditor_name" data-sortable="true">Prüfer</th>
                                 <th data-field="reporting_year" data-sortable="true">Jahr</th>
                                 <?php if ($canManageContent): ?>
                                     <th class="text-end">Aktionen</th>
@@ -163,7 +163,7 @@ $errors = session('errors') ?? [];
                                     >
                                         <td><?= esc($report['report_id']) ?></td>
                                         <td><?= esc($report['company_name']) ?></td>
-                                        <td><?= esc($report['author_name']) ?></td>
+                                        <td><?= esc($report['auditor_name'] ?? '-') ?></td>
                                         <td><?= esc($report['reporting_year']) ?></td>
                                         <?php if ($canManageContent): ?>
                                             <td>
@@ -259,36 +259,60 @@ $errors = session('errors') ?? [];
                                             </div>
                                         </div>
 
-                                        <!-- Author -->
+                                        <!-- Prüfer -->
                                         <div class="mb-3 row align-items-center">
                                             <label class="col-sm-3 col-form-label d-flex align-items-center">
-                                                Author<span class="text-danger">*</span>
+                                                Prüfer
                                                 <a href="<?= site_url('help') ?>#help-upload"
                                                    class="ms-2 text-muted"
                                                    data-bs-toggle="tooltip"
                                                    data-bs-placement="top"
                                                    title="Hier wählst du den Autor bzw. Ersteller des Berichts aus."
-                                                   aria-label="Hilfe zum Feld Author">
+                                                   aria-label="Hilfe zum Feld Auditor">
                                                     <i class="fa-regular fa-circle-question"></i>
                                                 </a>
                                             </label>
 
                                             <div class="col-sm-9">
-                                                <select class="form-select select2-author" name="author_id" required>
-                                                    <option value="" disabled <?= old('author_id') ? '' : 'selected' ?>>Author auswählen</option>
 
-                                                    <?php if (!empty($authors)): ?>
-                                                        <?php foreach ($authors as $author): ?>
-                                                            <option value="<?= esc($author['id']) ?>" <?= old('author_id') == $author['id'] ? 'selected' : '' ?>>
-                                                                <?= esc($author['name']) ?>
-                                                            </option>
+                                                <div class="dropdown w-100 position-relative auditor-dropdown">
+
+                                                    <button class="form-select text-start"
+                                                            type="button"
+                                                            data-bs-toggle="dropdown"
+                                                            id="auditorDropdown">
+
+                                                        Prüfer auswählen
+
+                                                    </button>
+                                                    
+                                                    <ul class="dropdown-menu w-100 p-3 auditor-menu">
+
+                                                        <?php foreach ($auditors as $auditor): ?>
+                                                            <li>
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input auditor-checkbox"
+                                                                           type="checkbox"
+                                                                           name="auditor_ids[]"
+                                                                           value="<?= esc($auditor['id']) ?>"
+                                                                           id="auditor<?= esc($auditor['id']) ?>">
+
+                                                                    <label class="form-check-label"
+                                                                           for="auditor<?= esc($auditor['id']) ?>">
+                                                                        <?= esc($auditor['name']) ?>
+                                                                    </label>
+                                                                </div>
+                                                            </li>
                                                         <?php endforeach; ?>
-                                                    <?php else: ?>
-                                                        <option value="" disabled>Keine Autoren vorhanden</option>
-                                                    <?php endif; ?>
-                                                </select>
+
+                                                    </ul>
+
+                                                </div>
+
                                             </div>
                                         </div>
+
+
 
                                         <!-- JAHR -->
                                         <div class="mb-3 row align-items-center">
@@ -506,7 +530,6 @@ $errors = session('errors') ?? [];
         console.log('requirementSelect:', requirementSelect);
         console.log('Alle IDs im Dokument:', Array.from(document.querySelectorAll('[id]')).map(el => el.id));
     });
-
 
 </script>
 

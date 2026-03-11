@@ -30,7 +30,7 @@
                             <div class="d-flex justify-content-between mb-3">
                                 <!-- Left: "Neu" Button -->
 
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createAuthorModal">
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createAuditorModal">
                                     <i class="fas fa-plus-circle"></i> Neu
                                 </button>
 
@@ -46,32 +46,32 @@
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                         <li>
                                             <label class="dropdown-item">
-                                                <input type="checkbox" class="column-toggle" data-column="0" data-table-id="authorTable" checked> ID
+                                                <input type="checkbox" class="column-toggle" data-column="0" data-table-id="auditorTable" checked> ID
                                             </label>
                                         </li>
                                         <li>
                                             <label class="dropdown-item">
-                                                <input type="checkbox" class="column-toggle" data-column="1" data-table-id="authorTable" checked> Name
+                                                <input type="checkbox" class="column-toggle" data-column="1" data-table-id="auditorTable" checked> Name
                                             </label>
                                         </li>
                                         <li>
                                             <label class="dropdown-item">
-                                                <input type="checkbox" class="column-toggle" data-column="2" data-table-id="authorTable" checked> Beschreibung
+                                                <input type="checkbox" class="column-toggle" data-column="2" data-table-id="auditorTable" checked> Beschreibung
                                             </label>
                                         </li>
                                         <li>
                                             <label class="dropdown-item">
-                                                <input type="checkbox" class="column-toggle" data-column="3" data-table-id="authorTable" checked> Typ
+                                                <input type="checkbox" class="column-toggle" data-column="3" data-table-id="auditorTable" checked> Typ
                                             </label>
                                         </li>
                                         <li>
                                             <label class="dropdown-item">
-                                                <input type="checkbox" class="column-toggle" data-column="4" data-table-id="authorTable" checked> Zeitstempel
+                                                <input type="checkbox" class="column-toggle" data-column="4" data-table-id="auditorTable" checked> Zeitstempel
                                             </label>
                                         </li>
                                     </ul>
 
-                                    <input id="table-search" class="form-control w-75" type="search" placeholder="Autor" data-table-id="authorTable" aria-label="Search">
+                                    <input id="table-search" class="form-control w-75" type="search" placeholder="Autor" data-table-id="auditorTable" aria-label="Search">
 
                                 </div>
                             </div>
@@ -81,7 +81,7 @@
                         <!-- Tabellenansicht -->
                         <div class="card-body container-fluid" id="table-view">
                             <div class="table-responsive">
-                                <table class="table table-hover table-border table-striped" id="authorTable" data-toggle="table">
+                                <table class="table table-hover table-border table-striped" id="auditorTable" data-toggle="table">
                                     <thead>
                                         <tr>
                                             <th>ID</th>
@@ -93,14 +93,14 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                    <?php if (!empty($authors)): ?>
-                                        <?php foreach ($authors as $author): ?>
+                                    <?php if (!empty($auditors)): ?>
+                                        <?php foreach ($auditors as $auditor): ?>
                                             <tr>
-                                                <td><?= esc($author['id']) ?></td>
-                                                <td><?= esc($author['name']) ?></td>
-                                                <td><?= esc($author['description']) ?></td>
-                                                <td><?= esc($author['type']) ?></td>
-                                                <td><?= esc($author['timestamp']) ?></td>
+                                                <td><?= esc($auditor['id']) ?></td>
+                                                <td><?= esc($auditor['name']) ?></td>
+                                                <td><?= esc($auditor['description']) ?></td>
+                                                <td><?= esc($auditor['type']) ?></td>
+                                                <td><?= esc($auditor['timestamp']) ?></td>
                                                 <td class="text-end">
 
                                                     <!-- EDIT -->
@@ -108,18 +108,18 @@
                                                        class="text-secondary me-2 edit-btn"
                                                        title="Bearbeiten"
                                                        data-bs-toggle="modal"
-                                                       data-bs-target="#createAuthorModal"
+                                                       data-bs-target="#createAuditorModal"
 
-                                                       data-id="<?= $author['id'] ?>"
-                                                       data-name="<?= esc($author['name']) ?>"
-                                                       data-description="<?= esc($author['description']) ?>"
-                                                       data-type="<?= esc($author['type']) ?>"
+                                                       data-id="<?= $auditor['id'] ?>"
+                                                       data-name="<?= esc($auditor['name']) ?>"
+                                                       data-description="<?= esc($auditor['description']) ?>"
+                                                       data-type="<?= esc($auditor['type']) ?>"
                                                     >
                                                         <i class="fa-solid fa-pen-to-square"></i>
                                                     </a>
 
                                                     <!-- DELETE -->
-                                                    <form action="<?= base_url('config/author/delete/' . $author['id']) ?>"
+                                                    <form action="<?= base_url('config/auditor/delete/' . $auditor['id']) ?>"
                                                           method="post"
                                                           class="d-inline">
                                                         <?= csrf_field() ?>
@@ -158,27 +158,27 @@
 
 
 <?php if (auth()->loggedIn() && auth()->user()->can('content.manage')): ?>
-    <div class="modal fade config-modal" id="createAuthorModal" tabindex="-1" aria-labelledby="createAuthorModalLabel" aria-hidden="true">
+    <div class="modal fade config-modal" id="createAuditorModal" tabindex="-1" aria-labelledby="createAuditorModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
 
                 <div class="modal-header">
-                    <h5 class="modal-title" id="dynamicAuthorModalTitle">Autor hinzufügen</h5>
+                    <h5 class="modal-title" id="dynamicAuditorModalTitle">Autor hinzufügen</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
                 <form class="config-form needs-validation"
                       id="countryForm"
                       method="post"
-                      action="<?= base_url('config/author/create') ?>"
-                      data-create-url="<?= base_url('config/author/create') ?>"
-                      data-update-url="<?= base_url('config/author/update') ?>"
+                      action="<?= base_url('config/auditor/create') ?>"
+                      data-create-url="<?= base_url('config/auditor/create') ?>"
+                      data-update-url="<?= base_url('config/auditor/update') ?>"
                       novalidate
                 >
 
                     <?= csrf_field() ?>
 
-                    <input type="hidden" name="author_id" id="author_id">
+                    <input type="hidden" name="auditor_id" id="auditor_id">
 
                     <div class="modal-body p-0">
                         <div class="d-flex" style="min-height: 350px;">
@@ -189,7 +189,7 @@
                                     <label class="col-sm-3 col-form-label d-flex align-items-center">
                                         Name
                                         <a
-                                                href="<?= site_url('help') ?>#help-author"
+                                                href="<?= site_url('help') ?>#help-auditor"
                                                 class="ms-2 text-muted"
                                                 data-bs-toggle="tooltip"
                                                 data-bs-placement="top"
@@ -220,7 +220,7 @@
                                     <label class="col-sm-3 col-form-label">
                                         Beschreibung
                                         <a
-                                                href="<?= site_url('help') ?>#help-author"
+                                                href="<?= site_url('help') ?>#help-auditor"
                                                 class="ms-2 text-muted"
                                                 data-bs-toggle="tooltip"
                                                 data-bs-placement="top"
@@ -240,7 +240,7 @@
                                     <label class="col-sm-3 col-form-label d-flex align-items-center">
                                         Type
                                         <a
-                                                href="<?= site_url('help') ?>#help-author"
+                                                href="<?= site_url('help') ?>#help-auditor"
                                                 class="ms-2 text-muted"
                                                 data-bs-toggle="tooltip"
                                                 data-bs-placement="top"
@@ -276,6 +276,6 @@
     </div>
 
     <div id="country-modal-trigger"
-         data-open="<?= session('openAuthorModal') ? '1' : '0' ?>">
+         data-open="<?= session('openAuditorModal') ? '1' : '0' ?>">
     </div>
 <?php endif; ?>

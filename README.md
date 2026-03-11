@@ -1,60 +1,184 @@
-# CodeIgniter 4 Framework
+# ESG Report Extraction Platform
 
-## What is CodeIgniter?
+## Overview
 
-CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
-More information can be found at the [official site](https://codeigniter.com).
+This project is a prototype web application that enables users to extract structured information from ESG (Environmental, Social, Governance) reports.
 
-This repository holds the distributable version of the framework.
-It has been built from the
-[development repository](https://github.com/codeigniter4/CodeIgniter4).
+The application provides a web interface built with **CodeIgniter 4**, which allows users to trigger a **Python-based processing pipeline** located in the backend directory. The pipeline processes ESG reports and extracts relevant information from the documents.
 
-More information about the plans for version 4 can be found in [CodeIgniter 4](https://forum.codeigniter.com/forumdisplay.php?fid=28) on the forums.
+The repository therefore combines two main components:
 
-You can read the [user guide](https://codeigniter.com/user_guide/)
-corresponding to the latest version of the framework.
+- a **PHP web application** for interaction and orchestration
+- a **Python processing pipeline** for document analysis
 
-## Important Change with index.php
+The Python backend and its internal architecture are documented separately in the `backend/README.md`.
 
-`index.php` is no longer in the root of the project! It has been moved inside the *public* folder,
-for better security and separation of components.
+This project was developed as part of a **university bachelor thesis** and represents a **prototype implementation**.
 
-This means that you should configure your web server to "point" to your project's *public* folder, and
-not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter *public/...*, as the rest of your logic and the
-framework are exposed.
+---
 
-**Please** read the user guide for a better explanation of how CI4 works!
+# Architecture
 
-## Repository Management
+The system consists of two main layers.
 
-We use GitHub issues, in our main repository, to track **BUGS** and to track approved **DEVELOPMENT** work packages.
-We use our [forum](http://forum.codeigniter.com) to provide SUPPORT and to discuss
-FEATURE REQUESTS.
+## Web Application (Frontend / Control Layer)
 
-This repository is a "distribution" one, built by our release preparation script.
-Problems with it can be raised on our forum, or as issues in the main repository.
+The web application is implemented using **CodeIgniter 4** and provides the user interface and orchestration logic. Users can interact with the application through a browser and start the ESG processing pipeline.
 
-## Contributing
+The CodeIgniter application follows the standard MVC structure:
 
-We welcome contributions from the community.
+- Controllers handle user requests
+- Models manage data logic
+- Views provide the interface
 
-Please read the [*Contributing to CodeIgniter*](https://github.com/codeigniter4/CodeIgniter4/blob/develop/CONTRIBUTING.md) section in the development repository.
+## Python Processing Pipeline
 
-## Server Requirements
+The ESG report analysis is performed by a **Python pipeline** located in the `backend/` directory.
 
-PHP version 8.1 or higher is required, with the following extensions installed:
+This pipeline:
 
-- [intl](http://php.net/manual/en/intl.requirements.php)
-- [mbstring](http://php.net/manual/en/mbstring.installation.php)
+- processes ESG reports
+- extracts relevant information from documents
+- returns structured output to the application
 
-> [!WARNING]
-> - The end of life date for PHP 7.4 was November 28, 2022.
-> - The end of life date for PHP 8.0 was November 26, 2023.
-> - If you are still using PHP 7.4 or 8.0, you should upgrade immediately.
-> - The end of life date for PHP 8.1 will be December 31, 2025.
+All details about the pipeline architecture, dependencies, and execution are documented in:
 
-Additionally, make sure that the following extensions are enabled in your PHP:
+```
+backend/README.md
+```
 
-- json (enabled by default - don't turn it off)
-- [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
-- [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
+---
+
+# Technology Stack
+
+## Web Application
+
+- PHP
+- CodeIgniter 4
+- MVC architecture
+- Local web hosting environment (e.g. Apache)
+
+## Backend Processing
+
+- Python
+- Python libraries listed in `backend/requirements.txt`
+
+---
+
+# Project Structure
+
+The repository extends the standard **CodeIgniter 4 project structure** with additional directories for backend processing and storage.
+
+```
+project-root
+│
+├── app/
+│   ├── Controllers/
+│   ├── Models/
+│   ├── Views/
+│   ├── Config/
+│   └── Filters/
+│
+├── public/
+│
+├── writable/
+│
+├── backend/
+│   ├── Python processing pipeline
+│   ├── requirements.txt
+│   └── backend README with detailed documentation
+│
+├── storage/
+│   └── data and files used during processing
+│
+└── README.md
+```
+
+The `backend/` directory contains all components required for the Python-based ESG extraction pipeline.
+
+The `storage/` directory is used for document storage and intermediate processing data.
+
+---
+
+# Installation
+
+## Requirements
+
+The project requires the following technologies to run locally:
+
+- PHP
+- CodeIgniter 4
+- Python
+- Python dependencies listed in `backend/requirements.txt`
+- Local web server environment (e.g. Apache / local host setup)
+
+---
+
+# Running the Application
+
+## Start the Web Application
+
+The web application is designed to run on a local **Apache server environment**.  
+During development the project was hosted using **MAMP**.
+
+### Setup with MAMP
+
+1. Install and start **MAMP**.
+2. Place the project inside the MAMP `htdocs` directory.
+
+Example:
+
+```
+/Applications/MAMP/htdocs/esg-report-platform
+```
+
+3. Start the Apache server via the MAMP control panel.
+4. Open the application in your browser:
+
+```
+http://localhost/esg-report-platform/public
+```
+
+CodeIgniter uses the `public` directory as the web root, therefore requests should be directed to this folder.
+
+## Run the Python Backend
+
+The Python backend is executed through the pipeline environment located in the `backend` directory.
+
+Install required dependencies:
+
+```
+pip install -r backend/requirements.txt
+```
+
+Further execution instructions and pipeline configuration are described in:
+
+```
+backend/README.md
+```
+
+---
+
+# Configuration
+
+Configuration of the web application follows the **standard CodeIgniter 4 configuration workflow**.
+
+Relevant settings can be adjusted in the `app/Config` directory.
+
+Backend configuration is documented separately inside the backend documentation.
+
+---
+
+# Disclaimer
+
+This project represents a **prototype implementation** developed for academic purposes.
+
+The system is provided **without guarantee of correctness or production readiness**.
+
+---
+
+# Project Context
+
+This project was developed as part of a **university bachelor thesis**.
+
+The goal of the project is to explore automated extraction of ESG-related information from sustainability reports using a combined **web application and document processing pipeline architecture**.

@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
-use App\Models\AuthorModel;
+use App\Models\AuditorModel;
 use App\Models\CountryModel;
 use App\Models\IndustryModel;
 use App\Models\RequirementModel;
@@ -11,14 +11,14 @@ use App\Models\SectorModel;
 use App\Models\StandardModel;
 use RuntimeException;
 
-class ConfigAuthorController extends BaseController
+class ConfigAuditorController extends BaseController
 {
     protected CountryModel $countryModel;
     protected IndustryModel $industryModel;
     protected SectorModel $sectorModel;
     protected StandardModel $standardModel;
     protected RequirementModel $requirementModel;
-    protected AuthorModel $authorModel;
+    protected AuditorModel $auditorModel;
 
     public function __construct()
     {
@@ -27,7 +27,7 @@ class ConfigAuthorController extends BaseController
         $this->sectorModel = new SectorModel();
         $this->standardModel = new StandardModel();
         $this->requirementModel = new RequirementModel();
-        $this->authorModel = new AuthorModel();
+        $this->auditorModel = new AuditorModel();
     }
 
     private function loadConfigData()
@@ -38,36 +38,36 @@ class ConfigAuthorController extends BaseController
             'standards' => $this->standardModel->getStandards(),
             'requirements' => $this->requirementModel->getRequirements(),
             'countries' => $this->countryModel->getCountries(),
-            'authors' => $this->authorModel->getAuthors(),
+            'auditors' => $this->auditorModel->getAuditors(),
         ];
     }
 
     //--------------------
-    // Author Methods
+    // Auditor Methods
     //--------------------
 
-    public function author()
+    public function auditor()
     {
         $data = $this->loadConfigData();
 
         echo view('templates/header_home');
         echo view('templates/menu_home');
-        echo view('pages/page_Config_author', $data);
+        echo view('pages/page_Config_auditor', $data);
         echo view('templates/footer');
     }
 
-    public function createAuthor()
+    public function createAuditor()
     {
         if (! auth()->loggedIn() || ! auth()->user()->can('content.manage')) {
             return redirect()->back()->with('error', 'Keine Berechtigung.');
         }
 
-        if (! $this->validate('author')) {
+        if (! $this->validate('auditor')) {
             return redirect()
                 ->back()
                 ->withInput()
                 ->with('errors', $this->validator->getErrors())
-                ->with('openAuthorModal', true);
+                ->with('openAuditorModal', true);
         }
 
         $data = [
@@ -77,31 +77,31 @@ class ConfigAuthorController extends BaseController
         ];
 
         try {
-            $this->authorModel->createAuthor($data);
+            $this->auditorModel->createAuditor($data);
 
             return redirect()
-                ->to('/config/author')
+                ->to('/config/auditor')
                 ->with('success', 'Eintrag erfolgreich angelegt.');
         } catch (RuntimeException $exception) {
             return redirect()
                 ->back()
                 ->withInput()
-                ->with('openAuthorModal', true)
+                ->with('openAuditorModal', true)
                 ->with('error', $exception->getMessage());
         }
     }
 
-    public function updateAuthor($author_id)
+    public function updateAuditor($auditor_id)
     {
         if (! auth()->loggedIn() || ! auth()->user()->can('content.manage')) {
             return redirect()->back()->with('error', 'Keine Berechtigung.');
         }
 
-        if (! $this->validate('author')) {
+        if (! $this->validate('auditor')) {
             return redirect()
                 ->back()
                 ->withInput()
-                ->with('openAuthorModal', true);
+                ->with('openAuditorModal', true);
         }
 
         $data = [
@@ -111,35 +111,35 @@ class ConfigAuthorController extends BaseController
         ];
 
         try {
-            $this->authorModel->updateAuthor($author_id, $data);
+            $this->auditorModel->updateAuditorr($auditor_id, $data);
 
             return redirect()
-                ->to('/config/author')
+                ->to('/config/auditor')
                 ->with('success', 'Eintrag erfolgreich aktualisiert.');
         } catch (RuntimeException $exception) {
             return redirect()
                 ->back()
                 ->withInput()
-                ->with('openAuthorModal', true)
+                ->with('openAuditorModal', true)
                 ->with('error', $exception->getMessage());
         }
     }
 
-    public function deleteAuthor($author_id)
+    public function deleteAuditor($auditor_id)
     {
         if (! auth()->loggedIn() || ! auth()->user()->can('content.manage')) {
             throw new \CodeIgniter\Exceptions\PageForbiddenException();
         }
 
         try {
-            $this->authorModel->deleteAuthor($author_id);
+            $this->auditorModel->deleteAuditor($auditor_id);
 
             return redirect()
-                ->to('/config/author')
+                ->to('/config/auditor')
                 ->with('success', 'Eintrag erfolgreich gelöscht.');
         } catch (RuntimeException $exception) {
             return redirect()
-                ->to('/config/author')
+                ->to('/config/auditor')
                 ->with('error', $exception->getMessage());
         }
     }
