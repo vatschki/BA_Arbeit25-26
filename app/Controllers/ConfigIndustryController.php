@@ -43,6 +43,8 @@ class ConfigIndustryController extends BaseController
     //--------------------
     // Industry Methods
     //--------------------
+
+    // Zeigt die Liste der Industrien an
     public function industry()
     {
         $data = $this->loadConfigData();
@@ -53,6 +55,7 @@ class ConfigIndustryController extends BaseController
         echo view('templates/footer');
     }
 
+    // Funktion zum Anlegen einer neuen Industrie
     public function createIndustry()
     {
         if (! auth()->loggedIn() || ! auth()->user()->can('content.manage')) {
@@ -88,6 +91,7 @@ class ConfigIndustryController extends BaseController
         }
     }
 
+    // Funktion zum Aktualisieren einer bestehenden Industrie
     public function updateIndustry($industry_id)
     {
         if (! $this->validate('industry')) {
@@ -117,6 +121,7 @@ class ConfigIndustryController extends BaseController
         }
     }
 
+    // Funktion zum Löschen einer Industrie
     public function deleteIndustry($industry_id)
     {
         if (! auth()->loggedIn() || ! auth()->user()->can('content.manage')) {

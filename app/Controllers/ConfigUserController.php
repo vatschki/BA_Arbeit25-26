@@ -9,6 +9,8 @@ use CodeIgniter\Shield\Entities\User;
 
 class ConfigUserController extends BaseController
 {
+    //Prototypisch umgesetzt. Bis jetzt nur die User-Verwaltung, da hier die meisten Funktionen nötig sind. Eine direkte E-Mail-Benachrichtigung ist nicht implementiert, da es hier um die Funktionalität geht. In einem echten System würde man hier natürlich eine E-Mail mit dem Passwort verschicken, damit der User es nicht im Klartext angezeigt bekommt.
+    // Zeigt die Liste der User an
     public function user()
     {
         $userModel = new UserListModel();
@@ -35,6 +37,7 @@ class ConfigUserController extends BaseController
         echo view('templates/footer');
     }
 
+    // Funktion zum Anlegen eines neuen Users
     public function createUser()
     {
         $email    = $this->request->getPost('email');
@@ -67,6 +70,7 @@ class ConfigUserController extends BaseController
             ->with('success', "User erstellt. Passwort: {$password}");
     }
 
+    //Mögliche Umsetzung einer E-Mail-Benachrichtigung bei User-Erstellung.
     /* Mail schicken
         service('email')
             ->setTo($email)

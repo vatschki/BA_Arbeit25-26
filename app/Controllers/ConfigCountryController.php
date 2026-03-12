@@ -41,6 +41,8 @@ class ConfigCountryController extends BaseController
     //--------------------
     // Country Methods
     //--------------------
+
+    // Zeigt die Liste der Länder an
     public function country()
     {
         $data = $this->loadConfigData();
@@ -51,6 +53,7 @@ class ConfigCountryController extends BaseController
         echo view('templates/footer');
     }
 
+    // Funktion zum Anlegen eines neuen Landes
     public function createCountry()
     {
         if (! auth()->loggedIn() || ! auth()->user()->can('content.manage')) {
@@ -88,6 +91,7 @@ class ConfigCountryController extends BaseController
         }
     }
 
+    // Funktion zum Aktualisieren eines Landes
     public function updateCountry($country_id)
     {
         if (! $this->validate('country')) {
@@ -120,6 +124,7 @@ class ConfigCountryController extends BaseController
         }
     }
 
+    // Funktion zum Löschen eines Landes
     public function deleteCountry($country_id)
     {
         if (! auth()->loggedIn() || ! auth()->user()->can('content.manage')) {

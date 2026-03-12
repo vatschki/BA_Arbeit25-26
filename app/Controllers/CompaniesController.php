@@ -23,6 +23,7 @@ class CompaniesController extends BaseController
         $this->sectorModel = new SectorModel();
     }
 
+    // Zeigt die Liste der Unternehmen an
     public function index()
     {
 
@@ -39,6 +40,7 @@ class CompaniesController extends BaseController
         echo view('templates/footer');
     }
 
+    // Funktion zum Anlegen eines neuen Unternehmens
     public function createCompany(){
 
         if (! auth()->loggedIn() || ! auth()->user()->can('content.manage')) {
@@ -105,6 +107,7 @@ class CompaniesController extends BaseController
             ->with('success', 'Unternehmen erfolgreich angelegt.');
     }
 
+    // Funktion zum Aktualisieren eines bestehenden Unternehmens
     public function updateCompany(int $companyId)
     {
         if (! auth()->loggedIn() || ! auth()->user()->can('content.manage')) {
@@ -155,6 +158,7 @@ class CompaniesController extends BaseController
     }
 
 
+    // Funktion zum Aktualisieren eines bestehenden Unternehmens
     public function deleteCompany(int $companyId)
     {
         if (! auth()->loggedIn() || ! auth()->user()->can('content.manage')) {

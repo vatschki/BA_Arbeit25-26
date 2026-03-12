@@ -9,6 +9,7 @@ use App\Models\ReportModel;
 
 class ExportController extends BaseController
 {
+    // Exportiert die Werte eines Berichts als Excel-Datei
     public function values(int $report_id)
     {
         $valueModel  = new ReportValueModel();

@@ -39,6 +39,7 @@ class ApiController extends ResourceController{
         $this->auditReportModel = new AuditReportModel();
     }
 
+    // Funktion zum Speichern des API-Schlüssels
     public function saveapikey()
     {
         $provider = $this->request->getPost('provider_name');
@@ -71,6 +72,7 @@ class ApiController extends ResourceController{
             ->with('error', 'API-Test fehlgeschlagen: ' . $result);
     }
 
+    // Funktion zum Testen des API-Schlüssels
     public function apikeytest()
     {
         $api_config = session()->get('api_config');
@@ -132,7 +134,7 @@ class ApiController extends ResourceController{
         }
     }
 
-
+    // Hauptfunktion zur Verarbeitung des Report-Uploads und Starten der Pipeline
     public function process()
     {
         log_message('error', 'PROCESS START');
@@ -450,6 +452,7 @@ class ApiController extends ResourceController{
         }
     }
 
+    // Funktion zum Abrufen des Pipeline-Status
     public function pipelinestatus(string $job_id)
     {
         try {

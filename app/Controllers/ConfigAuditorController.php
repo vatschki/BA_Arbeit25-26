@@ -46,6 +46,7 @@ class ConfigAuditorController extends BaseController
     // Auditor Methods
     //--------------------
 
+    // Zeigt die Liste der Auditoren an
     public function auditor()
     {
         $data = $this->loadConfigData();
@@ -56,6 +57,7 @@ class ConfigAuditorController extends BaseController
         echo view('templates/footer');
     }
 
+    // Funktion zum Anlegen eines neuen Auditors
     public function createAuditor()
     {
         if (! auth()->loggedIn() || ! auth()->user()->can('content.manage')) {
@@ -91,6 +93,7 @@ class ConfigAuditorController extends BaseController
         }
     }
 
+    // Funktion zum Aktualisieren eines Auditors
     public function updateAuditor($auditor_id)
     {
         if (! auth()->loggedIn() || ! auth()->user()->can('content.manage')) {
@@ -125,6 +128,7 @@ class ConfigAuditorController extends BaseController
         }
     }
 
+    // Funktion zum Löschen eines Auditors
     public function deleteAuditor($auditor_id)
     {
         if (! auth()->loggedIn() || ! auth()->user()->can('content.manage')) {

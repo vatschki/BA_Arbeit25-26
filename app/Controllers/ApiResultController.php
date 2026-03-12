@@ -25,6 +25,7 @@ class ApiResultController extends ResourceController{
         $this->reportValueModel = new ReportValueModel();
     }
 
+    // Endpoint für Pipeline, um Ergebnisse zu übermitteln
     public function store()
     {
         log_message('error', 'STORE HIT');
@@ -73,18 +74,25 @@ class ApiResultController extends ResourceController{
 
                 $this->reportModel->update($job['report_id'], ['status' => 'failed']);
 
+                $this->deleteUploadFile();
+
                 return $this->respond(['ok' => true]);
             }
 
             if ($status === 'no_match') {
                 $this->jobModel->updateStatus($job['job_id'], 'no_match');
-                $this->reportModel->update($job['report_id'], ['status' => 'ready']); //vllt lieber updaten
+                $this->reportModel->update($job['report_id'], ['status' => 'ready']);
+
+                $this->deleteUploadFile();
+
                 return $this->respond(['ok' => true]);
             }
 
             if ($status === 'not_compatible') {
                 $this->jobModel->updateStatus($job['job_id'], 'not_compatible');
                 $this->reportModel->update($job['report_id'], ['status' => 'not_compatible']);
+
+                $this->deleteUploadFile();
 
                 return $this->respond(['ok' => true]);
             }
@@ -112,6 +120,8 @@ class ApiResultController extends ResourceController{
                     result: $data['result']
                 );
 
+                $this->deleteUploadFile();
+
                 return $this->respond(['ok' => true]);
             }
 
@@ -120,6 +130,18 @@ class ApiResultController extends ResourceController{
 
         } catch (\Throwable $e) {
             return $this->failServerError($e->getMessage());
+        }
+    }
+
+    private function deleteUploadFile()
+    {
+        $uploadPath = realpath(FCPATH . '../storage/uploads') . DIRECTORY_SEPARATOR;
+
+        foreach (glob($uploadPath . '*.pdf') as $file) {
+            if (file_exists($file)) {
+                unlink($file);
+                log_message('info', 'FILE DELETED: ' . $file);
+            }
         }
     }
 }

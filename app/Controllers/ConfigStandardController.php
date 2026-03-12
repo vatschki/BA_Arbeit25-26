@@ -41,6 +41,8 @@ class ConfigStandardController extends BaseController
     //--------------------
     // Standard Methods
     //--------------------
+
+    // Zeigt die Liste der Standards an
     public function standard()
     {
         $data = $this->loadConfigData();
@@ -51,6 +53,7 @@ class ConfigStandardController extends BaseController
         echo view('templates/footer');
     }
 
+    // Funktion zum Anlegen eines neuen Standards
     public function createStandard()
     {
         if (! auth()->loggedIn() || ! auth()->user()->can('content.manage')) {
@@ -87,6 +90,7 @@ class ConfigStandardController extends BaseController
         }
     }
 
+    // Funktion zum Aktualisieren eines Standards
     public function updateStandard($standard_id)
     {
         if (! $this->validate('standard')) {
@@ -118,6 +122,7 @@ class ConfigStandardController extends BaseController
         }
     }
 
+    // Funktion zum Löschen eines Standards
     public function deleteStandard($standard_id)
     {
         if (! auth()->loggedIn() || ! auth()->user()->can('content.manage')) {

@@ -41,6 +41,8 @@ class ConfigRequirementController extends BaseController
     //--------------------
     // Requirement Methods
     //--------------------
+
+    // Zeigt die Liste der Anforderungen an
     public function requirement()
     {
         $data = $this->loadConfigData();
@@ -51,6 +53,7 @@ class ConfigRequirementController extends BaseController
         echo view('templates/footer');
     }
 
+    // Funktion zum Anlegen einer neuen Anforderung
     public function createRequirement()
     {
         if (! auth()->loggedIn() || ! auth()->user()->can('content.manage')) {
@@ -90,6 +93,7 @@ class ConfigRequirementController extends BaseController
         }
     }
 
+    // Funktion zum Aktualisieren einer bestehenden Anforderung
     public function updateRequirement($requirement_id)
     {
         if (! $this->validate('requirement')) {
@@ -124,6 +128,7 @@ class ConfigRequirementController extends BaseController
         }
     }
 
+    // Funktion zum Löschen einer Anforderung
     public function deleteRequirement($requirement_id)
     {
         if (! auth()->loggedIn() || ! auth()->user()->can('content.manage')) {

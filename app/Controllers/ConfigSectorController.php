@@ -44,6 +44,8 @@ class ConfigSectorController extends BaseController
     //--------------------
     // Sector Methods
     //--------------------
+
+    // Zeigt die Liste der Sektoren an
     public function sector()
     {
         $data = $this->loadConfigData();
@@ -54,6 +56,7 @@ class ConfigSectorController extends BaseController
         echo view('templates/footer');
     }
 
+    // Funktion zum Anlegen eines neuen Sektors
     public function createSector()
     {
 
@@ -89,6 +92,7 @@ class ConfigSectorController extends BaseController
         }
     }
 
+    // Funktion zum Aktualisieren eines bestehenden Sektors
     public function updateSector($sector_id)
     {
         if (! $this->validate('sector')) {
@@ -118,6 +122,7 @@ class ConfigSectorController extends BaseController
         }
     }
 
+    // Funktion zum Löschen eines Sektors
     public function deleteSector($sector_id)
     {
         if (! auth()->loggedIn() || ! auth()->user()->can('content.manage')) {

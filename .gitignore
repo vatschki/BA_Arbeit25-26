@@ -29,7 +29,14 @@ Thumbs.db
 #---------------------------------
 #Storage files
 #---------------------------------
-storage/
+storage/*
+
+!storage/uploads/
+
+storage/uploads/*
+
+!storage/uploads/.gitkeep
+
 backend/debug/
 
 # --------------------------------

@@ -37,7 +37,7 @@ class ValueController extends BaseController
         $this->jobModel = new JobModel();
     }
 
-
+    // Zeigt die Werte eines ESG-Berichts an
     public function index(int $report_id)
     {
         $pipelineJob = session()->get('pipeline_job');
@@ -90,10 +90,6 @@ class ValueController extends BaseController
             'job_id'          => $job_id,
             'currentReportId'=> $report_id,
         ];
-
-
-
-        //dd($data);
 
         echo view('templates/header_home');
         echo view('templates/menu_home');

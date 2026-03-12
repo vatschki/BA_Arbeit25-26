@@ -22,7 +22,6 @@ class EsgReportsController extends BaseController
     protected StandardModel $standardModel;
     protected ReportModel $reportModel;
     protected RequirementModel $requirementModel;
-    //protected reportvalueModel $reportvalueModel;
     protected AuditorModel $auditorModel;
 
     public function __construct()
@@ -37,7 +36,7 @@ class EsgReportsController extends BaseController
         $this->auditorModel = new AuditorModel();
     }
 
-
+    // Zeigt die Liste der ESG-Berichte an
     public function index()
     {
         $reports = $this->reportModel->getReports();
@@ -63,6 +62,7 @@ class EsgReportsController extends BaseController
         echo view('templates/footer');
     }
 
+    // Zeigt die ESG-Berichte eines bestimmten Unternehmens an
     public function byCompany($company_id){
 
         $company = $this->companyModel->find($company_id);
@@ -76,14 +76,13 @@ class EsgReportsController extends BaseController
             'reportsbycompany' => $this->reportModel->getByCompanyId($company_id),
         ];
 
-        #dd($data);
-
         echo view('templates/header_home');
         echo view('templates/menu_home');
         echo view('pages/page_EsgReports_byCompany', $data);
         echo view('templates/footer');
     }
 
+    // Funktion zum Löschen eines ESG-Berichts
     public function deleteReport($report_id)
     {
         if (! auth()->loggedIn() || ! auth()->user()->can('content.manage')) {
