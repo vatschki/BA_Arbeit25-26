@@ -1,6 +1,12 @@
 from pydantic import BaseModel
 from typing import List, Optional
 
+'''
+Schema für den Kontext, der für die Anforderungserstellung verwendet wird.
+Es enthält Informationen über das Unternehmen, das Jahr, die relevanten Standards und die Seitenzahlen,
+die für die Anforderungserstellung relevant sind.
+'''
+
 class Context(BaseModel):
     company_name: str
     year: str

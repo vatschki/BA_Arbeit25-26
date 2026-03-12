@@ -7,6 +7,14 @@ logger = logging.getLogger(__name__)
 
 ENV_PATH = Path(__file__).resolve().parent / ".env"
 
+'''
+Die Klasse Config ist verantwortlich für das Laden und Validieren der Konfigurationseinstellungen aus einer .env-Datei.
+Sie verwendet Pydantic, um die Konfiguration zu validieren und sicherzustellen, dass alle erforderlichen
+Umgebungsvariablen vorhanden und korrekt formatiert sind. Die Konfiguration umfasst Einstellungen wie Debug-Modus,
+Speicheroptionen, maximale Blockanzahl, TTL, Pipeline-Geheimnis und Basis-URL. Wenn die Konfiguration erfolgreich
+geladen wird, werden relevante Informationen geloggt.
+'''
+
 class Config(BaseModel):
     debug_enabled: bool
     store_doob: bool

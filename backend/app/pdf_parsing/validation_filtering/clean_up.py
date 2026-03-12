@@ -4,6 +4,17 @@ from typing import List
 import logging
 
 
+'''
+Die Klasse Filter bietet Funktionen zur Bereinigung von Elementen, die aus PDF-Dokumenten extrahiert wurden.
+Insbesondere enthält sie eine Methode, die doppelte oder sehr ähnliche Elemente basierend auf ihrem Textinhalt entfernt.
+Die Methode filter_elements_partition_pdf nimmt eine Liste von Elementen als Eingabe und gibt eine bereinigte Liste
+zurück, in der nur einzigartige Elemente enthalten sind. Dabei wird der Text jedes Elements normalisiert, indem er
+in Kleinbuchstaben umgewandelt, überflüssige Leerzeichen entfernt und mehrere aufeinanderfolgende Leerzeichen durch
+ein einzelnes Leerzeichen ersetzt werden. Elemente ohne Text oder mit leerem Text werden automatisch ausgeschlossen.
+Diese Bereinigung hilft dabei, die Qualität der extrahierten Daten zu verbessern, indem redundante Informationen
+entfernt werden, was insbesondere bei der Verarbeitung großer PDF-Dokumente von Vorteil sein kann.
+'''
+
 class Filter:
 
     def filter_elements_partition_pdf(self, elements: List[Element]) -> List[Element]:

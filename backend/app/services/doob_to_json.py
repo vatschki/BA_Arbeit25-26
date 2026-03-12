@@ -24,6 +24,9 @@ STRUCTURAL_ROLE = {
     FooterBlock: "noise",
 }
 
+'''
+Dieses Modul enthält Funktionen zur Umwandlung von DOOB-Dokumenten in JSON-Format.
+'''
 
 def _block_to_dict(block: Block, idx: int) -> Dict:
     return {

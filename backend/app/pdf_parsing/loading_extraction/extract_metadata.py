@@ -1,6 +1,15 @@
 from typing import Any, Dict, Optional
 from unstructured.documents.elements import Element
 
+'''
+Die Klasse MetadataExtractor ist dafür verantwortlich, relevante Metadaten aus einem gegebenen Element zu extrahieren.
+Sie berücksichtigt dabei sowohl die Basis-Metadaten, die in einem möglichen "metadata"-Attribut des Elements enthalten
+sein können, als auch direkte Informationen aus dem Element selbst. Die extrahierten Metadaten umfassen unter anderem
+Dateiinformationen, Koordinaten, Sprachen, Seitenzahlen und Kategorietiefe. Zusätzlich werden spezifische Informationen
+für bestimmte Elementtypen wie Bilder und Tabellen berücksichtigt. Die Klasse ermöglicht es, diese Metadaten in einem
+strukturierten Format zurückzugeben, um sie in weiteren Verarbeitungsschritten oder Analysen zu verwenden.
+'''
+
 
 class MetadataExtractor:
     BASE_FIELDS = (

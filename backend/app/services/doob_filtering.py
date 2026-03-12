@@ -13,6 +13,15 @@ ALLOWED_TEXT_CATEGORIES = {
     "Title",
 }
 
+'''
+Dieses Modul enthält Funktionen zur Filterung von DOOB-Dokumenten basierend auf bestimmten Kriterien.
+Es bietet die Möglichkeit, DOOB-Dokumente nach Seitenzahlen oder nach Kategorien zu filtern.
+Die Funktion `filter_doob_by_pages` ermöglicht es, nur die Blöcke eines DOOB-Dokuments zu behalten,
+die auf bestimmten Seitenzahlen erscheinen. Die Funktion `filter_doob_by_category` ermöglicht es,
+nur die Blöcke eines DOOB-Dokuments zu behalten, die zu bestimmten Kategorien gehören, in diesem Fall
+"NarrativeText" und "Title". Beide Funktionen geben ein neues DOOB-Dokument zurück, das nur die gefilterten Blöcke enthält.
+'''
+
 def filter_doob_by_pages(doob: DOOB, pages: List[int]) -> DOOB:
 
     logger.info(f"Filtering DOOB for pages: {pages}")

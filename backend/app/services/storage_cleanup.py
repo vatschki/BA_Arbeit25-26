@@ -1,6 +1,13 @@
 import shutil
 from pathlib import Path
 
+'''
+Dieses Modul enthält Funktionen zur Bereinigung von Speicherplatz, indem alte Job- und Debug-Daten entfernt werden.
+Die Funktion `limit_job_storage` begrenzt die Anzahl der gespeicherten Jobs auf eine
+angegebene maximale Anzahl, indem sie die ältesten Jobs löscht. Dabei werden auch die zugehörigen Debug-Daten entfernt.
+Die Funktion `limit_debug_jobs` begrenzt die Anzahl der gespeicherten Debug-Jobs.
+Beide Funktionen verwenden die Änderungszeit der Verzeichnisse, um die ältesten Einträge zu identifizieren und zu entfernen.
+'''
 
 def limit_job_storage(max_jobs: int):
     jobs_path = Path("storage/jobs")

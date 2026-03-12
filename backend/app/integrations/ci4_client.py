@@ -1,6 +1,13 @@
 import requests
 
-
+'''
+Der CI4Client ist ein einfacher Client zum Senden von Pipeline-Ergebnissen an CI4. Er verwendet die Bibliothek
+*requests*, um HTTP-POST-Anfragen an die CI4-API zu stellen. Der Client wird mit der Basis-URL der CI4-Instanz,
+einem Pipeline-Secret zur Authentifizierung sowie optional mit einem Timeout für Anfragen initialisiert.
+Die Methode *send_pipeline_result* nimmt die Job-ID, den Status, den Fortschritt, eine Nachricht und das Ergebnis als
+Parameter entgegen und sendet diese an die CI4-API. Wenn der Statuscode der Antwort nicht 200 ist, wird ein
+*RuntimeError* mit den Details der Antwort ausgelöst. Andernfalls gibt die Methode die JSON-Antwort von CI4 zurück.
+'''
 class CI4Client:
     def __init__(self, base_url: str, pipeline_secret: str, timeout: int = 30):
         self.base_url = base_url.rstrip("/")

@@ -20,6 +20,30 @@ from app.services.storage_cleanup import limit_job_storage, limit_debug_jobs
 
 logger = logging.getLogger(__name__)
 
+'''
+Dieses Modul enthält die Hauptfunktion `run_pipeline`, die den gesamten Verarbeitungsablauf für die Analyse von
+PDF-Dokumenten steuert. Die Funktion führt die folgenden Schritte aus:
+1. Validierung des Kontextes: Überprüft, ob der erforderliche Kontext vorhanden ist, insbesondere der Firmenname,
+   der für die Analyse benötigt wird.
+2. Initialisierung des Parsers: Erstellt eine Instanz des Parsers, der für die Analyse des PDF-Dokuments verantwortlich ist.
+3. PDF-Parsing: Verwendet den Parser, um das PDF-Dokument zu analysieren und in ein internes DOOB-Format zu überführen.
+   Wenn das PDF nicht kompatibel ist, wird eine entsprechende Fehlermeldung zurückgegeben und die Pipeline mit einem "not_compatible"-Status beendet.
+4. Blockauswahl: Verwendet entweder benutzerdefinierte relevante Seiten oder einen LLM-basierten BlockSelector,
+   um relevante Seiten im Dokument zu identifizieren, die bestimmte Standards enthalten.
+5. Blockfilterung: Filtert die relevanten Blöcke basierend auf Seitenzahlen und Kategorien, um die Analyse auf die
+   wichtigsten Textblöcke zu konzentrieren.
+6. Extraktion: Verwendet einen BlockExtractor, um die relevanten Informationen aus den gefilterten Blöcken zu extrahieren,
+   basierend auf den Anforderungen, die in einem JSON-Format vorliegen.
+7. Ergebnisaufbereitung: Bereitet die extrahierten Informationen in einem flachen JSON-Format auf, das leicht in der
+   CI4-Plattform verwendet werden kann.
+8. Statusaktualisierungen: Aktualisiert den Status des Jobs in verschiedenen Phasen der Pipeline, um den Fortschritt zu
+   verfolgen und den Benutzer über den aktuellen Stand der Verarbeitung zu informieren.
+9. Fehlerbehandlung: Fängt alle Ausnahmen ab, die während der Pipeline auftreten können, aktualisiert den Job-Status
+   entsprechend und sendet eine Fehlermeldung zurück. Es gibt auch spezielle Handhabungen für Fälle, in denen das PDF
+   nicht kompatibel ist oder keine relevanten Seiten gefunden werden, um sicherzustellen, dass der Benutzer klare
+   Rückmeldungen erhält und die Pipeline ordnungsgemäß mit einem entsprechenden Status endet.
+'''
+
 def run_pipeline(
     pdf_path: str,
     job_id: str,

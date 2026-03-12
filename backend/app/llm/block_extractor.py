@@ -3,6 +3,17 @@ import re
 from typing import List
 from app.llm.base_client import BaseLLMClient
 
+'''
+Der BlockExtractor ist dafür verantwortlich, mithilfe eines Sprachmodells relevante Informationen aus Dokumentblöcken
+auf Basis vorgegebener Anforderungen zu extrahieren. Als Eingabe erhält er ein gefiltertes JSON mit Dokumentblöcken
+sowie ein JSON mit den Anforderungen. Daraus wird ein Prompt für das LLM erstellt, und die Antworten werden
+anschließend verarbeitet, um Übereinstimmungen zwischen den Dokumentblöcken und den Anforderungen zu identifizieren.
+Der Extraktionsprozess ist so gestaltet, dass auch große Dokumente verarbeitet werden können, indem die Blöcke in
+Teilmengen (Chunks) verarbeitet werden. Zusätzlich werden ausführliche Debugging-Informationen bereitgestellt,
+um die Größe und Struktur der Eingaben überwachen zu können. Das finale Ergebnis ist ein strukturiertes JSON,
+das die gefundenen Anforderungen und die dazugehörigen Dokumentblöcke enthält, wobei eine Normalisierung und
+Deduplizierung durchgeführt wird, um saubere Ergebnisse sicherzustellen.
+'''
 
 class BlockExtractor:
 

@@ -3,6 +3,15 @@ from typing import Any, Dict, List, Optional, Tuple
 
 from pydantic import BaseModel, Field, field_validator
 
+'''
+Dieses Modul definiert die Datenmodelle für die Dokumentenrepräsentation im DOOB-Format
+(Document Object Oriented Blocks). Es enthält die Basisklasse *Block* sowie spezialisierte Klassen für verschiedene
+Blocktypen wie *TextBlock*, *ImageBlock* und *TableBlock*. Jede Klasse enthält relevante Felder und Validierungslogik,
+um sicherzustellen, dass die Daten konsistent und korrekt strukturiert sind. Die Dokumentenklasse *DOOB* aggregiert
+eine Liste von Blöcken und ermöglicht die einfache Darstellung des gesamten Dokuments als String. Diese Modelle bilden
+die Grundlage für die Verarbeitung und Analyse von Dokumenten in der Anwendung.
+'''
+
 
 # --------------------
 # Basis-Typen

@@ -11,6 +11,10 @@ from app.pdf_parsing.validation_filtering.clean_up import Filter
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
+'''
+Die Klasse Loader ist verantwortlich für das Laden von PDF-Dokumenten und die Extraktion von Elementen daraus.
+'''
+
 class Loader:
    
     def load(

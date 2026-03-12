@@ -7,6 +7,19 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+'''
+BlockSelector ist eine Klasse, die ein LLM verwendet, um ein beschädigtes Inhaltsverzeichnis zu analysieren und
+Seitenzahlen zu bestimmten Kapiteln zu identifizieren. Sie arbeitet in zwei Phasen: In der ersten Phase werden Blöcke
+des Inhaltsverzeichnisses iterativ verarbeitet, um mögliche Treffer für den Zielkapitel-Titel sowie für den folgenden
+Kapitel-Titel zu finden. In der zweiten Phase erfolgt eine Validierung, bei der benachbarte Blöcke überprüft werden,
+um zusätzliche Treffer zu finden und die Ergebnisse zu bestätigen. Die Klasse erstellt dafür einen Prompt für das LLM,
+der die Aufgabe der Strukturrekonstruktion sowie strenge Regeln zur Identifizierung von Kapiteln und Seitenzahlen
+betont. Die Antwort des LLM wird anschließend geparst, um die Seitenzahlen zu extrahieren, die dann als sortierte
+Liste zurückgegeben werden. Die Klasse ist dafür ausgelegt, in einer größeren Dokumentanalyse-Pipeline eingesetzt zu
+werden, in der sie hilft, relevante Seiten für bestimmte Kapitel anhand eines möglicherweise beschädigten
+Inhaltsverzeichnisses zu bestimmen.
+'''
+
 class BlockSelector:
 
     def __init__(self, llm_client: BaseLLMClient, config: Config, window_size: int = 90):

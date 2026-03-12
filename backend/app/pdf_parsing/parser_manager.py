@@ -19,6 +19,16 @@ from app.pdf_parsing.schema.doob_document import (
 from app.pdf_parsing.schema.extensions import FileExtensionType
 from app.pdf_parsing.loading_extraction.extract_metadata import MetadataExtractor
 
+'''
+Die Klasse Parser ist verantwortlich für die Umwandlung von PDF-Dokumenten in eine strukturierte Darstellung,
+die als DOOB (Document Out Of Blocks) bezeichnet wird. Sie verwendet einen Validator, um die Eingabedaten zu
+überprüfen, und einen Loader, um die Elemente aus dem PDF zu extrahieren. Anschließend formatiert sie diese Elemente
+in Blöcke um, die verschiedene Kategorien wie Titel, Überschriften, Text, Bilder und Tabellen repräsentieren.
+Die Klasse nutzt auch einen MetadataExtractor, um relevante Metadaten aus den Elementen zu extrahieren und in den
+Blöcken zu speichern. Das Ergebnis ist ein DOOB-Dokument, das eine strukturierte und leicht zugängliche Darstellung
+des ursprünglichen PDF-Dokuments bietet.
+'''
+
 class Parser:
 
     def __init__(self, validator: Validator | None = None, loader: Loader | None = None, company: str | None = None) -> None:

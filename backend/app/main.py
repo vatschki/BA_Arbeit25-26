@@ -8,6 +8,12 @@ import json
 from app.pipeline_runner import run_pipeline
 from app.schemas.pipeline import PipelineRequest
 
+'''
+Dieses Modul enthält die FastAPI-Endpunkte für die Pipeline. Es definiert die Endpunkte zum Starten der Pipeline
+und zum Abrufen des Status eines laufenden Jobs. Die Endpunkte validieren die eingehenden Anfragen, starten die
+Pipeline asynchron im Hintergrund und geben den Status zurück.
+'''
+
 # -----------------------------
 # Endpoint
 # -----------------------------

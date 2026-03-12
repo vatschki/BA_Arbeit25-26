@@ -6,7 +6,13 @@ import time
 from app.services.doob_to_json import doob_to_json, write_output_json
 import logging
 
-
+'''
+Dieses Modul stellt Hilfsfunktionen bereit, um Doob-Dokumente und Anforderungen zu Debugging-Zwecken in JSON-Dateien
+zu exportieren. Die exportierten Dateien werden in einem „debug“-Verzeichnis gespeichert und nach Job-ID organisiert.
+Jede Datei wird mit der Job-ID und einem beschreibenden Namen benannt, sodass ihr Inhalt leicht identifiziert werden
+kann. Das Modul enthält außerdem eine Bereinigungsfunktion, die alte Debug-Dateien nach Ablauf einer festgelegten
+Lebensdauer (TTL) entfernt.
+'''
 def dump_json_debug(
     doob_document,
     job_id: str,

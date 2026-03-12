@@ -1,5 +1,8 @@
 from pydantic import BaseModel, Field, field_validator
 
+'''
+Schema für die API-Konfiguration eines LLM-Providers.
+'''
 
 class ApiConfig(BaseModel):
     provider_name: str = Field(..., min_length=1)
